@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="SmartInventory.API/SmartInventory.API.csproj" />
+  <Project Path="SmartInventory.Core/SmartInventory.Core.csproj" />
+  <Project Path="SmartInventory.Infrastructure/SmartInventory.Infrastructure.csproj" />
+  <Project Path="SmartInventory.Repository/SmartInventory.Repository.csproj" />
+  <Project Path="SmartInventory.Service/SmartInventory.Service.csproj" />
+</Solution>
