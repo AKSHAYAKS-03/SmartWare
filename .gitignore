@@ -1,9 +1,47 @@
+## Build outputs and packages
 **/bin/
 **/obj/
+**/publish/
 .vs/
+.vscode/
 *.user
 *.suo
 *.userosscache
 *.sln.docstates
 *.log
+*.lock
 md/
+
+## OS-specific files
+.DS_Store
+Thumbs.db
+
+## User Secrets & Local AppSettings
+**/appsettings.Development.json
+**/appsettings.Local.json
+**/appsettings.Production.json
+secrets.json
+.secrets
+
+## Environment Variables & Keys
+.env
+.env.*
+*.pem
+*.pfx
+*.p12
+*.key
+*.snk
+*.developer
+certificates/
+keys/
+
+## Uploaded Files & Attachments (Local storage)
+**/uploads/
+**/wwwroot/uploads/
+**/bin-barcodes/
+**/uploads/barcodes/
+
+## Package manager directories
+.nuget/
+**/packages/
+node_modules/
