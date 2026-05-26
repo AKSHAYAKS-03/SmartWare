@@ -10,6 +10,7 @@
 *.sln.docstates
 *.log
 *.lock
+
 md/
 
 ## OS-specific files
