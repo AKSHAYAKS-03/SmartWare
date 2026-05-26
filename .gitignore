@@ -23,6 +23,8 @@ Thumbs.db
 secrets.json
 .secrets
 
+
+
 ## Environment Variables & Keys
 .env
 .env.*
