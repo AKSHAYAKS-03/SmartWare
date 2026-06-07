@@ -1,0 +1,1625 @@
+{
+  "info": {
+    "_postman_id": "smartware-uat-2026",
+    "name": "SmartWare WMS — UAT Collection (Codebase Generated)",
+    "description": "Generated directly from codebase scan of all 21 controllers. Base URL: {{base_url}} = http://localhost:5000\n\nAuth flows:\n- Admin/Internal: POST /api/v1/auth/signin → save accessToken to {{admin_token}}\n- Supplier portal: POST /api/v1/supplier/auth/login → save accessToken to {{supplier_token}}",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:5000", "type": "string" },
+    { "key": "admin_token", "value": "", "type": "string" },
+    { "key": "supplier_token", "value": "", "type": "string" },
+    { "key": "refresh_token", "value": "", "type": "string" },
+    { "key": "supplier_refresh_token", "value": "", "type": "string" },
+    { "key": "warehouse_id", "value": "", "type": "string" },
+    { "key": "supplier_id", "value": "", "type": "string" },
+    { "key": "product_id", "value": "", "type": "string" },
+    { "key": "category_id", "value": "", "type": "string" },
+    { "key": "zone_id", "value": "", "type": "string" },
+    { "key": "bin_id", "value": "", "type": "string" },
+    { "key": "po_id", "value": "", "type": "string" },
+    { "key": "grn_id", "value": "", "type": "string" },
+    { "key": "transfer_id", "value": "", "type": "string" },
+    { "key": "adjustment_id", "value": "", "type": "string" },
+    { "key": "user_id", "value": "", "type": "string" },
+    { "key": "barcode_id", "value": "", "type": "string" },
+    { "key": "supplier_product_id", "value": "", "type": "string" },
+    { "key": "invoice_id", "value": "", "type": "string" },
+    { "key": "file_id", "value": "", "type": "string" },
+    { "key": "contact_id", "value": "", "type": "string" }
+  ],
+  "item": [
+
+    {
+      "name": "01 — Auth (Internal)",
+      "description": "Internal user auth. Route base: /api/v1/auth",
+      "item": [
+        {
+          "name": "Sign In (Admin/Staff)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json();",
+            "if(j.accessToken){ pm.collectionVariables.set('admin_token', j.accessToken); }",
+            "if(j.refreshToken){ pm.collectionVariables.set('refresh_token', j.refreshToken); }"
+          ], "type": "text/javascript" }}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"admin@smartware.com\",\n  \"password\": \"Admin@123\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/auth/signin", "host": ["{{base_url}}"], "path": ["api","v1","auth","signin"] }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json();",
+            "if(j.accessToken){ pm.collectionVariables.set('admin_token', j.accessToken); }",
+            "if(j.refreshToken){ pm.collectionVariables.set('refresh_token', j.refreshToken); }"
+          ], "type": "text/javascript" }}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"token\": \"{{refresh_token}}\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/auth/refresh", "host": ["{{base_url}}"], "path": ["api","v1","auth","refresh"] }
+          }
+        },
+        {
+          "name": "Revoke Token (Logout)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"token\": \"{{refresh_token}}\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/auth/revoke", "host": ["{{base_url}}"], "path": ["api","v1","auth","revoke"] }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"oldPassword\": \"Admin@123\",\n  \"newPassword\": \"Admin@456\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/auth/change-password", "host": ["{{base_url}}"], "path": ["api","v1","auth","change-password"] }
+          }
+        },
+        {
+          "name": "Set Password (Invite Activation)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"token\": \"<invite_token_from_email>\",\n  \"newPassword\": \"Employee@123\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/auth/set-password", "host": ["{{base_url}}"], "path": ["api","v1","auth","set-password"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "02 — Users",
+      "description": "Internal user management. Route: /api/v1/users",
+      "item": [
+        {
+          "name": "Get My Profile",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/users/me", "host": ["{{base_url}}"], "path": ["api","v1","users","me"] }
+          }
+        },
+        {
+          "name": "List Users [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/users?page=1&pageSize=20", "host": ["{{base_url}}"], "path": ["api","v1","users"], "query": [{"key":"page","value":"1"},{"key":"pageSize","value":"20"}] }
+          }
+        },
+        {
+          "name": "Get User By ID [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/users/{{user_id}}", "host": ["{{base_url}}"], "path": ["api","v1","users","{{user_id}}"] }
+          }
+        },
+        {
+          "name": "Create User [Admin]",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json(); if(j.id) pm.collectionVariables.set('user_id', j.id);"
+          ], "type": "text/javascript" }}],
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"fullName\": \"Jane Staff\",\n  \"email\": \"jane.staff@smartware.com\",\n  \"phoneNumber\": \"+919876543210\",\n  \"employeeId\": \"EMP-001\",\n  \"roleId\": \"<role-guid>\",\n  \"smsEnabled\": false,\n  \"emailEnabled\": true,\n  \"isActive\": true,\n  \"expiresAt\": null,\n  \"aadhaarNumber\": null\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/users", "host": ["{{base_url}}"], "path": ["api","v1","users"] }
+          }
+        },
+        {
+          "name": "Update User [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"fullName\": \"Jane Staff Updated\",\n  \"email\": \"jane.staff@smartware.com\",\n  \"phoneNumber\": \"+919876543210\",\n  \"employeeId\": \"EMP-001\",\n  \"roleId\": \"<role-guid>\",\n  \"smsEnabled\": false,\n  \"emailEnabled\": true,\n  \"isActive\": true,\n  \"expiresAt\": null,\n  \"aadhaarNumber\": null\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/users/{{user_id}}", "host": ["{{base_url}}"], "path": ["api","v1","users","{{user_id}}"] }
+          }
+        },
+        {
+          "name": "Deactivate User [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "DELETE",
+            "url": { "raw": "{{base_url}}/api/v1/users/{{user_id}}", "host": ["{{base_url}}"], "path": ["api","v1","users","{{user_id}}"] }
+          }
+        },
+        {
+          "name": "Approve User [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "PUT",
+            "url": { "raw": "{{base_url}}/api/v1/users/{{user_id}}/approve", "host": ["{{base_url}}"], "path": ["api","v1","users","{{user_id}}","approve"] }
+          }
+        },
+        {
+          "name": "Update Notification Preferences",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"smsEnabled\": true,\n  \"emailEnabled\": true\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/users/{{user_id}}/notifications", "host": ["{{base_url}}"], "path": ["api","v1","users","{{user_id}}","notifications"] }
+          }
+        },
+        {
+          "name": "Resend Invite [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "url": { "raw": "{{base_url}}/api/v1/users/{{user_id}}/resend-invite", "host": ["{{base_url}}"], "path": ["api","v1","users","{{user_id}}","resend-invite"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "03 — Categories",
+      "description": "Product category management. Route: /api/v1/categories",
+      "item": [
+        {
+          "name": "List Categories",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/categories?page=1&pageSize=50", "host": ["{{base_url}}"], "path": ["api","v1","categories"], "query": [{"key":"page","value":"1"},{"key":"pageSize","value":"50"}] }
+          }
+        },
+        {
+          "name": "Get Category Tree",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/categories/tree", "host": ["{{base_url}}"], "path": ["api","v1","categories","tree"] }
+          }
+        },
+        {
+          "name": "Get Category By ID",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/categories/{{category_id}}", "host": ["{{base_url}}"], "path": ["api","v1","categories","{{category_id}}"] }
+          }
+        },
+        {
+          "name": "Create Category [Admin]",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json(); if(j.id) pm.collectionVariables.set('category_id', j.id);"
+          ], "type": "text/javascript" }}],
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Electronics\",\n  \"slug\": \"electronics\",\n  \"description\": \"Electronic components and devices\",\n  \"parentId\": null,\n  \"isActive\": true\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/categories", "host": ["{{base_url}}"], "path": ["api","v1","categories"] }
+          }
+        },
+        {
+          "name": "Update Category [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Electronics Updated\",\n  \"slug\": \"electronics-updated\",\n  \"description\": \"Updated description\",\n  \"parentId\": null,\n  \"isActive\": true\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/categories/{{category_id}}", "host": ["{{base_url}}"], "path": ["api","v1","categories","{{category_id}}"] }
+          }
+        },
+        {
+          "name": "Delete Category [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "DELETE",
+            "url": { "raw": "{{base_url}}/api/v1/categories/{{category_id}}", "host": ["{{base_url}}"], "path": ["api","v1","categories","{{category_id}}"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "04 — Products",
+      "description": "Product management. Route: /api/v1/products",
+      "item": [
+        {
+          "name": "List Products",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/products?page=1&pageSize=20&categoryId=&warehouseId=&isActive=true", "host": ["{{base_url}}"], "path": ["api","v1","products"], "query": [{"key":"page","value":"1"},{"key":"pageSize","value":"20"},{"key":"categoryId","value":""},{"key":"warehouseId","value":""},{"key":"isActive","value":"true"}] }
+          }
+        },
+        {
+          "name": "Search Products (Dynamic)",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"filters\": [\n    { \"field\": \"Name\", \"operator\": \"contains\", \"value\": \"bolt\" }\n  ],\n  \"sortBy\": \"Name\",\n  \"sortDirection\": \"asc\",\n  \"page\": 1,\n  \"pageSize\": 20\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/products/search", "host": ["{{base_url}}"], "path": ["api","v1","products","search"] }
+          }
+        },
+        {
+          "name": "Get Product By ID",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/products/{{product_id}}", "host": ["{{base_url}}"], "path": ["api","v1","products","{{product_id}}"] }
+          }
+        },
+        {
+          "name": "Create Product [Manager]",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json(); if(j.id) pm.collectionVariables.set('product_id', j.id);"
+          ], "type": "text/javascript" }}],
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"M6 Hex Bolt 50mm\",\n  \"sku\": \"BOLT-M6-50\",\n  \"description\": \"Standard M6 hex bolt 50mm length\",\n  \"unitOfMeasure\": 0,\n  \"costPrice\": 2.50,\n  \"sellingPrice\": 4.00,\n  \"reorderPoint\": 100,\n  \"reorderQuantity\": 500,\n  \"categoryId\": \"{{category_id}}\",\n  \"isActive\": true,\n  \"imagePath\": null,\n  \"length\": 5.0,\n  \"width\": 1.0,\n  \"height\": 1.0,\n  \"weightKg\": 0.02\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/products", "host": ["{{base_url}}"], "path": ["api","v1","products"] }
+          }
+        },
+        {
+          "name": "Update Product [Manager]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"M6 Hex Bolt 50mm (Updated)\",\n  \"description\": \"Updated description\",\n  \"unitOfMeasure\": 0,\n  \"costPrice\": 2.75,\n  \"sellingPrice\": 4.50,\n  \"reorderPoint\": 100,\n  \"reorderQuantity\": 500,\n  \"categoryId\": \"{{category_id}}\",\n  \"isActive\": true,\n  \"imagePath\": null,\n  \"length\": 5.0,\n  \"width\": 1.0,\n  \"height\": 1.0,\n  \"weightKg\": 0.02\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/products/{{product_id}}", "host": ["{{base_url}}"], "path": ["api","v1","products","{{product_id}}"] }
+          }
+        },
+        {
+          "name": "Delete Product [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "DELETE",
+            "url": { "raw": "{{base_url}}/api/v1/products/{{product_id}}", "host": ["{{base_url}}"], "path": ["api","v1","products","{{product_id}}"] }
+          }
+        },
+        {
+          "name": "Get Low Stock Products",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/products/low-stock?warehouseId={{warehouse_id}}", "host": ["{{base_url}}"], "path": ["api","v1","products","low-stock"], "query": [{"key":"warehouseId","value":"{{warehouse_id}}"}] }
+          }
+        },
+        {
+          "name": "Get EOQ for Product",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/products/{{product_id}}/eoq?warehouseId={{warehouse_id}}", "host": ["{{base_url}}"], "path": ["api","v1","products","{{product_id}}","eoq"], "query": [{"key":"warehouseId","value":"{{warehouse_id}}"}] }
+          }
+        },
+        {
+          "name": "Get ABC Classification [Viewer]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/products/abc-classification?warehouseId={{warehouse_id}}", "host": ["{{base_url}}"], "path": ["api","v1","products","abc-classification"], "query": [{"key":"warehouseId","value":"{{warehouse_id}}"}] }
+          }
+        },
+        {
+          "name": "Update ABC Categories [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "url": { "raw": "{{base_url}}/api/v1/products/{{warehouse_id}}/update-abc", "host": ["{{base_url}}"], "path": ["api","v1","products","{{warehouse_id}}","update-abc"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "05 — Warehouses",
+      "description": "Warehouse, Zone, Bin management. Route: /api/v1/warehouses",
+      "item": [
+        {
+          "name": "List Warehouses",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/warehouses?page=1&pageSize=20", "host": ["{{base_url}}"], "path": ["api","v1","warehouses"], "query": [{"key":"page","value":"1"},{"key":"pageSize","value":"20"}] }
+          }
+        },
+        {
+          "name": "Get Warehouse By ID",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/warehouses/{{warehouse_id}}", "host": ["{{base_url}}"], "path": ["api","v1","warehouses","{{warehouse_id}}"] }
+          }
+        },
+        {
+          "name": "Create Warehouse [Admin]",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json(); if(j.id) pm.collectionVariables.set('warehouse_id', j.id);"
+          ], "type": "text/javascript" }}],
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Main Warehouse\",\n  \"code\": \"WH-MAIN\",\n  \"address\": \"123 Industrial Area\",\n  \"city\": \"Chennai\",\n  \"state\": \"Tamil Nadu\",\n  \"postalCode\": \"600001\",\n  \"country\": \"India\",\n  \"contactPerson\": \"Raj Kumar\",\n  \"contactNumber\": \"+919876543210\",\n  \"email\": \"warehouse@smartware.com\",\n  \"gstin\": \"33AABCS1429B1Z1\",\n  \"registrationNumber\": \"WH-REG-001\",\n  \"managerId\": null,\n  \"isActive\": true,\n  \"areaSqFt\": 50000,\n  \"maxVolumeCm3\": 100000000,\n  \"maxWeightKg\": 500000\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/warehouses", "host": ["{{base_url}}"], "path": ["api","v1","warehouses"] }
+          }
+        },
+        {
+          "name": "Update Warehouse [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Main Warehouse Updated\",\n  \"code\": \"WH-MAIN\",\n  \"address\": \"123 Industrial Area\",\n  \"city\": \"Chennai\",\n  \"state\": \"Tamil Nadu\",\n  \"postalCode\": \"600001\",\n  \"country\": \"India\",\n  \"contactPerson\": \"Raj Kumar\",\n  \"contactNumber\": \"+919876543210\",\n  \"email\": \"warehouse@smartware.com\",\n  \"gstin\": \"33AABCS1429B1Z1\",\n  \"registrationNumber\": \"WH-REG-001\",\n  \"managerId\": null,\n  \"isActive\": true,\n  \"areaSqFt\": 50000,\n  \"maxVolumeCm3\": 100000000,\n  \"maxWeightKg\": 500000\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/warehouses/{{warehouse_id}}", "host": ["{{base_url}}"], "path": ["api","v1","warehouses","{{warehouse_id}}"] }
+          }
+        },
+        {
+          "name": "Delete Warehouse [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "DELETE",
+            "url": { "raw": "{{base_url}}/api/v1/warehouses/{{warehouse_id}}", "host": ["{{base_url}}"], "path": ["api","v1","warehouses","{{warehouse_id}}"] }
+          }
+        },
+        {
+          "name": "Get Warehouse Capacity",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/warehouses/{{warehouse_id}}/capacity", "host": ["{{base_url}}"], "path": ["api","v1","warehouses","{{warehouse_id}}","capacity"] }
+          }
+        },
+        {
+          "name": "Get Putaway Suggestion",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/warehouses/{{warehouse_id}}/putaway-suggestion?productId={{product_id}}", "host": ["{{base_url}}"], "path": ["api","v1","warehouses","{{warehouse_id}}","putaway-suggestion"], "query": [{"key":"productId","value":"{{product_id}}"}] }
+          }
+        },
+        {
+          "name": "Get Zones",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/warehouses/{{warehouse_id}}/zones", "host": ["{{base_url}}"], "path": ["api","v1","warehouses","{{warehouse_id}}","zones"] }
+          }
+        },
+        {
+          "name": "Create Zone [Manager]",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json(); if(j.id) pm.collectionVariables.set('zone_id', j.id);"
+          ], "type": "text/javascript" }}],
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Zone A — Bulk Storage\",\n  \"code\": \"ZN-A\",\n  \"zoneType\": 0,\n  \"isCapacityEnforced\": true,\n  \"isActive\": true,\n  \"areaSqFt\": 10000,\n  \"maxVolumeCm3\": 20000000,\n  \"maxWeightKg\": 100000\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/warehouses/{{warehouse_id}}/zones", "host": ["{{base_url}}"], "path": ["api","v1","warehouses","{{warehouse_id}}","zones"] }
+          }
+        },
+        {
+          "name": "Update Zone [Manager]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Zone A — Updated\",\n  \"code\": \"ZN-A\",\n  \"zoneType\": 0,\n  \"isActive\": true,\n  \"areaSqFt\": 10000,\n  \"maxVolumeCm3\": 20000000,\n  \"maxWeightKg\": 100000\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/warehouses/zones/{{zone_id}}", "host": ["{{base_url}}"], "path": ["api","v1","warehouses","zones","{{zone_id}}"] }
+          }
+        },
+        {
+          "name": "Delete Zone [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "DELETE",
+            "url": { "raw": "{{base_url}}/api/v1/warehouses/zones/{{zone_id}}", "host": ["{{base_url}}"], "path": ["api","v1","warehouses","zones","{{zone_id}}"] }
+          }
+        },
+        {
+          "name": "Get Zone Capacity",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/warehouses/zones/{{zone_id}}/capacity", "host": ["{{base_url}}"], "path": ["api","v1","warehouses","zones","{{zone_id}}","capacity"] }
+          }
+        },
+        {
+          "name": "Get Bins In Zone",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/warehouses/zones/{{zone_id}}/bins", "host": ["{{base_url}}"], "path": ["api","v1","warehouses","zones","{{zone_id}}","bins"] }
+          }
+        },
+        {
+          "name": "Create Bin [Manager]",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json(); if(j.id) pm.collectionVariables.set('bin_id', j.id);"
+          ], "type": "text/javascript" }}],
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"binCode\": \"A-01-01\",\n  \"barcode\": null,\n  \"binType\": 0,\n  \"maxVolumeCm3\": 500000,\n  \"maxWeightKg\": 500,\n  \"isActive\": true\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/warehouses/zones/{{zone_id}}/bins", "host": ["{{base_url}}"], "path": ["api","v1","warehouses","zones","{{zone_id}}","bins"] }
+          }
+        },
+        {
+          "name": "Update Bin [Manager]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"binCode\": \"A-01-01-UPDATED\",\n  \"barcode\": null,\n  \"binType\": 0,\n  \"maxVolumeCm3\": 500000,\n  \"maxWeightKg\": 500,\n  \"isActive\": true\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/warehouses/bins/{{bin_id}}", "host": ["{{base_url}}"], "path": ["api","v1","warehouses","bins","{{bin_id}}"] }
+          }
+        },
+        {
+          "name": "Delete Bin [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "DELETE",
+            "url": { "raw": "{{base_url}}/api/v1/warehouses/bins/{{bin_id}}", "host": ["{{base_url}}"], "path": ["api","v1","warehouses","bins","{{bin_id}}"] }
+          }
+        },
+        {
+          "name": "Get Warehouse Users [Manager]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/warehouses/{{warehouse_id}}/users", "host": ["{{base_url}}"], "path": ["api","v1","warehouses","{{warehouse_id}}","users"] }
+          }
+        },
+        {
+          "name": "Assign User Access [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"userId\": \"{{user_id}}\",\n  \"accessLevel\": 1\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/warehouses/{{warehouse_id}}/users", "host": ["{{base_url}}"], "path": ["api","v1","warehouses","{{warehouse_id}}","users"] }
+          }
+        },
+        {
+          "name": "Revoke User Access [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "DELETE",
+            "url": { "raw": "{{base_url}}/api/v1/warehouses/access/<accessId>", "host": ["{{base_url}}"], "path": ["api","v1","warehouses","access","<accessId>"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "06 — Suppliers (Internal)",
+      "description": "Internal supplier management. Route: /api/v1/suppliers",
+      "item": [
+        {
+          "name": "List Suppliers",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/suppliers?page=1&pageSize=20&isActive=true", "host": ["{{base_url}}"], "path": ["api","v1","suppliers"], "query": [{"key":"page","value":"1"},{"key":"pageSize","value":"20"},{"key":"isActive","value":"true"}] }
+          }
+        },
+        {
+          "name": "Get Supplier By ID",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/suppliers/{{supplier_id}}", "host": ["{{base_url}}"], "path": ["api","v1","suppliers","{{supplier_id}}"] }
+          }
+        },
+        {
+          "name": "Update Supplier [Manager]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Acme Supplies Ltd\",\n  \"code\": \"ACME-001\",\n  \"gstin\": \"29AABCA1234B1Z5\",\n  \"pan\": \"AABCA1234B\",\n  \"contactPerson\": \"John Doe\",\n  \"email\": \"john@acme.com\",\n  \"phone\": \"+919876543210\",\n  \"address\": \"456 Supplier Lane, Mumbai\",\n  \"leadTimeDays\": 7,\n  \"paymentTerms\": 1,\n  \"creditLimit\": 500000,\n  \"isActive\": true\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/suppliers/{{supplier_id}}", "host": ["{{base_url}}"], "path": ["api","v1","suppliers","{{supplier_id}}"] }
+          }
+        },
+        {
+          "name": "Delete Supplier [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "DELETE",
+            "url": { "raw": "{{base_url}}/api/v1/suppliers/{{supplier_id}}", "host": ["{{base_url}}"], "path": ["api","v1","suppliers","{{supplier_id}}"] }
+          }
+        },
+        {
+          "name": "Get Pending Reviews [Manager]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/suppliers/pending-reviews", "host": ["{{base_url}}"], "path": ["api","v1","suppliers","pending-reviews"] }
+          }
+        },
+        {
+          "name": "Invite Supplier [Manager]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"New Supplier Co\",\n  \"gstin\": \"29AABCN1234B1Z5\",\n  \"email\": \"contact@newsupplier.com\",\n  \"phone\": \"+919876543211\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/suppliers/invite", "host": ["{{base_url}}"], "path": ["api","v1","suppliers","invite"] }
+          }
+        },
+        {
+          "name": "Review Supplier [Manager] — Approve",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"action\": \"Approve\",\n  \"reason\": \"Documents verified.\",\n  \"code\": \"SUPP-101\",\n  \"creditLimit\": 250000,\n  \"paymentTerms\": 1\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/suppliers/{{supplier_id}}/review", "host": ["{{base_url}}"], "path": ["api","v1","suppliers","{{supplier_id}}","review"] }
+          }
+        },
+        {
+          "name": "Review Supplier [Manager] — Reject",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"action\": \"Reject\",\n  \"reason\": \"GSTIN could not be verified.\",\n  \"code\": null,\n  \"creditLimit\": null,\n  \"paymentTerms\": null\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/suppliers/{{supplier_id}}/review", "host": ["{{base_url}}"], "path": ["api","v1","suppliers","{{supplier_id}}","review"] }
+          }
+        },
+        {
+          "name": "Review Supplier [Manager] — Request Info",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"action\": \"RequestMoreInfo\",\n  \"reason\": \"Please provide a valid GST certificate.\",\n  \"code\": null,\n  \"creditLimit\": null,\n  \"paymentTerms\": null\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/suppliers/{{supplier_id}}/review", "host": ["{{base_url}}"], "path": ["api","v1","suppliers","{{supplier_id}}","review"] }
+          }
+        },
+        {
+          "name": "Suspend Supplier [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"reason\": \"Repeated late deliveries.\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/suppliers/{{supplier_id}}/suspend", "host": ["{{base_url}}"], "path": ["api","v1","suppliers","{{supplier_id}}","suspend"] }
+          }
+        },
+        {
+          "name": "Activate Supplier [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "url": { "raw": "{{base_url}}/api/v1/suppliers/{{supplier_id}}/activate", "host": ["{{base_url}}"], "path": ["api","v1","suppliers","{{supplier_id}}","activate"] }
+          }
+        },
+        {
+          "name": "Get Supplier Products",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/suppliers/{{supplier_id}}/products", "host": ["{{base_url}}"], "path": ["api","v1","suppliers","{{supplier_id}}","products"] }
+          }
+        },
+        {
+          "name": "Add Supplier Product [Manager]",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json(); if(j.id) pm.collectionVariables.set('supplier_product_id', j.id);"
+          ], "type": "text/javascript" }}],
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"productId\": \"{{product_id}}\",\n  \"unitPrice\": 2.50,\n  \"leadTimeDays\": 5,\n  \"minOrderQuantity\": 100,\n  \"isPreferred\": true\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/suppliers/{{supplier_id}}/products", "host": ["{{base_url}}"], "path": ["api","v1","suppliers","{{supplier_id}}","products"] }
+          }
+        },
+        {
+          "name": "Update Supplier Product [Manager]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"unitPrice\": 2.75,\n  \"leadTimeDays\": 4,\n  \"minOrderQuantity\": 50,\n  \"isPreferred\": true\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/suppliers/products/{{supplier_product_id}}", "host": ["{{base_url}}"], "path": ["api","v1","suppliers","products","{{supplier_product_id}}"] }
+          }
+        },
+        {
+          "name": "Remove Supplier Product [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "DELETE",
+            "url": { "raw": "{{base_url}}/api/v1/suppliers/products/{{supplier_product_id}}", "host": ["{{base_url}}"], "path": ["api","v1","suppliers","products","{{supplier_product_id}}"] }
+          }
+        },
+        {
+          "name": "Get Supplier Performance [Viewer]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/suppliers/{{supplier_id}}/performance", "host": ["{{base_url}}"], "path": ["api","v1","suppliers","{{supplier_id}}","performance"] }
+          }
+        },
+        {
+          "name": "Recalculate Rating [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "url": { "raw": "{{base_url}}/api/v1/suppliers/{{supplier_id}}/recalculate-rating", "host": ["{{base_url}}"], "path": ["api","v1","suppliers","{{supplier_id}}","recalculate-rating"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "07 — Purchase Orders",
+      "description": "PO management. Route: /api/v1/purchaseorders",
+      "item": [
+        {
+          "name": "List Purchase Orders",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/purchaseorders?page=1&pageSize=20&status=&supplierId=&warehouseId=", "host": ["{{base_url}}"], "path": ["api","v1","purchaseorders"], "query": [{"key":"page","value":"1"},{"key":"pageSize","value":"20"},{"key":"status","value":""},{"key":"supplierId","value":""},{"key":"warehouseId","value":""}] }
+          }
+        },
+        {
+          "name": "Search Purchase Orders (Dynamic)",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"filters\": [\n    { \"field\": \"Status\", \"operator\": \"eq\", \"value\": \"1\" }\n  ],\n  \"sortBy\": \"CreatedAt\",\n  \"sortDirection\": \"desc\",\n  \"page\": 1,\n  \"pageSize\": 20\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/purchaseorders/search", "host": ["{{base_url}}"], "path": ["api","v1","purchaseorders","search"] }
+          }
+        },
+        {
+          "name": "Get PO By ID",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/purchaseorders/{{po_id}}", "host": ["{{base_url}}"], "path": ["api","v1","purchaseorders","{{po_id}}"] }
+          }
+        },
+        {
+          "name": "Create PO [Manager]",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json(); if(j.id) pm.collectionVariables.set('po_id', j.id);"
+          ], "type": "text/javascript" }}],
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"supplierId\": \"{{supplier_id}}\",\n  \"warehouseId\": \"{{warehouse_id}}\",\n  \"expectedDelivery\": \"2026-07-01T00:00:00Z\",\n  \"notes\": \"Urgent order\",\n  \"idempotencyKey\": \"po-create-001\",\n  \"items\": [\n    {\n      \"productId\": \"{{product_id}}\",\n      \"quantityOrdered\": 500,\n      \"unitPrice\": 2.50\n    }\n  ]\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/purchaseorders", "host": ["{{base_url}}"], "path": ["api","v1","purchaseorders"] }
+          }
+        },
+        {
+          "name": "Update PO [Manager]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"supplierId\": \"{{supplier_id}}\",\n  \"warehouseId\": \"{{warehouse_id}}\",\n  \"expectedDelivery\": \"2026-07-15T00:00:00Z\",\n  \"notes\": \"Updated notes\",\n  \"items\": [\n    {\n      \"productId\": \"{{product_id}}\",\n      \"quantityOrdered\": 600,\n      \"unitPrice\": 2.50\n    }\n  ]\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/purchaseorders/{{po_id}}", "host": ["{{base_url}}"], "path": ["api","v1","purchaseorders","{{po_id}}"] }
+          }
+        },
+        {
+          "name": "Submit PO for Approval [Manager]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "PUT",
+            "url": { "raw": "{{base_url}}/api/v1/purchaseorders/{{po_id}}/submit", "host": ["{{base_url}}"], "path": ["api","v1","purchaseorders","{{po_id}}","submit"] }
+          }
+        },
+        {
+          "name": "Approve PO [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"approve\": true,\n  \"rejectionReason\": null\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/purchaseorders/{{po_id}}/approve", "host": ["{{base_url}}"], "path": ["api","v1","purchaseorders","{{po_id}}","approve"] }
+          }
+        },
+        {
+          "name": "Reject PO [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"approve\": false,\n  \"rejectionReason\": \"Budget exceeded.\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/purchaseorders/{{po_id}}/approve", "host": ["{{base_url}}"], "path": ["api","v1","purchaseorders","{{po_id}}","approve"] }
+          }
+        },
+        {
+          "name": "Cancel PO [Manager]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "PUT",
+            "url": { "raw": "{{base_url}}/api/v1/purchaseorders/{{po_id}}/cancel", "host": ["{{base_url}}"], "path": ["api","v1","purchaseorders","{{po_id}}","cancel"] }
+          }
+        },
+        {
+          "name": "Receive GRN (Goods Receipt) [Staff]",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json(); if(j.id) pm.collectionVariables.set('grn_id', j.id);"
+          ], "type": "text/javascript" }}],
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"warehouseId\": \"{{warehouse_id}}\",\n  \"notes\": \"All items received in good condition.\",\n  \"idempotencyKey\": \"grn-po-001\",\n  \"bypassWarnings\": false,\n  \"items\": [\n    {\n      \"purchaseOrderItemId\": \"<po-item-guid>\",\n      \"binLocationId\": \"{{bin_id}}\",\n      \"quantityReceived\": 500,\n      \"quantityRejected\": 0,\n      \"rejectionReason\": null,\n      \"overrideReason\": null\n    }\n  ],\n  \"attachmentIds\": []\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/purchaseorders/{{po_id}}/grn", "host": ["{{base_url}}"], "path": ["api","v1","purchaseorders","{{po_id}}","grn"] }
+          }
+        },
+        {
+          "name": "Receive GRN Bulk CSV [Staff]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "warehouseId", "value": "{{warehouse_id}}", "type": "text" },
+                { "key": "notes", "value": "Bulk GRN", "type": "text" },
+                { "key": "idempotencyKey", "value": "grn-bulk-001", "type": "text" },
+                { "key": "file", "type": "file", "src": "" }
+              ]
+            },
+            "url": { "raw": "{{base_url}}/api/v1/purchaseorders/{{po_id}}/grn/bulk", "host": ["{{base_url}}"], "path": ["api","v1","purchaseorders","{{po_id}}","grn","bulk"] }
+          }
+        },
+        {
+          "name": "Get Goods Receipts for PO",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/purchaseorders/{{po_id}}/grn", "host": ["{{base_url}}"], "path": ["api","v1","purchaseorders","{{po_id}}","grn"] }
+          }
+        },
+        {
+          "name": "Cancel Goods Receipt [Manager]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "url": { "raw": "{{base_url}}/api/v1/purchaseorders/receipts/{{grn_id}}/cancel", "host": ["{{base_url}}"], "path": ["api","v1","purchaseorders","receipts","{{grn_id}}","cancel"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "08 — Transfers",
+      "description": "Inter-warehouse & bin-to-bin transfers. Route: /api/v1/transfers",
+      "item": [
+        {
+          "name": "List Transfers",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/transfers?page=1&pageSize=20&status=", "host": ["{{base_url}}"], "path": ["api","v1","transfers"], "query": [{"key":"page","value":"1"},{"key":"pageSize","value":"20"},{"key":"status","value":""}] }
+          }
+        },
+        {
+          "name": "Search Transfers (Dynamic)",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"filters\": [\n    { \"field\": \"Status\", \"operator\": \"eq\", \"value\": \"0\" }\n  ],\n  \"sortBy\": \"CreatedAt\",\n  \"sortDirection\": \"desc\",\n  \"page\": 1,\n  \"pageSize\": 20\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/transfers/search", "host": ["{{base_url}}"], "path": ["api","v1","transfers","search"] }
+          }
+        },
+        {
+          "name": "Get Transfer By ID",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/transfers/{{transfer_id}}", "host": ["{{base_url}}"], "path": ["api","v1","transfers","{{transfer_id}}"] }
+          }
+        },
+        {
+          "name": "Create Transfer [Staff]",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json(); if(j.id) pm.collectionVariables.set('transfer_id', j.id);"
+          ], "type": "text/javascript" }}],
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"fromWarehouseId\": \"{{warehouse_id}}\",\n  \"toWarehouseId\": \"<target-warehouse-guid>\",\n  \"notes\": \"Rebalancing stock\",\n  \"idempotencyKey\": \"transfer-001\",\n  \"items\": [\n    {\n      \"productId\": \"{{product_id}}\",\n      \"fromBinId\": \"{{bin_id}}\",\n      \"toBinId\": null,\n      \"quantityRequested\": 100\n    }\n  ]\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/transfers", "host": ["{{base_url}}"], "path": ["api","v1","transfers"] }
+          }
+        },
+        {
+          "name": "Approve Transfer [Manager]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"approve\": true\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/transfers/{{transfer_id}}/approve", "host": ["{{base_url}}"], "path": ["api","v1","transfers","{{transfer_id}}","approve"] }
+          }
+        },
+        {
+          "name": "Dispatch Transfer [Staff]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "PUT",
+            "url": { "raw": "{{base_url}}/api/v1/transfers/{{transfer_id}}/dispatch", "host": ["{{base_url}}"], "path": ["api","v1","transfers","{{transfer_id}}","dispatch"] }
+          }
+        },
+        {
+          "name": "Receive Transfer [Staff]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"bypassWarnings\": false,\n  \"items\": [\n    {\n      \"transferItemId\": \"<transfer-item-guid>\",\n      \"quantityReceived\": 100,\n      \"overrideReason\": null\n    }\n  ]\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/transfers/{{transfer_id}}/receive", "host": ["{{base_url}}"], "path": ["api","v1","transfers","{{transfer_id}}","receive"] }
+          }
+        },
+        {
+          "name": "Bin-to-Bin Transfer [Staff]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"warehouseId\": \"{{warehouse_id}}\",\n  \"productId\": \"{{product_id}}\",\n  \"fromBinId\": \"{{bin_id}}\",\n  \"toBinId\": \"<target-bin-guid>\",\n  \"quantity\": 50,\n  \"reason\": \"Reorganizing shelf\",\n  \"bypassWarnings\": false,\n  \"overrideReason\": null\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/transfers/bin-to-bin", "host": ["{{base_url}}"], "path": ["api","v1","transfers","bin-to-bin"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "09 — Stock Adjustments",
+      "description": "Stock adjustment management. Route: /api/v1/stockadjustments",
+      "item": [
+        {
+          "name": "List Adjustments [Viewer]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/stockadjustments?page=1&pageSize=20&warehouseId={{warehouse_id}}", "host": ["{{base_url}}"], "path": ["api","v1","stockadjustments"], "query": [{"key":"page","value":"1"},{"key":"pageSize","value":"20"},{"key":"warehouseId","value":"{{warehouse_id}}"}] }
+          }
+        },
+        {
+          "name": "Get Adjustment By ID [Viewer]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/stockadjustments/{{adjustment_id}}", "host": ["{{base_url}}"], "path": ["api","v1","stockadjustments","{{adjustment_id}}"] }
+          }
+        },
+        {
+          "name": "Create Adjustment [Staff]",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json(); if(j.id) pm.collectionVariables.set('adjustment_id', j.id);"
+          ], "type": "text/javascript" }}],
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"productId\": \"{{product_id}}\",\n  \"warehouseId\": \"{{warehouse_id}}\",\n  \"binLocationId\": \"{{bin_id}}\",\n  \"reason\": 0,\n  \"quantityBefore\": 500,\n  \"quantityAfter\": 480,\n  \"notes\": \"Cycle count discrepancy\",\n  \"idempotencyKey\": \"adj-001\",\n  \"bypassWarnings\": false,\n  \"overrideReason\": null\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/stockadjustments", "host": ["{{base_url}}"], "path": ["api","v1","stockadjustments"] }
+          }
+        },
+        {
+          "name": "Approve Adjustment [Manager]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"approve\": true\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/stockadjustments/{{adjustment_id}}/approve", "host": ["{{base_url}}"], "path": ["api","v1","stockadjustments","{{adjustment_id}}","approve"] }
+          }
+        },
+        {
+          "name": "Cancel Adjustment [Manager]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "url": { "raw": "{{base_url}}/api/v1/stockadjustments/{{adjustment_id}}/cancel", "host": ["{{base_url}}"], "path": ["api","v1","stockadjustments","{{adjustment_id}}","cancel"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "10 — Barcodes",
+      "description": "Barcode management and scanning. Route: /api/v1/barcodes",
+      "item": [
+        {
+          "name": "Generate Barcode [Manager]",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json(); if(j.id) pm.collectionVariables.set('barcode_id', j.id);"
+          ], "type": "text/javascript" }}],
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"productId\": \"{{product_id}}\",\n  \"barcodeValue\": \"BOLT-M6-50-001\",\n  \"type\": 0,\n  \"isPrimary\": true\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/barcodes/generate", "host": ["{{base_url}}"], "path": ["api","v1","barcodes","generate"] }
+          }
+        },
+        {
+          "name": "Batch Generate Barcodes [Manager]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "[\n  {\n    \"productId\": \"{{product_id}}\",\n    \"barcodeValue\": \"BOLT-M6-50-001\",\n    \"type\": 0,\n    \"isPrimary\": false\n  },\n  {\n    \"productId\": \"{{product_id}}\",\n    \"barcodeValue\": \"BOLT-M6-50-002\",\n    \"type\": 1,\n    \"isPrimary\": false\n  }\n]" },
+            "url": { "raw": "{{base_url}}/api/v1/barcodes/batch-generate", "host": ["{{base_url}}"], "path": ["api","v1","barcodes","batch-generate"] }
+          }
+        },
+        {
+          "name": "Scan Barcode [Staff]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"barcodeValue\": \"BOLT-M6-50-001\",\n  \"scannedBy\": \"{{user_id}}\",\n  \"warehouseId\": \"{{warehouse_id}}\",\n  \"action\": 0\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/barcodes/scan", "host": ["{{base_url}}"], "path": ["api","v1","barcodes","scan"] }
+          }
+        },
+        {
+          "name": "Get Product Barcodes",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/barcodes/product/{{product_id}}", "host": ["{{base_url}}"], "path": ["api","v1","barcodes","product","{{product_id}}"] }
+          }
+        },
+        {
+          "name": "Get Barcode Image",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/barcodes/{{barcode_id}}/image", "host": ["{{base_url}}"], "path": ["api","v1","barcodes","{{barcode_id}}","image"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "11 — Internal Invoices",
+      "description": "Finance invoice processing (3-way match). Route: /api/v1/invoices — RequireManager",
+      "item": [
+        {
+          "name": "Mark Under Review [Manager]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"internalNotes\": \"Reviewing invoice against PO.\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/invoices/{{invoice_id}}/under-review", "host": ["{{base_url}}"], "path": ["api","v1","invoices","{{invoice_id}}","under-review"] }
+          }
+        },
+        {
+          "name": "Match Invoice [Manager]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"internalNotes\": \"3-way match complete.\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/invoices/{{invoice_id}}/match", "host": ["{{base_url}}"], "path": ["api","v1","invoices","{{invoice_id}}","match"] }
+          }
+        },
+        {
+          "name": "Pay Invoice [Manager]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"paymentReference\": \"PAY-2026-001\",\n  \"internalNotes\": \"Payment processed via NEFT.\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/invoices/{{invoice_id}}/pay", "host": ["{{base_url}}"], "path": ["api","v1","invoices","{{invoice_id}}","pay"] }
+          }
+        },
+        {
+          "name": "Void Invoice [Manager]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"rejectionReason\": \"Invoice amount does not match PO.\",\n  \"internalNotes\": \"Discrepancy noted.\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/invoices/{{invoice_id}}/void", "host": ["{{base_url}}"], "path": ["api","v1","invoices","{{invoice_id}}","void"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "12 — Reports",
+      "description": "Analytics and export reports. Route: /api/v1/reports — RequireViewer",
+      "item": [
+        {
+          "name": "Inventory Valuation",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/reports/inventory-valuation?warehouseId={{warehouse_id}}&method=0&export=false", "host": ["{{base_url}}"], "path": ["api","v1","reports","inventory-valuation"], "query": [{"key":"warehouseId","value":"{{warehouse_id}}"},{"key":"method","value":"0"},{"key":"export","value":"false"}] }
+          }
+        },
+        {
+          "name": "Inventory Valuation (CSV Export)",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/reports/inventory-valuation?warehouseId={{warehouse_id}}&method=0&export=true", "host": ["{{base_url}}"], "path": ["api","v1","reports","inventory-valuation"], "query": [{"key":"warehouseId","value":"{{warehouse_id}}"},{"key":"method","value":"0"},{"key":"export","value":"true"}] }
+          }
+        },
+        {
+          "name": "Stock Movements",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/reports/stock-movements?warehouseId={{warehouse_id}}&productId=&from=2026-01-01&to=2026-12-31&export=false", "host": ["{{base_url}}"], "path": ["api","v1","reports","stock-movements"], "query": [{"key":"warehouseId","value":"{{warehouse_id}}"},{"key":"productId","value":""},{"key":"from","value":"2026-01-01"},{"key":"to","value":"2026-12-31"},{"key":"export","value":"false"}] }
+          }
+        },
+        {
+          "name": "Dead Stock Report",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/reports/dead-stock?warehouseId={{warehouse_id}}&daysThreshold=90&export=false", "host": ["{{base_url}}"], "path": ["api","v1","reports","dead-stock"], "query": [{"key":"warehouseId","value":"{{warehouse_id}}"},{"key":"daysThreshold","value":"90"},{"key":"export","value":"false"}] }
+          }
+        },
+        {
+          "name": "Shrinkage Report",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/reports/shrinkage?warehouseId={{warehouse_id}}&from=2026-01-01&to=2026-12-31&export=false", "host": ["{{base_url}}"], "path": ["api","v1","reports","shrinkage"], "query": [{"key":"warehouseId","value":"{{warehouse_id}}"},{"key":"from","value":"2026-01-01"},{"key":"to","value":"2026-12-31"},{"key":"export","value":"false"}] }
+          }
+        },
+        {
+          "name": "Supplier Performance Report",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/reports/supplier-performance?supplierId=&warehouseId={{warehouse_id}}&export=false", "host": ["{{base_url}}"], "path": ["api","v1","reports","supplier-performance"], "query": [{"key":"supplierId","value":""},{"key":"warehouseId","value":"{{warehouse_id}}"},{"key":"export","value":"false"}] }
+          }
+        },
+        {
+          "name": "PO Fulfillment Report",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/reports/po-fulfillment?warehouseId={{warehouse_id}}&from=2026-01-01&to=2026-12-31&export=false", "host": ["{{base_url}}"], "path": ["api","v1","reports","po-fulfillment"], "query": [{"key":"warehouseId","value":"{{warehouse_id}}"},{"key":"from","value":"2026-01-01"},{"key":"to","value":"2026-12-31"},{"key":"export","value":"false"}] }
+          }
+        },
+        {
+          "name": "Audit Log [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/reports/audit-log?page=1&pageSize=50&userId=&entityType=&action=&fromDate=&toDate=", "host": ["{{base_url}}"], "path": ["api","v1","reports","audit-log"], "query": [{"key":"page","value":"1"},{"key":"pageSize","value":"50"},{"key":"userId","value":""},{"key":"entityType","value":""},{"key":"action","value":""},{"key":"fromDate","value":""},{"key":"toDate","value":""}] }
+          }
+        },
+        {
+          "name": "Warehouse Utilization",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/reports/warehouse-utilization?warehouseId={{warehouse_id}}&export=false", "host": ["{{base_url}}"], "path": ["api","v1","reports","warehouse-utilization"], "query": [{"key":"warehouseId","value":"{{warehouse_id}}"},{"key":"export","value":"false"}] }
+          }
+        },
+        {
+          "name": "Override Audit Report [Admin]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/reports/override-audit?warehouseId={{warehouse_id}}&from=2026-01-01&to=2026-12-31&export=false", "host": ["{{base_url}}"], "path": ["api","v1","reports","override-audit"], "query": [{"key":"warehouseId","value":"{{warehouse_id}}"},{"key":"from","value":"2026-01-01"},{"key":"to","value":"2026-12-31"},{"key":"export","value":"false"}] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "13 — Notifications",
+      "description": "User notification inbox. Route: /api/v1/notifications",
+      "item": [
+        {
+          "name": "Get Inbox",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/notifications?page=1&pageSize=20", "host": ["{{base_url}}"], "path": ["api","v1","notifications"], "query": [{"key":"page","value":"1"},{"key":"pageSize","value":"20"}] }
+          }
+        },
+        {
+          "name": "Get Unread Count",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/notifications/unread-count", "host": ["{{base_url}}"], "path": ["api","v1","notifications","unread-count"] }
+          }
+        },
+        {
+          "name": "Mark Notification Read",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "PUT",
+            "url": { "raw": "{{base_url}}/api/v1/notifications/<notification-id>/read", "host": ["{{base_url}}"], "path": ["api","v1","notifications","<notification-id>","read"] }
+          }
+        },
+        {
+          "name": "Mark All Read",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "PUT",
+            "url": { "raw": "{{base_url}}/api/v1/notifications/read-all", "host": ["{{base_url}}"], "path": ["api","v1","notifications","read-all"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "14 — Files",
+      "description": "File attachments (hardcoded /api/v1/files — no versioning param).",
+      "item": [
+        {
+          "name": "Upload File",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json(); if(j.id) pm.collectionVariables.set('file_id', j.id);"
+          ], "type": "text/javascript" }}],
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "file", "type": "file", "src": "" },
+                { "key": "entityType", "value": "Supplier", "type": "text" },
+                { "key": "entityId", "value": "{{supplier_id}}", "type": "text" },
+                { "key": "category", "value": "0", "type": "text" },
+                { "key": "expiryDate", "value": "", "type": "text" }
+              ]
+            },
+            "url": { "raw": "{{base_url}}/api/v1/files/upload", "host": ["{{base_url}}"], "path": ["api","v1","files","upload"] }
+          }
+        },
+        {
+          "name": "Get Files By Entity",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/files/Supplier/{{supplier_id}}", "host": ["{{base_url}}"], "path": ["api","v1","files","Supplier","{{supplier_id}}"] }
+          }
+        },
+        {
+          "name": "Download File",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/files/{{file_id}}/download", "host": ["{{base_url}}"], "path": ["api","v1","files","{{file_id}}","download"] }
+          }
+        },
+        {
+          "name": "Delete File [Manager]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "DELETE",
+            "url": { "raw": "{{base_url}}/api/v1/files/{{file_id}}", "host": ["{{base_url}}"], "path": ["api","v1","files","{{file_id}}"] }
+          }
+        },
+        {
+          "name": "Verify File [Manager]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "PUT",
+            "url": { "raw": "{{base_url}}/api/v1/files/{{file_id}}/verify", "host": ["{{base_url}}"], "path": ["api","v1","files","{{file_id}}","verify"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "15 — Lookup (Master Data)",
+      "description": "Cached master data for dropdowns. Route: /api/v1/lookup",
+      "item": [
+        {
+          "name": "Get Master Data",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{admin_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/lookup/master-data", "host": ["{{base_url}}"], "path": ["api","v1","lookup","master-data"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "16 — Supplier Auth (Portal)",
+      "description": "Supplier portal authentication. Route: /api/v1/supplier/auth — ALL PUBLIC except logout/change-password",
+      "item": [
+        {
+          "name": "Supplier Login",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json();",
+            "if(j.accessToken){ pm.collectionVariables.set('supplier_token', j.accessToken); }",
+            "if(j.refreshToken){ pm.collectionVariables.set('supplier_refresh_token', j.refreshToken); }",
+            "if(j.contact){ pm.collectionVariables.set('supplier_id', j.contact.supplierId); pm.collectionVariables.set('contact_id', j.contact.contactId); }"
+          ], "type": "text/javascript" }}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"supplier@acme.com\",\n  \"password\": \"Supplier@123\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/supplier/auth/login", "host": ["{{base_url}}"], "path": ["api","v1","supplier","auth","login"] }
+          }
+        },
+        {
+          "name": "Supplier Register (Self)",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json(); if(j.contactId) pm.collectionVariables.set('contact_id', j.contactId);"
+          ], "type": "text/javascript" }}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Acme Supplies Pvt Ltd\",\n  \"gstin\": \"29AABCA1234B1Z5\",\n  \"pan\": \"AABCA1234B\",\n  \"address\": \"456 Industrial Zone, Bangalore\",\n  \"contactFullName\": \"Ravi Kumar\",\n  \"email\": \"ravi@acme.com\",\n  \"phone\": \"+919876543210\",\n  \"password\": \"Supplier@123\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/supplier/auth/register", "host": ["{{base_url}}"], "path": ["api","v1","supplier","auth","register"] }
+          }
+        },
+        {
+          "name": "Supplier Verify Email OTP",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"ravi@acme.com\",\n  \"token\": \"123456\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/supplier/auth/verify-email", "host": ["{{base_url}}"], "path": ["api","v1","supplier","auth","verify-email"] }
+          }
+        },
+        {
+          "name": "Supplier Resend OTP",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"contactId\": \"{{contact_id}}\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/supplier/auth/resend-otp", "host": ["{{base_url}}"], "path": ["api","v1","supplier","auth","resend-otp"] }
+          }
+        },
+        {
+          "name": "Supplier Complete Registration (Invite Flow)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"inviteToken\": \"<invite-token-from-email>\",\n  \"contactFullName\": \"Jane Supplier\",\n  \"jobTitle\": \"Procurement Manager\",\n  \"pan\": \"AABCJ5678K\",\n  \"address\": \"789 Supplier Road, Delhi\",\n  \"password\": \"Supplier@123\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/supplier/auth/complete-registration", "host": ["{{base_url}}"], "path": ["api","v1","supplier","auth","complete-registration"] }
+          }
+        },
+        {
+          "name": "Supplier Refresh Token",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json();",
+            "if(j.accessToken){ pm.collectionVariables.set('supplier_token', j.accessToken); }",
+            "if(j.refreshToken){ pm.collectionVariables.set('supplier_refresh_token', j.refreshToken); }"
+          ], "type": "text/javascript" }}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"refreshToken\": \"{{supplier_refresh_token}}\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/supplier/auth/refresh", "host": ["{{base_url}}"], "path": ["api","v1","supplier","auth","refresh"] }
+          }
+        },
+        {
+          "name": "Supplier Logout [RequireSupplier]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"refreshToken\": \"{{supplier_refresh_token}}\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/supplier/auth/logout", "host": ["{{base_url}}"], "path": ["api","v1","supplier","auth","logout"] }
+          }
+        },
+        {
+          "name": "Supplier Change Password [RequireSupplier]",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"currentPassword\": \"Supplier@123\",\n  \"newPassword\": \"Supplier@456\",\n  \"confirmPassword\": \"Supplier@456\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/supplier/auth/change-password", "host": ["{{base_url}}"], "path": ["api","v1","supplier","auth","change-password"] }
+          }
+        },
+        {
+          "name": "Supplier Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"ravi@acme.com\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/supplier/auth/forgot-password", "host": ["{{base_url}}"], "path": ["api","v1","supplier","auth","forgot-password"] }
+          }
+        },
+        {
+          "name": "Supplier Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"token\": \"<reset-token-from-email>\",\n  \"newPassword\": \"Supplier@New123\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/supplier/auth/reset-password", "host": ["{{base_url}}"], "path": ["api","v1","supplier","auth","reset-password"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "17 — Supplier Profile (Portal)",
+      "description": "Supplier portal — own profile management. Route: /api/v1/supplier/profile — RequireSupplier",
+      "item": [
+        {
+          "name": "Get My Profile",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/supplier/profile", "host": ["{{base_url}}"], "path": ["api","v1","supplier","profile"] }
+          }
+        },
+        {
+          "name": "Update My Profile",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"fullName\": \"Ravi Kumar Updated\",\n  \"phone\": \"+919876543211\",\n  \"jobTitle\": \"Senior Procurement Manager\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/supplier/profile", "host": ["{{base_url}}"], "path": ["api","v1","supplier","profile"] }
+          }
+        },
+        {
+          "name": "Upload Logo",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [{ "key": "logo", "type": "file", "src": "" }]
+            },
+            "url": { "raw": "{{base_url}}/api/v1/supplier/profile/logo", "host": ["{{base_url}}"], "path": ["api","v1","supplier","profile","logo"] }
+          }
+        },
+        {
+          "name": "Get Onboarding Status",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/supplier/profile/status", "host": ["{{base_url}}"], "path": ["api","v1","supplier","profile","status"] }
+          }
+        },
+        {
+          "name": "Submit Info (Info Requested State)",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"message\": \"Please find the updated GST certificate attached.\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/supplier/profile/submit-info", "host": ["{{base_url}}"], "path": ["api","v1","supplier","profile","submit-info"] }
+          }
+        },
+        {
+          "name": "Get Agreement",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/supplier/profile/agreement", "host": ["{{base_url}}"], "path": ["api","v1","supplier","profile","agreement"] }
+          }
+        },
+        {
+          "name": "Accept Agreement (→ Active)",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "POST",
+            "url": { "raw": "{{base_url}}/api/v1/supplier/profile/agreement/accept", "host": ["{{base_url}}"], "path": ["api","v1","supplier","profile","agreement","accept"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "18 — Supplier Purchase Orders (Portal)",
+      "description": "Supplier portal — view and respond to POs. Route: /api/v1/supplier/purchase-orders — RequireSupplier + Active",
+      "item": [
+        {
+          "name": "Get My Purchase Orders",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/supplier/purchase-orders", "host": ["{{base_url}}"], "path": ["api","v1","supplier","purchase-orders"] }
+          }
+        },
+        {
+          "name": "Get PO Detail",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/supplier/purchase-orders/{{po_id}}", "host": ["{{base_url}}"], "path": ["api","v1","supplier","purchase-orders","{{po_id}}"] }
+          }
+        },
+        {
+          "name": "Respond to PO — Accept",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"accept\": true,\n  \"declineReason\": null,\n  \"committedDeliveryDate\": \"2026-07-10T00:00:00Z\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/supplier/purchase-orders/{{po_id}}/respond", "host": ["{{base_url}}"], "path": ["api","v1","supplier","purchase-orders","{{po_id}}","respond"] }
+          }
+        },
+        {
+          "name": "Respond to PO — Decline",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"accept\": false,\n  \"declineReason\": \"Unable to fulfil this quantity at this time.\",\n  \"committedDeliveryDate\": null\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/supplier/purchase-orders/{{po_id}}/respond", "host": ["{{base_url}}"], "path": ["api","v1","supplier","purchase-orders","{{po_id}}","respond"] }
+          }
+        },
+        {
+          "name": "Update Delivery Date",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"expectedDelivery\": \"2026-07-15T00:00:00Z\",\n  \"supplierNotes\": \"Delayed due to logistics.\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/supplier/purchase-orders/{{po_id}}/delivery-date", "host": ["{{base_url}}"], "path": ["api","v1","supplier","purchase-orders","{{po_id}}","delivery-date"] }
+          }
+        },
+        {
+          "name": "Mark Dispatched",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"trackingNumber\": \"DTDC-1234567890\",\n  \"supplierNotes\": \"Dispatched via DTDC courier.\"\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/supplier/purchase-orders/{{po_id}}/dispatch", "host": ["{{base_url}}"], "path": ["api","v1","supplier","purchase-orders","{{po_id}}","dispatch"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "19 — Supplier Invoices (Portal)",
+      "description": "Supplier portal — submit and track invoices. Route: /api/v1/supplier/invoices — RequireSupplier + Active",
+      "item": [
+        {
+          "name": "Upload Invoice PDF",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "var j = pm.response.json(); if(j.id) pm.collectionVariables.set('invoice_id', j.id);"
+          ], "type": "text/javascript" }}],
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "purchaseOrderId", "value": "{{po_id}}", "type": "text" },
+                { "key": "invoiceNumber", "value": "INV-2026-001", "type": "text" },
+                { "key": "amount", "value": "1250.00", "type": "text" },
+                { "key": "currency", "value": "INR", "type": "text" },
+                { "key": "invoiceDate", "value": "2026-07-10", "type": "text" },
+                { "key": "file", "type": "file", "src": "" }
+              ]
+            },
+            "url": { "raw": "{{base_url}}/api/v1/supplier/invoices", "host": ["{{base_url}}"], "path": ["api","v1","supplier","invoices"] }
+          }
+        },
+        {
+          "name": "Get My Invoices",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/supplier/invoices", "host": ["{{base_url}}"], "path": ["api","v1","supplier","invoices"] }
+          }
+        },
+        {
+          "name": "Get Invoice Detail",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/supplier/invoices/{{invoice_id}}", "host": ["{{base_url}}"], "path": ["api","v1","supplier","invoices","{{invoice_id}}"] }
+          }
+        },
+        {
+          "name": "Download Invoice PDF",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/supplier/invoices/{{invoice_id}}/download", "host": ["{{base_url}}"], "path": ["api","v1","supplier","invoices","{{invoice_id}}","download"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "20 — Supplier Catalogue (Portal)",
+      "description": "Supplier portal — manage product catalogue. Route: /api/v1/supplier/catalogue — RequireSupplier + Active",
+      "item": [
+        {
+          "name": "Get My Catalogue",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/supplier/catalogue", "host": ["{{base_url}}"], "path": ["api","v1","supplier","catalogue"] }
+          }
+        },
+        {
+          "name": "Add Catalogue Item",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"productId\": \"{{product_id}}\",\n  \"unitPrice\": 2.50,\n  \"leadTimeDays\": 5,\n  \"minOrderQuantity\": 100\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/supplier/catalogue", "host": ["{{base_url}}"], "path": ["api","v1","supplier","catalogue"] }
+          }
+        },
+        {
+          "name": "Update Catalogue Item",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"unitPrice\": 2.75,\n  \"leadTimeDays\": 4,\n  \"minOrderQuantity\": 50\n}" },
+            "url": { "raw": "{{base_url}}/api/v1/supplier/catalogue/<catalogue-item-guid>", "host": ["{{base_url}}"], "path": ["api","v1","supplier","catalogue","<catalogue-item-guid>"] }
+          }
+        },
+        {
+          "name": "Deactivate Catalogue Item",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "DELETE",
+            "url": { "raw": "{{base_url}}/api/v1/supplier/catalogue/<catalogue-item-guid>", "host": ["{{base_url}}"], "path": ["api","v1","supplier","catalogue","<catalogue-item-guid>"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "21 — Supplier Dashboard (Portal)",
+      "description": "Supplier portal — performance dashboard. Route: /api/v1/supplier/dashboard — RequireSupplier + Active",
+      "item": [
+        {
+          "name": "Get Supplier Dashboard",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{supplier_token}}" }] },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/v1/supplier/dashboard", "host": ["{{base_url}}"], "path": ["api","v1","supplier","dashboard"] }
+          }
+        }
+      ]
+    }
+
+  ]
+}

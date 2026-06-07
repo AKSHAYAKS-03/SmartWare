@@ -1,3 +1,4 @@
+using SmartInventory.Core.Attributes;
 using SmartInventory.Core.Enums;
 
 namespace SmartInventory.Core.Entities;
@@ -7,7 +8,8 @@ namespace SmartInventory.Core.Entities;
 /// </summary>
 public class WarehouseTransfer : BaseEntity
 {
-    public string TransferNumber { get; set; } = string.Empty;
+    public string TransferNumber { get; set; } = null!;
+    [Sortable]
     public TransferStatus Status { get; set; } = TransferStatus.Requested;
     public DateTime? TransferDate { get; set; }
     public string? Notes { get; set; }
@@ -17,6 +19,10 @@ public class WarehouseTransfer : BaseEntity
     public Guid ToWarehouseId { get; set; }
     public Guid RequestedBy { get; set; }
     public Guid? ApprovedBy { get; set; }
+
+    /// <summary>Set when transfer is received with transit variance.</summary>
+    public TransferVarianceResolutionStatus? VarianceResolutionStatus { get; set; }
+    public DateTime? VarianceResolvedAt { get; set; }
 
     // Navigation
     public Warehouse FromWarehouse { get; set; } = null!;

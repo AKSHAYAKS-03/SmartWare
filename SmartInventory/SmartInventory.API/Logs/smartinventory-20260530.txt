@@ -1,0 +1,5 @@
+2026-05-30 18:08:18.502 +05:30 [INF] () Outbox Processor Service started.
+2026-05-30 18:08:18.502 +05:30 [INF] () AuditLogArchiveJob started.
+2026-05-30 18:08:18.502 +05:30 [INF] () OutboxProcessorJob started.
+2026-05-30 18:08:18.594 +05:30 [INF] () AuditLogArchiveJob will run at "2026-05-31T02:00:00.0000000Z" UTC (in 13:21 hours).
+2026-05-30 18:08:40.917 +05:30 [WRN] (1c6de09f-8c38-41ab-a64b-049857d5a892) Failed to determine the https port for redirect.

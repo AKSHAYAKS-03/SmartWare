@@ -8,6 +8,8 @@ public class SupplierCreateDto
 {
     public string Name { get; set; } = string.Empty;
     public string Code { get; set; } = string.Empty;
+    public string? GSTIN { get; set; }
+    public string? PAN { get; set; }
     public string? ContactPerson { get; set; }
     public string? Email { get; set; }
     public string? Phone { get; set; }
@@ -22,6 +24,8 @@ public class SupplierUpdateDto
 {
     public string Name { get; set; } = string.Empty;
     public string Code { get; set; } = string.Empty;
+    public string? GSTIN { get; set; }
+    public string? PAN { get; set; }
     public string? ContactPerson { get; set; }
     public string? Email { get; set; }
     public string? Phone { get; set; }
@@ -37,6 +41,8 @@ public class SupplierResponseDto
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Code { get; set; } = string.Empty;
+    public string? GSTIN { get; set; }
+    public string? PAN { get; set; }
     public string? ContactPerson { get; set; }
     public string? Email { get; set; }
     public string? Phone { get; set; }
@@ -48,6 +54,19 @@ public class SupplierResponseDto
     public decimal Rating { get; set; }
     public bool IsActive { get; set; }
     public DateTime CreatedAt { get; set; }
+
+    // Onboarding properties
+    public SupplierStatus Status { get; set; }
+    public string StatusName => Status.ToString();
+    public RegistrationSource RegistrationSource { get; set; }
+    public string RegistrationSourceName => RegistrationSource.ToString();
+    public string? InviteToken { get; set; }
+    public DateTime? InviteTokenExpiresAt { get; set; }
+    public string? RejectionReason { get; set; }
+    public string? SuspensionReason { get; set; }
+    public string? InfoRequestedMessage { get; set; }
+    public DateTime? AgreementSignedAt { get; set; }
+    public string? AgreementSignedIp { get; set; }
 }
 
 public class SupplierSummaryDto

@@ -81,17 +81,22 @@ public class InputValidationException : SmartInventoryException
 /// </summary>
 public class StaleDataException : SmartInventoryException
 {
-    public StaleDataException(string entityName)
+    public int? CurrentQuantity { get; }
+
+    public StaleDataException(string entityName, int? currentQuantity = null)
         : base($"The {entityName} was modified by another user. Please refresh and try again.",
-            409, "STALE_DATA") { }
+            409, "STALE_DATA") 
+    {
+        CurrentQuantity = currentQuantity;
+    }
 }
 
 /// <summary>
-/// Action requires manager/admin approval (HTTP 403).
+/// Action requires manager/admin approval (HTTP 202).
 /// </summary>
 public class ApprovalRequiredException : SmartInventoryException
 {
     public ApprovalRequiredException(string action)
-        : base($"The action '{action}' requires approval from a manager or admin.",
-            403, "APPROVAL_REQUIRED") { }
+        : base($"The action '{action}' requires approval from a manager or admin. It has been saved as pending.",
+            202, "APPROVAL_REQUIRED") { }
 }

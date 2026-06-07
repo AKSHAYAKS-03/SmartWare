@@ -6,5 +6,6 @@ public enum GoodsReceiptStatus
     Inspecting = 1,
     Accepted = 2,
     PartiallyAccepted = 3,
-    Rejected = 4
+    Rejected = 4,
+    Cancelled = 5
 }

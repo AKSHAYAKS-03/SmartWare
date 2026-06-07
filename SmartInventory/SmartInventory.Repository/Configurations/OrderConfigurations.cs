@@ -16,7 +16,9 @@ public class PurchaseOrderConfiguration : IEntityTypeConfiguration<PurchaseOrder
 
         builder.Property(x => x.PoNumber)
             .IsRequired()
-            .HasMaxLength(50);
+            .HasMaxLength(50)
+            .HasDefaultValueSql("CONCAT('PO-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_purchase_orders')::text, 5, '0'))")
+            .ValueGeneratedOnAdd();
 
         builder.Property(x => x.Status)
             .HasConversion<int>()
@@ -103,7 +105,9 @@ public class GoodsReceiptConfiguration : IEntityTypeConfiguration<GoodsReceipt>
 
         builder.Property(x => x.GrnNumber)
             .IsRequired()
-            .HasMaxLength(50);
+            .HasMaxLength(50)
+            .HasDefaultValueSql("CONCAT('GRN-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_goods_receipts')::text, 5, '0'))")
+            .ValueGeneratedOnAdd();
 
         builder.Property(x => x.ReceivedDate)
             .IsRequired();
@@ -130,7 +134,67 @@ public class GoodsReceiptConfiguration : IEntityTypeConfiguration<GoodsReceipt>
             .HasForeignKey(x => x.WarehouseId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasOne(x => x.PurchaseOrderShipment)
+            .WithMany(s => s.GoodsReceipts)
+            .HasForeignKey(x => x.PurchaseOrderShipmentId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasIndex(x => x.GrnNumber).IsUnique();
+        builder.HasIndex(x => x.PurchaseOrderShipmentId);
+    }
+}
+
+public class PurchaseOrderShipmentConfiguration : IEntityTypeConfiguration<PurchaseOrderShipment>
+{
+    public void Configure(EntityTypeBuilder<PurchaseOrderShipment> builder)
+    {
+        builder.ToTable("PurchaseOrderShipments");
+
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id).ValueGeneratedOnAdd();
+
+        builder.Property(x => x.ShipmentNumber)
+            .IsRequired()
+            .HasMaxLength(50);
+        builder.Property(x => x.ShipmentNumber)
+            .HasDefaultValueSql("CONCAT('SHP-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_shipments')::text, 5, '0'))")
+            .ValueGeneratedOnAdd();
+
+        builder.Property(x => x.TrackingNumber).HasMaxLength(100);
+        builder.Property(x => x.CarrierName).HasMaxLength(100);
+        builder.Property(x => x.SupplierNotes).HasMaxLength(500);
+
+        builder.HasOne(x => x.PurchaseOrder)
+            .WithMany(po => po.Shipments)
+            .HasForeignKey(x => x.PurchaseOrderId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasIndex(x => x.ShipmentNumber).IsUnique();
+        builder.HasIndex(x => x.PurchaseOrderId);
+    }
+}
+
+public class PurchaseOrderShipmentItemConfiguration : IEntityTypeConfiguration<PurchaseOrderShipmentItem>
+{
+    public void Configure(EntityTypeBuilder<PurchaseOrderShipmentItem> builder)
+    {
+        builder.ToTable("PurchaseOrderShipmentItems");
+
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id).ValueGeneratedOnAdd();
+
+        builder.HasOne(x => x.PurchaseOrderShipment)
+            .WithMany(s => s.Items)
+            .HasForeignKey(x => x.PurchaseOrderShipmentId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(x => x.PurchaseOrderItem)
+            .WithMany()
+            .HasForeignKey(x => x.PurchaseOrderItemId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(x => x.PurchaseOrderShipmentId);
+        builder.HasIndex(x => x.PurchaseOrderItemId);
     }
 }
 

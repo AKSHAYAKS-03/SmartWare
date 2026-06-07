@@ -1,0 +1,695 @@
+2026-06-05 10:52:05.128 +05:30 [INF] () AuditLogArchiveJob started.
+2026-06-05 10:52:05.128 +05:30 [INF] () Outbox Processor Service started.
+2026-06-05 10:52:05.128 +05:30 [INF] () PO Overdue Checker Job started.
+2026-06-05 10:52:05.193 +05:30 [ERR] () Hosting failed to start
+System.IO.IOException: Failed to bind to address http://127.0.0.1:5245: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Address already in use
+ ---> System.Net.Sockets.SocketException (48): Address already in use
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__14_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+2026-06-05 10:52:05.202 +05:30 [INF] () AuditLogArchiveJob will run at "2026-06-06T02:00:00.0000000Z" UTC (in 20:37 hours).
+2026-06-05 10:52:05.204 +05:30 [INF] () AuditLogArchiveJob stopped.
+2026-06-05 10:53:21.057 +05:30 [INF] () Outbox Processor Service started.
+2026-06-05 10:53:21.057 +05:30 [INF] () AuditLogArchiveJob started.
+2026-06-05 10:53:21.057 +05:30 [INF] () PO Overdue Checker Job started.
+2026-06-05 10:53:21.148 +05:30 [INF] () AuditLogArchiveJob will run at "2026-06-06T02:00:00.0000000Z" UTC (in 20:36 hours).
+2026-06-05 10:53:21.778 +05:30 [INF] () Scanning for overdue Purchase Orders...
+2026-06-05 10:53:21.894 +05:30 [ERR] () An exception occurred while iterating over the results of a query for context type 'SmartInventory.Repository.AppDbContext'.
+System.InvalidOperationException: The configured execution strategy 'NpgsqlRetryingExecutionStrategy' does not support user-initiated transactions. Use the execution strategy returned by 'DbContext.Database.CreateExecutionStrategy()' to execute all the operations in the transaction as a retriable unit.
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.OnFirstExecution()
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.FromSqlQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+System.InvalidOperationException: The configured execution strategy 'NpgsqlRetryingExecutionStrategy' does not support user-initiated transactions. Use the execution strategy returned by 'DbContext.Database.CreateExecutionStrategy()' to execute all the operations in the transaction as a retriable unit.
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.OnFirstExecution()
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.FromSqlQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2026-06-05 10:53:21.980 +05:30 [INF] () Completed PO Overdue scan. Found and alerted on 0 overdue POs.
+2026-06-05 10:55:57.483 +05:30 [INF] () AuditLogArchiveJob stopped.
+2026-06-05 10:56:01.819 +05:30 [INF] () AuditLogArchiveJob started.
+2026-06-05 10:56:01.819 +05:30 [INF] () Outbox Processor Service started.
+2026-06-05 10:56:01.819 +05:30 [INF] () PO Overdue Checker Job started.
+2026-06-05 10:56:01.884 +05:30 [INF] () AuditLogArchiveJob will run at "2026-06-06T02:00:00.0000000Z" UTC (in 20:33 hours).
+2026-06-05 10:56:02.459 +05:30 [INF] () Scanning for overdue Purchase Orders...
+2026-06-05 10:56:02.578 +05:30 [ERR] () An exception occurred while iterating over the results of a query for context type 'SmartInventory.Repository.AppDbContext'.
+System.InvalidOperationException: The configured execution strategy 'NpgsqlRetryingExecutionStrategy' does not support user-initiated transactions. Use the execution strategy returned by 'DbContext.Database.CreateExecutionStrategy()' to execute all the operations in the transaction as a retriable unit.
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.OnFirstExecution()
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.FromSqlQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+System.InvalidOperationException: The configured execution strategy 'NpgsqlRetryingExecutionStrategy' does not support user-initiated transactions. Use the execution strategy returned by 'DbContext.Database.CreateExecutionStrategy()' to execute all the operations in the transaction as a retriable unit.
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.OnFirstExecution()
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.FromSqlQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2026-06-05 10:56:02.644 +05:30 [INF] () Completed PO Overdue scan. Found and alerted on 0 overdue POs.
+2026-06-05 10:56:03.768 +05:30 [INF] () AuditLogArchiveJob stopped.
+2026-06-05 10:56:14.131 +05:30 [INF] () Outbox Processor Service started.
+2026-06-05 10:56:14.131 +05:30 [INF] () AuditLogArchiveJob started.
+2026-06-05 10:56:14.131 +05:30 [INF] () PO Overdue Checker Job started.
+2026-06-05 10:56:14.233 +05:30 [INF] () AuditLogArchiveJob will run at "2026-06-06T02:00:00.0000000Z" UTC (in 20:33 hours).
+2026-06-05 10:56:14.852 +05:30 [INF] () Scanning for overdue Purchase Orders...
+2026-06-05 10:56:14.980 +05:30 [ERR] () An exception occurred while iterating over the results of a query for context type 'SmartInventory.Repository.AppDbContext'.
+System.InvalidOperationException: The configured execution strategy 'NpgsqlRetryingExecutionStrategy' does not support user-initiated transactions. Use the execution strategy returned by 'DbContext.Database.CreateExecutionStrategy()' to execute all the operations in the transaction as a retriable unit.
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.OnFirstExecution()
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.FromSqlQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+System.InvalidOperationException: The configured execution strategy 'NpgsqlRetryingExecutionStrategy' does not support user-initiated transactions. Use the execution strategy returned by 'DbContext.Database.CreateExecutionStrategy()' to execute all the operations in the transaction as a retriable unit.
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.OnFirstExecution()
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.FromSqlQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2026-06-05 10:56:15.091 +05:30 [INF] () Completed PO Overdue scan. Found and alerted on 0 overdue POs.
+2026-06-05 10:59:50.497 +05:30 [INF] () AuditLogArchiveJob stopped.
+2026-06-05 10:59:58.617 +05:30 [INF] () Outbox Processor Service started.
+2026-06-05 10:59:58.617 +05:30 [INF] () AuditLogArchiveJob started.
+2026-06-05 10:59:58.617 +05:30 [INF] () PO Overdue Checker Job started.
+2026-06-05 10:59:58.688 +05:30 [INF] () AuditLogArchiveJob will run at "2026-06-06T02:00:00.0000000Z" UTC (in 20:30 hours).
+2026-06-05 10:59:59.243 +05:30 [INF] () Scanning for overdue Purchase Orders...
+2026-06-05 10:59:59.406 +05:30 [INF] () Completed PO Overdue scan. Found and alerted on 0 overdue POs.
+2026-06-05 11:04:06.829 +05:30 [WRN] (60b2426d-c189-49c9-b2eb-53b2aef48ab5) Failed to determine the https port for redirect.
+2026-06-05 11:58:49.978 +05:30 [ERR] (d52e1274-7673-4096-a620-8285d738586c) Failed executing DbCommand (23ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = DateTime), @p3='?' (DbType = Guid), @p4='?', @p5='?', @p6='?' (DbType = Object), @p7='?' (DbType = Object), @p8='?' (DbType = DateTime), @p9='?' (DbType = Guid), @p10='?' (DbType = Guid), @p11='?', @p12='?' (DbType = DateTime), @p13='?' (DbType = Guid), @p14='?', @p15='?', @p16='?' (DbType = Object), @p17='?' (DbType = Object), @p18='?' (DbType = DateTime), @p19='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO audit_logs ("Id", "Action", "CreatedAt", "EntityId", "EntityType", "IpAddress", "NewValues", "OldValues", "UpdatedAt", "UserId")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+INSERT INTO audit_logs ("Id", "Action", "CreatedAt", "EntityId", "EntityType", "IpAddress", "NewValues", "OldValues", "UpdatedAt", "UserId")
+VALUES (@p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19);
+2026-06-05 11:58:50.009 +05:30 [ERR] (d52e1274-7673-4096-a620-8285d738586c) An exception occurred in the database while saving changes for context type 'SmartInventory.Repository.AppDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "audit_logs" violates foreign key constraint "FK_audit_logs_users_UserId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "audit_logs" violates foreign key constraint "FK_audit_logs_users_UserId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: audit_logs
+    ConstraintName: FK_audit_logs_users_UserId
+    File: ri_triggers.c
+    Line: 2783
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "audit_logs" violates foreign key constraint "FK_audit_logs_users_UserId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "audit_logs" violates foreign key constraint "FK_audit_logs_users_UserId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: audit_logs
+    ConstraintName: FK_audit_logs_users_UserId
+    File: ri_triggers.c
+    Line: 2783
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2026-06-05 11:58:50.022 +05:30 [ERR] (d52e1274-7673-4096-a620-8285d738586c) An unhandled exception occurred: An error occurred while saving the entity changes. See the inner exception for details.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "audit_logs" violates foreign key constraint "FK_audit_logs_users_UserId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "audit_logs" violates foreign key constraint "FK_audit_logs_users_UserId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: audit_logs
+    ConstraintName: FK_audit_logs_users_UserId
+    File: ri_triggers.c
+    Line: 2783
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at SmartInventory.Repository.AppDbContext.SaveAuditLogsAsync(List`1 auditEntries, CancellationToken cancellationToken) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.Repository/AppDbContext.cs:line 309
+   at SmartInventory.Repository.AppDbContext.SaveChangesAsync(CancellationToken cancellationToken) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.Repository/AppDbContext.cs:line 177
+   at SmartInventory.Repository.Repositories.UnitOfWork.CommitAsync() in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.Repository/Repositories/UnitOfWork.cs:line 57
+   at SmartInventory.Service.Services.AuthService.SignInAsync(LoginDto dto) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.Service/Services/AuthService.cs:line 78
+   at SmartInventory.API.Controllers.AuthController.SignIn(LoginDto dto) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Controllers/AuthController.cs:line 35
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at SmartInventory.API.Middleware.SupplierAuthorizationMiddleware.InvokeAsync(HttpContext context, AppDbContext db) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/SupplierAuthorizationMiddleware.cs:line 99
+   at SmartInventory.API.Middleware.LogContextEnrichmentMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/LogContextEnrichmentMiddleware.cs:line 32
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at SmartInventory.API.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/ExceptionMiddleware.cs:line 24
+2026-06-05 12:15:11.623 +05:30 [INF] () AuditLogArchiveJob stopped.
+2026-06-05 12:33:32.565 +05:30 [INF] () PO Overdue Checker Job started.
+2026-06-05 12:33:32.565 +05:30 [INF] () AuditLogArchiveJob started.
+2026-06-05 12:33:32.565 +05:30 [INF] () Outbox Processor Service started.
+2026-06-05 12:33:32.644 +05:30 [INF] () AuditLogArchiveJob will run at "2026-06-06T02:00:00.0000000Z" UTC (in 18:56 hours).
+2026-06-05 12:33:33.348 +05:30 [INF] () Scanning for overdue Purchase Orders...
+2026-06-05 12:33:33.549 +05:30 [INF] () Completed PO Overdue scan. Found and alerted on 0 overdue POs.
+2026-06-05 12:33:55.567 +05:30 [WRN] (4ef50edb-4cc9-4aaf-94e9-3e1cfc76459d) Failed to determine the https port for redirect.
+2026-06-05 13:58:51.275 +05:30 [INF] (b6be7c06-8559-406b-b5ca-ec7fb2c2d8e5) [INVITE] Welcome email queued for akshayasenthilkumar12@gmail.com. Link: https://app.smartware.com/set-password?token=99BB46EE046B7CAB9A3972F95BFF3977FEE59D3D6E1BB0207E9005E5CD218E71. Expires in 48 hours.
+2026-06-05 13:58:56.065 +05:30 [INF] (b6be7c06-8559-406b-b5ca-ec7fb2c2d8e5) Successfully sent email to akshayasenthilkumar12@gmail.com with subject: Welcome to SmartInventory
+2026-06-05 14:56:12.276 +05:30 [ERR] (e6d91ca1-1453-4f7f-901c-54aaf454f76c) An unhandled exception occurred: Email 'akshayasenthilkumar12@gmail.com' is already in use.
+SmartInventory.Core.Exceptions.BusinessRuleException: Email 'akshayasenthilkumar12@gmail.com' is already in use.
+   at SmartInventory.Service.Services.UserService.CreateUserAsync(UserCreateDto dto)
+   at SmartInventory.API.Controllers.UsersController.CreateUser(UserCreateDto dto)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at SmartInventory.API.Middleware.SupplierAuthorizationMiddleware.InvokeAsync(HttpContext context, AppDbContext db)
+   at SmartInventory.API.Middleware.LogContextEnrichmentMiddleware.InvokeAsync(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at SmartInventory.API.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context)
+2026-06-05 14:58:28.727 +05:30 [INF] () AuditLogArchiveJob stopped.
+2026-06-05 14:59:20.155 +05:30 [INF] () PO Overdue Checker Job started.
+2026-06-05 14:59:20.155 +05:30 [INF] () AuditLogArchiveJob started.
+2026-06-05 14:59:20.155 +05:30 [INF] () Outbox Processor Service started.
+2026-06-05 14:59:20.233 +05:30 [INF] () AuditLogArchiveJob will run at "2026-06-06T02:00:00.0000000Z" UTC (in 16:30 hours).
+2026-06-05 14:59:20.900 +05:30 [INF] () Scanning for overdue Purchase Orders...
+2026-06-05 14:59:21.080 +05:30 [INF] () Completed PO Overdue scan. Found and alerted on 0 overdue POs.
+2026-06-05 14:59:32.893 +05:30 [WRN] (ee4664ed-850c-410f-82e5-2836d0b06509) Failed to determine the https port for redirect.
+2026-06-05 14:59:33.148 +05:30 [ERR] (ee4664ed-850c-410f-82e5-2836d0b06509) An unhandled exception occurred: User with identifier '12a38413-f159-42fc-945c-12028b82d374' was not found.
+SmartInventory.Core.Exceptions.NotFoundException: User with identifier '12a38413-f159-42fc-945c-12028b82d374' was not found.
+   at SmartInventory.Service.Services.UserService.UpdateUserAsync(Guid userId, UserUpdateDto dto) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.Service/Services/UserService.cs:line 94
+   at SmartInventory.API.Controllers.UsersController.UpdateUser(Guid id, UserUpdateDto dto) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Controllers/UsersController.cs:line 56
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at SmartInventory.API.Middleware.SupplierAuthorizationMiddleware.InvokeAsync(HttpContext context, AppDbContext db) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/SupplierAuthorizationMiddleware.cs:line 99
+   at SmartInventory.API.Middleware.LogContextEnrichmentMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/LogContextEnrichmentMiddleware.cs:line 27
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at SmartInventory.API.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/ExceptionMiddleware.cs:line 24
+2026-06-05 14:59:48.981 +05:30 [ERR] (20bde05e-f22c-4793-9515-182732e74d94) Failed executing DbCommand (9ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = DateTime), @p3='?' (DbType = Guid), @p4='?' (DbType = DateTime), @p5='?', @p6='?', @p7='?', @p8='?' (DbType = DateTime), @p9='?', @p10='?', @p11='?' (DbType = DateTime), @p12='?' (DbType = Boolean), @p13='?' (DbType = DateTime), @p14='?', @p15='?', @p16='?' (DbType = Guid), @p17='?' (DbType = Boolean), @p18='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO users ("Id", "AadhaarLastFour", "ApprovedAt", "ApprovedById", "CreatedAt", "Email", "EmployeeId", "EncryptedAadhaarNumber", "ExpiresAt", "FullName", "InviteToken", "InviteTokenExpiresAt", "IsPasswordSet", "LastLogin", "PasswordHash", "PhoneNumber", "RoleId", "ShareContactDetails", "UpdatedAt")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18)
+RETURNING "EmailEnabled", "IsActive", "SmsEnabled", "Status";
+2026-06-05 14:59:48.993 +05:30 [ERR] (20bde05e-f22c-4793-9515-182732e74d94) An exception occurred in the database while saving changes for context type 'SmartInventory.Repository.AppDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23505: duplicate key value violates unique constraint "IX_users_Email"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23505
+    MessageText: duplicate key value violates unique constraint "IX_users_Email"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: users
+    ConstraintName: IX_users_Email
+    File: nbtinsert.c
+    Line: 673
+    Routine: _bt_check_unique
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23505: duplicate key value violates unique constraint "IX_users_Email"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23505
+    MessageText: duplicate key value violates unique constraint "IX_users_Email"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: users
+    ConstraintName: IX_users_Email
+    File: nbtinsert.c
+    Line: 673
+    Routine: _bt_check_unique
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2026-06-05 14:59:48.996 +05:30 [ERR] (20bde05e-f22c-4793-9515-182732e74d94) An unhandled exception occurred: An error occurred while saving the entity changes. See the inner exception for details.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23505: duplicate key value violates unique constraint "IX_users_Email"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23505
+    MessageText: duplicate key value violates unique constraint "IX_users_Email"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: users
+    ConstraintName: IX_users_Email
+    File: nbtinsert.c
+    Line: 673
+    Routine: _bt_check_unique
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at SmartInventory.Repository.AppDbContext.SaveChangesAsync(CancellationToken cancellationToken) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.Repository/AppDbContext.cs:line 167
+   at SmartInventory.Repository.Repositories.UnitOfWork.CommitAsync() in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.Repository/Repositories/UnitOfWork.cs:line 57
+   at SmartInventory.Service.Services.UserService.CreateUserAsync(UserCreateDto dto) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.Service/Services/UserService.cs:line 80
+   at SmartInventory.API.Controllers.UsersController.CreateUser(UserCreateDto dto) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Controllers/UsersController.cs:line 47
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at SmartInventory.API.Middleware.SupplierAuthorizationMiddleware.InvokeAsync(HttpContext context, AppDbContext db) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/SupplierAuthorizationMiddleware.cs:line 99
+   at SmartInventory.API.Middleware.LogContextEnrichmentMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/LogContextEnrichmentMiddleware.cs:line 27
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at SmartInventory.API.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/ExceptionMiddleware.cs:line 24
+2026-06-05 14:59:57.708 +05:30 [ERR] (fa5019d9-3596-422f-b856-cd9217dc9bf8) An unhandled exception occurred: User with identifier '12a38413-f159-42fc-945c-12028b82d374' was not found.
+SmartInventory.Core.Exceptions.NotFoundException: User with identifier '12a38413-f159-42fc-945c-12028b82d374' was not found.
+   at SmartInventory.Service.Services.UserService.UpdateUserAsync(Guid userId, UserUpdateDto dto) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.Service/Services/UserService.cs:line 94
+   at SmartInventory.API.Controllers.UsersController.UpdateUser(Guid id, UserUpdateDto dto) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Controllers/UsersController.cs:line 56
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at SmartInventory.API.Middleware.SupplierAuthorizationMiddleware.InvokeAsync(HttpContext context, AppDbContext db) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/SupplierAuthorizationMiddleware.cs:line 99
+   at SmartInventory.API.Middleware.LogContextEnrichmentMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/LogContextEnrichmentMiddleware.cs:line 27
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at SmartInventory.API.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/ExceptionMiddleware.cs:line 24
+2026-06-05 15:00:24.776 +05:30 [ERR] (4efb5302-39b1-4f09-b2a0-9b1556adcfaf) An unhandled exception occurred: User with identifier '12a38413-f159-42fc-945c-12028b82d374' was not found.
+SmartInventory.Core.Exceptions.NotFoundException: User with identifier '12a38413-f159-42fc-945c-12028b82d374' was not found.
+   at SmartInventory.Service.Services.UserService.UpdateUserAsync(Guid userId, UserUpdateDto dto) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.Service/Services/UserService.cs:line 94
+   at SmartInventory.API.Controllers.UsersController.UpdateUser(Guid id, UserUpdateDto dto) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Controllers/UsersController.cs:line 56
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at SmartInventory.API.Middleware.SupplierAuthorizationMiddleware.InvokeAsync(HttpContext context, AppDbContext db) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/SupplierAuthorizationMiddleware.cs:line 99
+   at SmartInventory.API.Middleware.LogContextEnrichmentMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/LogContextEnrichmentMiddleware.cs:line 27
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at SmartInventory.API.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/ExceptionMiddleware.cs:line 24
+2026-06-05 15:00:52.932 +05:30 [ERR] (4dd43f77-72a0-4a2b-800d-0e43c3ad29f1) An unhandled exception occurred: User with identifier '12a38413-f159-42fc-945c-12028b82d374' was not found.
+SmartInventory.Core.Exceptions.NotFoundException: User with identifier '12a38413-f159-42fc-945c-12028b82d374' was not found.
+   at SmartInventory.Service.Services.UserService.GetUserByIdAsync(Guid userId) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.Service/Services/UserService.cs:line 147
+   at SmartInventory.API.Controllers.UsersController.GetUser(Guid id) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Controllers/UsersController.cs:line 39
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at SmartInventory.API.Middleware.SupplierAuthorizationMiddleware.InvokeAsync(HttpContext context, AppDbContext db) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/SupplierAuthorizationMiddleware.cs:line 99
+   at SmartInventory.API.Middleware.LogContextEnrichmentMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/LogContextEnrichmentMiddleware.cs:line 27
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at SmartInventory.API.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/ExceptionMiddleware.cs:line 24
+2026-06-05 15:01:41.735 +05:30 [ERR] (f9b3235e-8701-4d54-b2cd-12e26ace5652) An unhandled exception occurred: User with identifier '12a38413-f159-42fc-945c-12028b82d374' was not found.
+SmartInventory.Core.Exceptions.NotFoundException: User with identifier '12a38413-f159-42fc-945c-12028b82d374' was not found.
+   at SmartInventory.Service.Services.UserService.GetUserByIdAsync(Guid userId) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.Service/Services/UserService.cs:line 147
+   at SmartInventory.API.Controllers.UsersController.GetUser(Guid id) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Controllers/UsersController.cs:line 39
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at SmartInventory.API.Middleware.SupplierAuthorizationMiddleware.InvokeAsync(HttpContext context, AppDbContext db) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/SupplierAuthorizationMiddleware.cs:line 99
+   at SmartInventory.API.Middleware.LogContextEnrichmentMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/LogContextEnrichmentMiddleware.cs:line 27
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at SmartInventory.API.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/ExceptionMiddleware.cs:line 24
+2026-06-05 15:02:25.110 +05:30 [ERR] (604c81ca-d399-418d-9f97-05aeca4a594b) An unhandled exception occurred: User with identifier '12a38413-f159-42fc-945c-12028b82d374' was not found.
+SmartInventory.Core.Exceptions.NotFoundException: User with identifier '12a38413-f159-42fc-945c-12028b82d374' was not found.
+   at SmartInventory.Service.Services.UserService.DeactivateUserAsync(Guid userId) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.Service/Services/UserService.cs:line 130
+   at SmartInventory.API.Controllers.UsersController.DeactivateUser(Guid id) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Controllers/UsersController.cs:line 64
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at SmartInventory.API.Middleware.SupplierAuthorizationMiddleware.InvokeAsync(HttpContext context, AppDbContext db) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/SupplierAuthorizationMiddleware.cs:line 99
+   at SmartInventory.API.Middleware.LogContextEnrichmentMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/LogContextEnrichmentMiddleware.cs:line 27
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at SmartInventory.API.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/ExceptionMiddleware.cs:line 24
+2026-06-05 15:02:57.852 +05:30 [INF] () AuditLogArchiveJob stopped.
+2026-06-05 15:03:03.054 +05:30 [INF] () AuditLogArchiveJob started.
+2026-06-05 15:03:03.054 +05:30 [INF] () Outbox Processor Service started.
+2026-06-05 15:03:03.054 +05:30 [INF] () PO Overdue Checker Job started.
+2026-06-05 15:03:03.126 +05:30 [INF] () AuditLogArchiveJob will run at "2026-06-06T02:00:00.0000000Z" UTC (in 16:26 hours).
+2026-06-05 15:03:03.807 +05:30 [INF] () Scanning for overdue Purchase Orders...
+2026-06-05 15:03:04.037 +05:30 [INF] () Completed PO Overdue scan. Found and alerted on 0 overdue POs.
+2026-06-05 15:03:39.966 +05:30 [WRN] (bbb423a6-1620-4de3-87e3-8b713cf01f83) Failed to determine the https port for redirect.
+2026-06-05 15:04:31.138 +05:30 [INF] (608005c1-ce45-4a16-b947-c6ec0b64adbf) [INVITE] Welcome email queued for akshayasenthilkumar12@gmail.com. Link: https://app.smartware.com/set-password?token=EB3D99A331A39CD94A858481EB5F493F0BC6CDF0389FB50E7C22EF3CDB58187C. Expires in 48 hours.
+2026-06-05 15:04:35.321 +05:30 [INF] (608005c1-ce45-4a16-b947-c6ec0b64adbf) Successfully sent email to akshayasenthilkumar12@gmail.com with subject: Welcome to SmartInventory
+2026-06-05 15:05:33.536 +05:30 [INF] (090f02cc-ab58-46a0-b4d1-0cf0c4f0d0e7) [INVITE] Welcome email queued for akshayasenthilkumar12@gmail.com. Link: https://app.smartware.com/set-password?token=E1544600AF0D054BF67DA2BA40FDB57AB89D5C2CC1D2ACD0596EF1E6818A7A76. Expires in 48 hours.
+2026-06-05 15:05:36.981 +05:30 [INF] (090f02cc-ab58-46a0-b4d1-0cf0c4f0d0e7) Successfully sent email to akshayasenthilkumar12@gmail.com with subject: Welcome to SmartInventory
+2026-06-05 15:09:13.665 +05:30 [ERR] (0a30e2a3-73a6-4351-92a3-5fb0d0a8e209) An unhandled exception occurred: Invalid or expired invitation link. Please contact your administrator.
+SmartInventory.Core.Exceptions.BusinessRuleException: Invalid or expired invitation link. Please contact your administrator.
+   at SmartInventory.Service.Services.AuthService.SetPasswordAsync(SetPasswordDto dto) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.Service/Services/AuthService.cs:line 219
+   at SmartInventory.API.Controllers.AuthController.SetPassword(SetPasswordDto dto) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Controllers/AuthController.cs:line 83
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at SmartInventory.API.Middleware.SupplierAuthorizationMiddleware.InvokeAsync(HttpContext context, AppDbContext db) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/SupplierAuthorizationMiddleware.cs:line 99
+   at SmartInventory.API.Middleware.LogContextEnrichmentMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/LogContextEnrichmentMiddleware.cs:line 32
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at SmartInventory.API.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/ExceptionMiddleware.cs:line 24
+2026-06-05 15:09:46.496 +05:30 [INF] (5c06eb74-1338-43e1-9823-4aa0a70b5df7) [INVITE] Welcome email queued for akshayasenthilkumar12@gmail.com. Link: https://app.smartware.com/set-password?token=E00857A51ED12D4A4C29E9BED660D79E70C222D00C0A80395BDE8FCB9C1FEE2F. Expires in 48 hours.
+2026-06-05 15:09:49.905 +05:30 [INF] (5c06eb74-1338-43e1-9823-4aa0a70b5df7) Successfully sent email to akshayasenthilkumar12@gmail.com with subject: Welcome to SmartInventory
+2026-06-05 15:10:58.497 +05:30 [ERR] (9170fdda-066d-4921-b38a-0e3d00f5716d) An unhandled exception occurred: Invalid or expired invitation link. Please contact your administrator.
+SmartInventory.Core.Exceptions.BusinessRuleException: Invalid or expired invitation link. Please contact your administrator.
+   at SmartInventory.Service.Services.AuthService.SetPasswordAsync(SetPasswordDto dto) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.Service/Services/AuthService.cs:line 219
+   at SmartInventory.API.Controllers.AuthController.SetPassword(SetPasswordDto dto) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Controllers/AuthController.cs:line 83
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at SmartInventory.API.Middleware.SupplierAuthorizationMiddleware.InvokeAsync(HttpContext context, AppDbContext db) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/SupplierAuthorizationMiddleware.cs:line 99
+   at SmartInventory.API.Middleware.LogContextEnrichmentMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/LogContextEnrichmentMiddleware.cs:line 32
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at SmartInventory.API.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/ExceptionMiddleware.cs:line 24
+2026-06-05 15:11:06.066 +05:30 [ERR] (f3968215-67aa-45e0-acb3-69d533bdd71a) An unhandled exception occurred: Invalid or expired invitation link. Please contact your administrator.
+SmartInventory.Core.Exceptions.BusinessRuleException: Invalid or expired invitation link. Please contact your administrator.
+   at SmartInventory.Service.Services.AuthService.SetPasswordAsync(SetPasswordDto dto) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.Service/Services/AuthService.cs:line 219
+   at SmartInventory.API.Controllers.AuthController.SetPassword(SetPasswordDto dto) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Controllers/AuthController.cs:line 83
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at SmartInventory.API.Middleware.SupplierAuthorizationMiddleware.InvokeAsync(HttpContext context, AppDbContext db) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/SupplierAuthorizationMiddleware.cs:line 99
+   at SmartInventory.API.Middleware.LogContextEnrichmentMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/LogContextEnrichmentMiddleware.cs:line 32
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at SmartInventory.API.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/ExceptionMiddleware.cs:line 24
+2026-06-05 15:14:44.611 +05:30 [INF] () AuditLogArchiveJob stopped.
+2026-06-05 15:14:50.254 +05:30 [INF] () PO Overdue Checker Job started.
+2026-06-05 15:14:50.254 +05:30 [INF] () AuditLogArchiveJob started.
+2026-06-05 15:14:50.254 +05:30 [INF] () Outbox Processor Service started.
+2026-06-05 15:14:50.334 +05:30 [INF] () AuditLogArchiveJob will run at "2026-06-06T02:00:00.0000000Z" UTC (in 16:15 hours).
+2026-06-05 15:14:50.949 +05:30 [INF] () Scanning for overdue Purchase Orders...
+2026-06-05 15:14:51.131 +05:30 [INF] () Completed PO Overdue scan. Found and alerted on 0 overdue POs.
+2026-06-05 15:15:30.877 +05:30 [WRN] (d9a51a3b-a31c-43ea-b116-0785e98d9992) Failed to determine the https port for redirect.
+2026-06-05 15:15:31.252 +05:30 [INF] (d9a51a3b-a31c-43ea-b116-0785e98d9992) [INVITE] Welcome email queued for akshayasenthilkumar12@gmail.com. Link: https://app.smartware.com/set-password?token=B6F3ECA3560EFEABA46895A4F35519BC17E4735CEF137818FD86B5B8316D0978. Expires in 48 hours.
+2026-06-05 15:15:35.127 +05:30 [INF] (d9a51a3b-a31c-43ea-b116-0785e98d9992) Successfully sent email to akshayasenthilkumar12@gmail.com with subject: Welcome to SmartInventory
+2026-06-05 15:18:29.167 +05:30 [ERR] (9dbab5eb-0ed9-4bde-bbe0-9754c41eeb48) An unhandled exception occurred: User with identifier '12a38413-f159-42fc-945c-12028b82d374' was not found.
+SmartInventory.Core.Exceptions.NotFoundException: User with identifier '12a38413-f159-42fc-945c-12028b82d374' was not found.
+   at SmartInventory.Service.Services.UserService.GetUserByIdAsync(Guid userId) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.Service/Services/UserService.cs:line 147
+   at SmartInventory.API.Controllers.UsersController.GetUser(Guid id) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Controllers/UsersController.cs:line 39
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at SmartInventory.API.Middleware.SupplierAuthorizationMiddleware.InvokeAsync(HttpContext context, AppDbContext db) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/SupplierAuthorizationMiddleware.cs:line 99
+   at SmartInventory.API.Middleware.LogContextEnrichmentMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/LogContextEnrichmentMiddleware.cs:line 27
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at SmartInventory.API.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in /Users/akshaya/SmartWare/SmartInventory/SmartInventory.API/Middleware/ExceptionMiddleware.cs:line 24
+2026-06-05 16:49:02.500 +05:30 [INF] () AuditLogArchiveJob stopped.
+2026-06-05 19:42:59.749 +05:30 [INF] () Outbox Processor Service started.
+2026-06-05 19:42:59.749 +05:30 [INF] () AuditLogArchiveJob started.
+2026-06-05 19:42:59.749 +05:30 [INF] () PO Overdue Checker Job started.
+2026-06-05 19:42:59.806 +05:30 [INF] () AuditLogArchiveJob will run at "2026-06-06T02:00:00.0000000Z" UTC (in 11:47 hours).
+2026-06-05 19:43:00.421 +05:30 [INF] () Scanning for overdue Purchase Orders...
+2026-06-05 19:43:00.578 +05:30 [INF] () Completed PO Overdue scan. Found and alerted on 0 overdue POs.
+2026-06-05 19:43:12.628 +05:30 [WRN] (4e61bfff-e251-455a-bb6f-8473c3dac075) Failed to determine the https port for redirect.
+2026-06-05 19:43:41.072 +05:30 [INF] (0f1026ae-3fa5-4cec-b8b7-4dc51ce79d09) [INVITE] Welcome email queued for s.harshavarthanan1109@gmail.com. Link: https://app.smartware.com/set-password?token=656D5FC14840EFAEC9246FB7A5033A8475CCE7173319CFFE555B107C192BF02E. Expires in 48 hours.
+2026-06-05 19:45:00.514 +05:30 [INF] (0f1026ae-3fa5-4cec-b8b7-4dc51ce79d09) Successfully sent email to s.harshavarthanan1109@gmail.com with subject: Welcome to SmartInventory
+2026-06-05 20:17:46.550 +05:30 [INF] () AuditLogArchiveJob stopped.
+2026-06-05 20:18:21.421 +05:30 [INF] () AuditLogArchiveJob started.
+2026-06-05 20:18:21.421 +05:30 [INF] () Outbox Processor Service started.
+2026-06-05 20:18:21.421 +05:30 [INF] () PO Overdue Checker Job started.
+2026-06-05 20:18:21.491 +05:30 [INF] () AuditLogArchiveJob will run at "2026-06-06T02:00:00.0000000Z" UTC (in 11:11 hours).
+2026-06-05 20:18:22.114 +05:30 [INF] () Scanning for overdue Purchase Orders...
+2026-06-05 20:18:22.275 +05:30 [INF] () Completed PO Overdue scan. Found and alerted on 0 overdue POs.
+2026-06-05 20:18:25.500 +05:30 [WRN] (165d13c4-c945-4064-9165-5fe5de9f0f35) Failed to determine the https port for redirect.
+2026-06-05 20:26:58.380 +05:30 [INF] () AuditLogArchiveJob stopped.
+2026-06-05 20:27:03.926 +05:30 [INF] () AuditLogArchiveJob started.
+2026-06-05 20:27:03.926 +05:30 [INF] () Outbox Processor Service started.
+2026-06-05 20:27:03.926 +05:30 [INF] () PO Overdue Checker Job started.
+2026-06-05 20:27:03.990 +05:30 [INF] () AuditLogArchiveJob will run at "2026-06-06T02:00:00.0000000Z" UTC (in 11:02 hours).
+2026-06-05 20:27:04.602 +05:30 [INF] () Scanning for overdue Purchase Orders...
+2026-06-05 20:27:04.765 +05:30 [INF] () Completed PO Overdue scan. Found and alerted on 0 overdue POs.
+2026-06-05 20:28:14.320 +05:30 [WRN] (3db8efa3-9192-4035-9c8d-0a4ac909db84) Failed to determine the https port for redirect.
+2026-06-05 20:28:38.107 +05:30 [INF] (d81debce-f0af-4e84-95a2-dd1ae6969856) [INVITE] Welcome email queued for s.harshavarthanan1109@gmail.com. Link: https://app.smartware.com/set-password?token=A6BC3ED51F6DD08B4E725F373E9336F04EBB4A50A8518EE04F8B5BD748CF3530. Expires in 48 hours.
+2026-06-05 20:28:38.133 +05:30 [INF] () Received NOTIFY outbox_ready. Processing outbox...
+2026-06-05 20:28:42.887 +05:30 [INF] () Successfully sent email to s.harshavarthanan1109@gmail.com with subject: Welcome to SmartInventory
+2026-06-05 21:17:28.893 +05:30 [INF] () AuditLogArchiveJob stopped.
+2026-06-05 21:17:39.446 +05:30 [INF] () PO Overdue Checker Job started.
+2026-06-05 21:17:39.446 +05:30 [INF] () Outbox Processor Service started.
+2026-06-05 21:17:39.446 +05:30 [INF] () AuditLogArchiveJob started.
+2026-06-05 21:17:39.515 +05:30 [INF] () AuditLogArchiveJob will run at "2026-06-06T02:00:00.0000000Z" UTC (in 10:12 hours).
+2026-06-05 21:17:40.160 +05:30 [INF] () Scanning for overdue Purchase Orders...
+2026-06-05 21:17:40.324 +05:30 [INF] () Completed PO Overdue scan. Found and alerted on 0 overdue POs.
+2026-06-05 21:19:21.582 +05:30 [WRN] (15374693-8ed3-4e5e-8c03-4e3acb6fe382) Failed to determine the https port for redirect.
+2026-06-05 22:15:11.453 +05:30 [INF] () AuditLogArchiveJob stopped.
+2026-06-05 22:15:21.097 +05:30 [INF] () Outbox Processor Service started.
+2026-06-05 22:15:21.097 +05:30 [INF] () PO Overdue Checker Job started.
+2026-06-05 22:15:21.097 +05:30 [INF] () AuditLogArchiveJob started.
+2026-06-05 22:15:21.168 +05:30 [INF] () AuditLogArchiveJob will run at "2026-06-06T02:00:00.0000000Z" UTC (in 09:14 hours).
+2026-06-05 22:15:21.792 +05:30 [INF] () Scanning for overdue Purchase Orders...
+2026-06-05 22:15:21.955 +05:30 [INF] () Completed PO Overdue scan. Found and alerted on 0 overdue POs.
+2026-06-05 22:16:32.904 +05:30 [WRN] (0392bbdd-cc1a-48eb-9a02-0f5f9b378e24) Failed to determine the https port for redirect.

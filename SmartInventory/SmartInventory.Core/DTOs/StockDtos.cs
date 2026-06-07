@@ -85,11 +85,13 @@ public class StockAdjustmentCreateDto
     public int QuantityAfter { get; set; }
     public string? Notes { get; set; }
     public Guid PerformedBy { get; set; }
+    public string? IdempotencyKey { get; set; }
+    public bool BypassWarnings { get; set; }
+    public string? OverrideReason { get; set; }
 }
 
 public class StockAdjustmentApprovalDto
 {
-    public Guid ApprovedBy { get; set; }
     public bool Approve { get; set; }
 }
 
@@ -117,6 +119,12 @@ public class StockAdjustmentResponseDto
     public Guid? ApprovedBy { get; set; }
     public string? ApprovedByUserName { get; set; }
     public DateTime CreatedAt { get; set; }
+    public ReferenceType? ReferenceType { get; set; }
+    public string? ReferenceTypeName => ReferenceType?.ToString();
+    public Guid? ReferenceId { get; set; }
+    public string? TransferNumber { get; set; }
+    public ShrinkageReason? ShrinkageReason { get; set; }
+    public string? ShrinkageReasonName => ShrinkageReason?.ToString();
 }
 
 public class StockAdjustmentQueryParameters : QueryParameters
@@ -124,5 +132,8 @@ public class StockAdjustmentQueryParameters : QueryParameters
     public Guid? ProductId { get; set; }
     public Guid? WarehouseId { get; set; }
     public AdjustmentStatus? Status { get; set; }
+    public AdjustmentReason? Reason { get; set; }
+    public ReferenceType? ReferenceType { get; set; }
+    public Guid? ReferenceId { get; set; }
 }
 #endregion

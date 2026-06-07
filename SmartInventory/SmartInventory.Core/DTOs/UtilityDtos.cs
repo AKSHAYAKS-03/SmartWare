@@ -42,6 +42,44 @@ public class BarcodeScanLogResponseDto
     public DateTime ScannedAt { get; set; }
     public DateTime CreatedAt { get; set; }
 }
+
+public class BarcodeGenerateRequestDto
+{
+    public Guid ProductId { get; set; }
+    public string BarcodeValue { get; set; } = string.Empty;
+    public BarcodeType Type { get; set; } = BarcodeType.Code128;
+    public bool IsPrimary { get; set; } = false;
+}
+
+public class StockLocationDto
+{
+    public Guid WarehouseId { get; set; }
+    public string WarehouseName { get; set; } = string.Empty;
+    public Guid ZoneId { get; set; }
+    public string ZoneName { get; set; } = string.Empty;
+    public Guid BinId { get; set; }
+    public string BinCode { get; set; } = string.Empty;
+    public int QuantityOnHand { get; set; }
+}
+
+public class ScanResultDto
+{
+    public string Message { get; set; } = string.Empty;
+    public Guid ProductId { get; set; }
+    public string ProductName { get; set; } = string.Empty;
+    public string ProductSKU { get; set; } = string.Empty;
+    public string CategoryName { get; set; } = string.Empty;
+    public string ProductType { get; set; } = string.Empty;
+    public string ABCClass { get; set; } = string.Empty;
+    
+    public int TotalOnHand { get; set; }
+    public int TotalReserved { get; set; }
+    public int TotalAvailable => TotalOnHand - TotalReserved;
+    
+    public System.Collections.Generic.List<StockLocationDto> Locations { get; set; } = new();
+    
+    public string ScanLogConfirmation { get; set; } = string.Empty;
+}
 #endregion
 
 #region FileAttachment DTOs
@@ -54,6 +92,10 @@ public class FileAttachmentResponseDto
     public string FilePath { get; set; } = string.Empty;
     public string MimeType { get; set; } = string.Empty;
     public long FileSizeBytes { get; set; }
+    public DocumentCategory Category { get; set; }
+    public DateTime? ExpiryDate { get; set; }
+    public bool IsVerified { get; set; }
+    public Guid? VerifiedBy { get; set; }
     public Guid UploadedBy { get; set; }
     public string UploadedByUserName { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
@@ -100,5 +142,65 @@ public class DeadStockDto
     public int QuantityOnHand { get; set; }
     public DateTime? LastMovementDate { get; set; }
     public int DaysSinceLastMovement { get; set; }
+}
+
+public class WarehouseUtilizationDto
+{
+    public Guid ZoneId { get; set; }
+    public string ZoneName { get; set; } = string.Empty;
+    public decimal TotalVolumeCapacity { get; set; }
+    public decimal UtilizedVolume { get; set; }
+    public decimal UtilizationPercentage => TotalVolumeCapacity > 0 ? (UtilizedVolume / TotalVolumeCapacity) * 100 : 0;
+}
+
+public class TransferVarianceReportDto
+{
+    public Guid TransferId { get; set; }
+    public string TransferNumber { get; set; } = string.Empty;
+    public Guid TransferItemId { get; set; }
+    public Guid ProductId { get; set; }
+    public string ProductName { get; set; } = string.Empty;
+    public string ProductSKU { get; set; } = string.Empty;
+    public string FromWarehouseName { get; set; } = string.Empty;
+    public string ToWarehouseName { get; set; } = string.Empty;
+    public int QuantityRequested { get; set; }
+    public int QuantityDispatched { get; set; }
+    public int QuantityReceived { get; set; }
+    public int VarianceQuantity { get; set; }
+    public TransferStatus TransferStatus { get; set; }
+    public string TransferStatusName => TransferStatus.ToString();
+    public Guid? AdjustmentId { get; set; }
+    public AdjustmentStatus? AdjustmentStatus { get; set; }
+    public string? AdjustmentStatusName => AdjustmentStatus?.ToString();
+    public TransferVarianceResolutionStatus? VarianceResolutionStatus { get; set; }
+    public string? VarianceResolutionStatusName => VarianceResolutionStatus?.ToString();
+    public string? ApprovedByUserName { get; set; }
+    public DateTime? ApprovedDate { get; set; }
+    public decimal EstimatedLossValue { get; set; }
+    public DateTime ReceivedDate { get; set; }
+}
+
+public class TransferVarianceSummaryDto
+{
+    public int TotalVariances { get; set; }
+    public int PendingApproval { get; set; }
+    public int Approved { get; set; }
+    public int Rejected { get; set; }
+    public decimal TotalEstimatedLoss { get; set; }
+    public decimal PendingLossValue { get; set; }
+}
+
+public class OverrideAuditReportDto
+{
+    public Guid Id { get; set; }
+    public Guid UserId { get; set; }
+    public string UserName { get; set; } = string.Empty;
+    public DateTime Timestamp { get; set; }
+    public string RuleBroken { get; set; } = string.Empty;
+    public string OverrideReason { get; set; } = string.Empty;
+    public Guid? TargetBinId { get; set; }
+    public string? TargetBinCode { get; set; }
+    public Guid? ProductId { get; set; }
+    public string? ProductName { get; set; }
 }
 #endregion

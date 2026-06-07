@@ -133,7 +133,10 @@ public class StockLevelConfiguration : IEntityTypeConfiguration<StockLevel>
 {
     public void Configure(EntityTypeBuilder<StockLevel> builder)
     {
-        builder.ToTable("stock_levels");
+        builder.ToTable("stock_levels", t => t.HasCheckConstraint(
+            "CK_StockLevels_NonNegativeQuantities",
+            "\"QuantityOnHand\" >= 0 AND \"QuantityReserved\" >= 0 AND \"QuantityInTransit\" >= 0"
+        ));
 
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).ValueGeneratedOnAdd();
@@ -147,6 +150,10 @@ public class StockLevelConfiguration : IEntityTypeConfiguration<StockLevel>
 
         builder.Property(x => x.QuantityOnOrder)
             .HasDefaultValue(0);
+
+        builder.Property(x => x.QuantityInTransit)
+            .HasDefaultValue(0);
+
 
         builder.Property(x => x.LastUpdated)
             .HasDefaultValueSql("NOW()");
@@ -227,7 +234,9 @@ public class StockAdjustmentConfiguration : IEntityTypeConfiguration<StockAdjust
 
         builder.Property(x => x.AdjustmentNumber)
             .IsRequired()
-            .HasMaxLength(50);
+            .HasMaxLength(50)
+            .HasDefaultValueSql("CONCAT('ADJ-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_adjustments')::text, 5, '0'))")
+            .ValueGeneratedOnAdd();
 
         builder.Property(x => x.Reason)
             .HasConversion<int>()
@@ -265,7 +274,11 @@ public class StockAdjustmentConfiguration : IEntityTypeConfiguration<StockAdjust
             .HasForeignKey(x => x.ApprovedBy)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.Property(x => x.ReferenceType)
+            .HasConversion<int>();
+
         builder.HasIndex(x => x.AdjustmentNumber).IsUnique();
+        builder.HasIndex(x => new { x.ReferenceType, x.ReferenceId });
     }
 }
 

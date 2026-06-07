@@ -9,5 +9,6 @@ public enum AdjustmentReason
     WriteOff = 4,
     Found = 5,
     Correction = 6,
-    Other = 7
+    Other = 7,
+    LossInTransit = 8
 }

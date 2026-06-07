@@ -97,14 +97,29 @@ public class SupplierCreateValidator : AbstractValidator<SupplierCreateDto>
             .NotEmpty().WithMessage("Supplier Code is required.")
             .Matches(@"^[A-Z0-9-]{3,10}$").WithMessage("Supplier Code must be 3-10 characters long, containing uppercase letters, numbers, or hyphens.");
 
+        RuleFor(x => x.GSTIN)
+            .NotEmpty().WithMessage("GSTIN is required.")
+            .Matches(@"^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$")
+            .WithMessage("GSTIN must be a valid 15-character Indian format.");
+
+        RuleFor(x => x.PAN)
+            .NotEmpty().WithMessage("PAN is required.")
+            .Matches(@"^[A-Z]{5}[0-9]{4}[A-Z]{1}$")
+            .WithMessage("PAN must be a valid 10-character Indian format (e.g., ABCDE1234F).");
+
         RuleFor(x => x.Email)
-            .EmailAddress().When(x => !string.IsNullOrEmpty(x.Email)).WithMessage("A valid email address is required.");
+            .NotEmpty().WithMessage("Email is required.")
+            .EmailAddress().WithMessage("A valid email address is required.");
 
         RuleFor(x => x.LeadTimeDays)
             .GreaterThanOrEqualTo(0).WithMessage("Lead Time Days must be 0 or greater.");
 
         RuleFor(x => x.CreditLimit)
             .GreaterThanOrEqualTo(0).WithMessage("Credit Limit must be 0 or greater.");
+
+        RuleFor(x => x.Phone)
+            .NotEmpty().WithMessage("Phone is required.")
+            .Matches(@"^\+91[6-9]\d{9}$").WithMessage("Phone number must be a valid Indian phone number (e.g. +919876543210).");
     }
 }
 
@@ -120,14 +135,29 @@ public class SupplierUpdateValidator : AbstractValidator<SupplierUpdateDto>
             .NotEmpty().WithMessage("Supplier Code is required.")
             .Matches(@"^[A-Z0-9-]{3,10}$").WithMessage("Supplier Code must be 3-10 characters long, containing uppercase letters, numbers, or hyphens.");
 
+        RuleFor(x => x.GSTIN)
+            .NotEmpty().WithMessage("GSTIN is required.")
+            .Matches(@"^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$")
+            .WithMessage("GSTIN must be a valid 15-character Indian format.");
+
+        RuleFor(x => x.PAN)
+            .NotEmpty().WithMessage("PAN is required.")
+            .Matches(@"^[A-Z]{5}[0-9]{4}[A-Z]{1}$")
+            .WithMessage("PAN must be a valid 10-character Indian format (e.g., ABCDE1234F).");
+
         RuleFor(x => x.Email)
-            .EmailAddress().When(x => !string.IsNullOrEmpty(x.Email)).WithMessage("A valid email address is required.");
+            .NotEmpty().WithMessage("Email is required.")
+            .EmailAddress().WithMessage("A valid email address is required.");
 
         RuleFor(x => x.LeadTimeDays)
             .GreaterThanOrEqualTo(0).WithMessage("Lead Time Days must be 0 or greater.");
 
         RuleFor(x => x.CreditLimit)
             .GreaterThanOrEqualTo(0).WithMessage("Credit Limit must be 0 or greater.");
+
+        RuleFor(x => x.Phone)
+            .NotEmpty().WithMessage("Phone is required.")
+            .Matches(@"^\+91[6-9]\d{9}$").WithMessage("Phone number must be a valid Indian phone number (e.g. +919876543210).");
     }
 }
 

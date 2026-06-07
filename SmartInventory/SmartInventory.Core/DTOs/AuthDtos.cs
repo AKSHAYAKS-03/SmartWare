@@ -17,15 +17,7 @@ public class LoginResponseDto
     public UserResponseDto User { get; set; } = null!;
 }
 
-public class RegisterDto
-{
-    public string FullName { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
-    public string? PhoneNumber { get; set; }
-    public string? EmployeeId { get; set; }
-    public Guid RoleId { get; set; }
-}
+
 
 public class RefreshTokenDto
 {
@@ -38,17 +30,32 @@ public class ChangePasswordDto
     public string NewPassword { get; set; } = string.Empty;
 }
 
+/// <summary>
+/// Used by the employee to activate their account via the one-time invite link.
+/// No authentication required — the invite token IS the proof of identity.
+/// </summary>
+public class SetPasswordDto
+{
+    /// <summary>The invite token received in the welcome email.</summary>
+    public string Token { get; set; } = string.Empty;
+
+    /// <summary>The employee's chosen password. Must meet complexity requirements.</summary>
+    public string NewPassword { get; set; } = string.Empty;
+}
+
 public class UserCreateDto
 {
     public string FullName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
+    // NOTE: No Password field — employee sets their own via invite email link.
     public string? PhoneNumber { get; set; }
     public string? EmployeeId { get; set; }
     public Guid RoleId { get; set; }
     public bool SmsEnabled { get; set; }
     public bool EmailEnabled { get; set; }
     public bool IsActive { get; set; } = true;
+    public DateTime? ExpiresAt { get; set; }
+    public string? AadhaarNumber { get; set; }
 }
 
 public class UserUpdateDto
@@ -61,6 +68,8 @@ public class UserUpdateDto
     public bool SmsEnabled { get; set; }
     public bool EmailEnabled { get; set; }
     public bool IsActive { get; set; }
+    public DateTime? ExpiresAt { get; set; }
+    public string? AadhaarNumber { get; set; }
 }
 
 public class UserResponseDto
@@ -72,6 +81,7 @@ public class UserResponseDto
     public string? EmployeeId { get; set; }
     public UserStatus Status { get; set; }
     public string StatusName => Status.ToString();
+    public bool IsPasswordSet { get; set; }
     public Guid? ApprovedById { get; set; }
     public string? ApprovedByName { get; set; }
     public DateTime? ApprovedAt { get; set; }
@@ -80,6 +90,8 @@ public class UserResponseDto
     public bool IsActive { get; set; }
     public Guid RoleId { get; set; }
     public string RoleName { get; set; } = string.Empty;
+    public DateTime? ExpiresAt { get; set; }
+    public string? AadhaarLastFour { get; set; }
     public DateTime CreatedAt { get; set; }
 }
 public class AuditLogQueryParameters : QueryParameters
@@ -100,7 +112,7 @@ public class AuditLogResponseDto
     public string? OldValues { get; set; }
     public string? NewValues { get; set; }
     public string? IpAddress { get; set; }
-    public Guid UserId { get; set; }
+    public Guid? UserId { get; set; }
     public string UserFullName { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
 }

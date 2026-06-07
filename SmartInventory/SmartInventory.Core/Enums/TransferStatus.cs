@@ -8,5 +8,6 @@ public enum TransferStatus
     Dispatched = 3,
     InTransit = 4,
     Received = 5,
-    Cancelled = 6
+    Cancelled = 6,
+    ReceivedWithVariance = 7
 }

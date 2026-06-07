@@ -1,0 +1,65 @@
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using SmartInventory.Core.DTOs;
+using SmartInventory.Core.Entities;
+using SmartInventory.Core.Interfaces;
+
+namespace SmartInventory.Repository.Repositories;
+
+/// <summary>
+/// Specialized Notification repository.
+/// Scopes all operations to the authenticated user's notification box.
+/// </summary>
+public class NotificationRepository : GenericRepository<Notification>, INotificationRepository
+{
+    public NotificationRepository(AppDbContext context) : base(context)
+    {
+    }
+
+    public async Task<PagedResult<Notification>> GetPagedNotificationsAsync(NotificationQueryParameters queryParams, Guid userId)
+    {
+        // Enforce user ownership scoping at database level
+        var query = _dbSet
+            .Where(n => n.UserId == userId)
+            .AsQueryable();
+
+        // 1. Filter by Read/Unread state
+        if (queryParams.IsRead.HasValue)
+        {
+            query = query.Where(n => n.IsRead == queryParams.IsRead.Value);
+        }
+
+        // Count
+        int totalCount = await query.CountAsync();
+
+        // Sort
+        query = ApplySorting(query, queryParams.SortBy, queryParams.SortDir);
+
+        // Page
+        int skip = (queryParams.Page - 1) * queryParams.PageSize;
+        var data = await query.Skip(skip).Take(queryParams.PageSize).ToListAsync();
+
+        return new PagedResult<Notification>
+        {
+            Data = data,
+            TotalCount = totalCount,
+            Page = queryParams.Page,
+            PageSize = queryParams.PageSize
+        };
+    }
+
+    public async Task MarkAllAsReadAsync(Guid userId)
+    {
+        // Mark all unread records for target user as read directly inside SQL context
+        var unread = await _dbSet
+            .Where(n => n.UserId == userId && !n.IsRead)
+            .ToListAsync();
+
+        foreach (var notification in unread)
+        {
+            notification.IsRead = true;
+        }
+    }
+}

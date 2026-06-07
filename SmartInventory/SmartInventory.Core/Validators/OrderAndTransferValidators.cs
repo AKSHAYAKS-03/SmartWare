@@ -13,8 +13,9 @@ public class PurchaseOrderCreateValidator : AbstractValidator<PurchaseOrderCreat
         RuleFor(x => x.WarehouseId)
             .NotEmpty().WithMessage("Warehouse ID is required.");
 
-        RuleFor(x => x.CreatedBy)
-            .NotEmpty().WithMessage("Creator User ID is required.");
+        RuleFor(x => x.ExpectedDelivery)
+            .GreaterThan(DateTime.UtcNow).WithMessage("Expected delivery date must be in the future.")
+            .LessThanOrEqualTo(DateTime.UtcNow.AddYears(1)).WithMessage("Expected delivery date cannot be more than 1 year in the future.");
 
         RuleFor(x => x.Items)
             .NotEmpty().WithMessage("Purchase Order must contain at least one item.");
@@ -40,8 +41,6 @@ public class GoodsReceiptCreateValidator : AbstractValidator<GoodsReceiptCreateD
         RuleFor(x => x.PurchaseOrderId)
             .NotEmpty().WithMessage("Purchase Order ID is required.");
 
-        RuleFor(x => x.ReceivedBy)
-            .NotEmpty().WithMessage("Receiver User ID is required.");
 
         RuleFor(x => x.WarehouseId)
             .NotEmpty().WithMessage("Warehouse ID is required.");
@@ -53,6 +52,12 @@ public class GoodsReceiptCreateValidator : AbstractValidator<GoodsReceiptCreateD
         {
             item.RuleFor(i => i.PurchaseOrderItemId)
                 .NotEmpty().WithMessage("Purchase Order Item ID is required.");
+
+            item.RuleFor(i => i.BinLocationId)
+                .NotEmpty().WithMessage(
+                    "Bin Location is required for every received item. " +
+                    "Stock must be physically placed in a specific bin. " +
+                    "Please ensure at least one active bin exists in this warehouse before receiving goods.");
 
             item.RuleFor(i => i.QuantityReceived)
                 .GreaterThanOrEqualTo(0).WithMessage("Quantity Received must be 0 or greater.");
@@ -74,8 +79,6 @@ public class TransferCreateValidator : AbstractValidator<TransferCreateDto>
             .NotEmpty().WithMessage("Destination warehouse is required.")
             .NotEqual(x => x.FromWarehouseId).WithMessage("Source and destination warehouses cannot be the same.");
 
-        RuleFor(x => x.RequestedBy)
-            .NotEmpty().WithMessage("Requester User ID is required.");
 
         RuleFor(x => x.Items)
             .NotEmpty().WithMessage("Transfer must contain at least one item.");

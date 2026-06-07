@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SmartInventory.Core.Entities;
+using SmartInventory.Core.Enums;
 
 namespace SmartInventory.Repository.Configurations;
 
@@ -16,7 +17,9 @@ public class WarehouseTransferConfiguration : IEntityTypeConfiguration<Warehouse
 
         builder.Property(x => x.TransferNumber)
             .IsRequired()
-            .HasMaxLength(50);
+            .HasMaxLength(50)
+            .HasDefaultValueSql("CONCAT('TRF-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_transfers')::text, 5, '0'))")
+            .ValueGeneratedOnAdd();
 
         builder.Property(x => x.Status)
             .HasConversion<int>()
@@ -24,6 +27,9 @@ public class WarehouseTransferConfiguration : IEntityTypeConfiguration<Warehouse
 
         builder.Property(x => x.Notes)
             .HasMaxLength(500);
+
+        builder.Property(x => x.VarianceResolutionStatus)
+            .HasConversion<int>();
 
         builder.HasOne(x => x.FromWarehouse)
             .WithMany()

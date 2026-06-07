@@ -1,7 +1,12 @@
 <Solution>
-  <Project Path="SmartInventory.API/SmartInventory.API.csproj" />
-  <Project Path="SmartInventory.Core/SmartInventory.Core.csproj" />
-  <Project Path="SmartInventory.Infrastructure/SmartInventory.Infrastructure.csproj" />
-  <Project Path="SmartInventory.Repository/SmartInventory.Repository.csproj" />
-  <Project Path="SmartInventory.Service/SmartInventory.Service.csproj" />
+  <Folder Name="/SmartInventory/">
+    <Project Path="SmartInventory/SmartInventory.Tests/SmartInventory.Tests.csproj" />
+    <Project Path="SmartInventory/SmartInventory.IntegrationTests/SmartInventory.IntegrationTests.csproj" />
+  </Folder>
+  <Project Path="SmartInventory/SmartInventory.API/SmartInventory.API.csproj" />
+  <Project Path="SmartInventory/SmartInventory.Core/SmartInventory.Core.csproj" />
+  <Project Path="SmartInventory/SmartInventory.Infrastructure/SmartInventory.Infrastructure.csproj" />
+  <Project Path="SmartInventory/SmartInventory.Repository/SmartInventory.Repository.csproj" />
+  <Project Path="SmartInventory/SmartInventory.Service/SmartInventory.Service.csproj" />
 </Solution>
+

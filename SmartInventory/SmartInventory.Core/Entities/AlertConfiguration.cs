@@ -1,9 +1,11 @@
+using SmartInventory.Core.Interfaces;
+
 namespace SmartInventory.Core.Entities;
 
 /// <summary>
 /// Per-product, per-warehouse alert threshold configuration.
 /// </summary>
-public class AlertConfiguration : BaseEntity
+public class AlertConfiguration : BaseEntity, ISoftDelete
 {
     public int LowStockThreshold { get; set; }
     public bool SmsAlert { get; set; } = false;

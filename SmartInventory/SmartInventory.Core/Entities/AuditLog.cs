@@ -14,8 +14,8 @@ public class AuditLog : BaseEntity
     public string? IpAddress { get; set; }
 
     // Foreign Keys
-    public Guid UserId { get; set; }
+    public Guid? UserId { get; set; }
 
     // Navigation
-    public User User { get; set; } = null!;
+    public User? User { get; set; }
 }

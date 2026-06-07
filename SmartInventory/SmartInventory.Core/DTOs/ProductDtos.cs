@@ -58,6 +58,12 @@ public class ProductCreateDto
     public Guid CategoryId { get; set; }
     public bool IsActive { get; set; } = true;
     public string? ImagePath { get; set; }
+
+    // Dimensions
+    public decimal Length { get; set; } = 0;
+    public decimal Width { get; set; } = 0;
+    public decimal Height { get; set; } = 0;
+    public decimal WeightKg { get; set; } = 0;
 }
 
 public class ProductUpdateDto
@@ -72,6 +78,12 @@ public class ProductUpdateDto
     public Guid CategoryId { get; set; }
     public bool IsActive { get; set; }
     public string? ImagePath { get; set; }
+
+    // Dimensions
+    public decimal Length { get; set; } = 0;
+    public decimal Width { get; set; } = 0;
+    public decimal Height { get; set; } = 0;
+    public decimal WeightKg { get; set; } = 0;
 }
 
 public class ProductResponseDto
@@ -91,6 +103,13 @@ public class ProductResponseDto
     public Guid CategoryId { get; set; }
     public string CategoryName { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
+
+    // Dimensions
+    public decimal Length { get; set; }
+    public decimal Width { get; set; }
+    public decimal Height { get; set; }
+    public decimal WeightKg { get; set; }
+    public decimal VolumeCm3 { get; set; }
 }
 
 public class ProductSummaryDto

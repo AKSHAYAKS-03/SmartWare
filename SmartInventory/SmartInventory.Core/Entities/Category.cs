@@ -1,10 +1,14 @@
+using SmartInventory.Core.Attributes;
+using SmartInventory.Core.Interfaces;
+
 namespace SmartInventory.Core.Entities;
 
 /// <summary>
 /// Product category with self-referencing hierarchy (subcategories).
 /// </summary>
-public class Category : BaseEntity
+public class Category : BaseEntity, ISoftDelete
 {
+    [Sortable]
     public string Name { get; set; } = string.Empty;
     public string Slug { get; set; } = string.Empty;
     public string? Description { get; set; }

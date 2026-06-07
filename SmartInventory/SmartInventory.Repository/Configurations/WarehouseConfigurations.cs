@@ -33,11 +33,27 @@ public class WarehouseConfiguration : IEntityTypeConfiguration<Warehouse>
         builder.Property(x => x.Country)
             .HasMaxLength(100);
 
+        builder.Property(x => x.State)
+            .IsRequired()
+            .HasMaxLength(100);
+
+        builder.Property(x => x.PostalCode)
+            .HasMaxLength(20);
+
         builder.Property(x => x.IsActive)
             .HasDefaultValue(true);
 
-        builder.Property(x => x.TaxIdentifier)
+        builder.Property(x => x.ContactPerson)
+            .HasMaxLength(100);
+
+        builder.Property(x => x.ContactNumber)
             .HasMaxLength(50);
+
+        builder.Property(x => x.Email)
+            .HasMaxLength(100);
+
+        builder.Property(x => x.GSTIN)
+            .HasMaxLength(15);
 
         builder.Property(x => x.RegistrationNumber)
             .HasMaxLength(100);
@@ -47,20 +63,13 @@ public class WarehouseConfiguration : IEntityTypeConfiguration<Warehouse>
             .IsRequired()
             .HasDefaultValue(WarehouseStatus.PendingVerification);
 
-        builder.Property(x => x.ApprovedAt);
-
-        builder.HasOne(x => x.ApprovedBy)
-            .WithMany(u => u.ApprovedWarehouses)
-            .HasForeignKey(x => x.ApprovedById)
-            .OnDelete(DeleteBehavior.Restrict);
-
         builder.HasOne(x => x.Manager)
             .WithMany()
             .HasForeignKey(x => x.ManagerId)
             .OnDelete(DeleteBehavior.SetNull);
 
         builder.HasIndex(x => x.Code).IsUnique();
-        builder.HasIndex(x => x.TaxIdentifier).IsUnique().HasFilter("\"TaxIdentifier\" IS NOT NULL");
+        builder.HasIndex(x => x.GSTIN);
         builder.HasIndex(x => x.RegistrationNumber).IsUnique().HasFilter("\"RegistrationNumber\" IS NOT NULL");
         builder.HasIndex(x => x.Status);
     }
@@ -110,17 +119,9 @@ public class BinLocationConfiguration : IEntityTypeConfiguration<BinLocation>
         builder.Property(x => x.Id).ValueGeneratedOnAdd();
         builder.Property(x => x.CreatedAt).HasDefaultValueSql("NOW()");
 
-        builder.Property(x => x.Aisle)
+        builder.Property(x => x.BinCode)
             .IsRequired()
-            .HasMaxLength(20);
-
-        builder.Property(x => x.Rack)
-            .IsRequired()
-            .HasMaxLength(20);
-
-        builder.Property(x => x.Bin)
-            .IsRequired()
-            .HasMaxLength(20);
+            .HasMaxLength(30);
 
         builder.Property(x => x.Barcode)
             .HasMaxLength(50);
@@ -134,7 +135,7 @@ public class BinLocationConfiguration : IEntityTypeConfiguration<BinLocation>
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasIndex(x => x.Barcode).IsUnique().HasFilter("\"Barcode\" IS NOT NULL");
-        builder.HasIndex(x => new { x.ZoneId, x.Aisle, x.Rack, x.Bin }).IsUnique();
+        builder.HasIndex(x => new { x.ZoneId, x.BinCode }).IsUnique();
     }
 }
 

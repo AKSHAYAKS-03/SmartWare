@@ -1,0 +1,4190 @@
+{
+    "info": {
+        "_postman_id": "smartware-collection-v1",
+        "name": "SmartWare Enterprise WMS",
+        "description": "Complete API collection for SmartInventory - generated from actual controller source code.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Sign In",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Auth/signin",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Auth",
+                                "signin"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"{{admin_email}}\",\n  \"password\": \"{{admin_password}}\"\n}"
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "  var j = pm.response.json();",
+                                    "  pm.environment.set('admin_token', j.accessToken);",
+                                    "  pm.environment.set('admin_refresh_token', j.refreshToken);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Refresh Token",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Auth/refresh",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Auth",
+                                "refresh"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"token\": \"{{admin_refresh_token}}\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Revoke Token",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Auth/revoke",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Auth",
+                                "revoke"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"token\": \"{{admin_refresh_token}}\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Change Password",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Auth/change-password",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Auth",
+                                "change-password"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"currentPassword\": \"<string>\",\n  \"newPassword\": \"<string>\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Set Password (Invite)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Auth/set-password",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Auth",
+                                "set-password"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"token\": \"{{invite_token}}\",\n  \"newPassword\": \"<string>\"\n}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Users",
+            "item": [
+                {
+                    "name": "Get My Profile",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Users/me",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Users",
+                                "me"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get All Users",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Users?page=1&pageSize=20",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Users"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "pageSize",
+                                    "value": "20"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get User By ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Users/{{user_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Users",
+                                "{{user_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create User",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Users",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Users"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"fullName\": \"Ravi Kumar\",\n  \"email\": \"ravi@smartinventory.com\",\n  \"roleId\": \"<guid>\",\n  \"warehouseId\": \"{{warehouse_id}}\",\n  \"phoneNumber\": \"+919876543210\"\n}"
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "  pm.environment.set('user_id', pm.response.json().id);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Update User",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Users/{{user_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Users",
+                                "{{user_id}}"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"fullName\": \"<string>\",\n  \"phoneNumber\": \"<string>\",\n  \"warehouseId\": \"<guid>\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Deactivate User",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Users/{{user_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Users",
+                                "{{user_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Approve User",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Users/{{user_id}}/approve",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Users",
+                                "{{user_id}}",
+                                "approve"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Notification Preferences",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Users/{{user_id}}/notifications",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Users",
+                                "{{user_id}}",
+                                "notifications"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"smsEnabled\": true,\n  \"emailEnabled\": true\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Resend Invite",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Users/{{user_id}}/resend-invite",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Users",
+                                "{{user_id}}",
+                                "resend-invite"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Warehouses",
+            "item": [
+                {
+                    "name": "Get All Warehouses",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Warehouses",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Warehouses"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Warehouse By ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Warehouses/{{warehouse_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Warehouses",
+                                "{{warehouse_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Warehouse",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Warehouses",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Warehouses"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Chennai Central Warehouse\",\n  \"code\": \"WH-CHE-01\",\n  \"address\": \"45 Industrial Estate, Chennai, Tamil Nadu\",\n  \"managerId\": \"<guid>\"\n}"
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "  pm.environment.set('warehouse_id', pm.response.json().id);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Update Warehouse",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Warehouses/{{warehouse_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Warehouses",
+                                "{{warehouse_id}}"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"<string>\",\n  \"address\": \"<string>\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Warehouse",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Warehouses/{{warehouse_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Warehouses",
+                                "{{warehouse_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Zones",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Warehouses/{{warehouse_id}}/zones",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Warehouses",
+                                "{{warehouse_id}}",
+                                "zones"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Zone",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Warehouses/{{warehouse_id}}/zones",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Warehouses",
+                                "{{warehouse_id}}",
+                                "zones"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Zone A\",\n  \"zoneType\": \"Standard\"\n}"
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "  pm.environment.set('zone_id', pm.response.json().id);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Update Zone",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Warehouses/zones/{{zone_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Warehouses",
+                                "zones",
+                                "{{zone_id}}"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"<string>\",\n  \"zoneType\": \"<string>\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Zone",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Warehouses/zones/{{zone_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Warehouses",
+                                "zones",
+                                "{{zone_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Bins",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Warehouses/zones/{{zone_id}}/bins",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Warehouses",
+                                "zones",
+                                "{{zone_id}}",
+                                "bins"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Bin",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Warehouses/zones/{{zone_id}}/bins",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Warehouses",
+                                "zones",
+                                "{{zone_id}}",
+                                "bins"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"binCode\": \"B-01\",\n  \"level\": \"1\",\n  \"position\": \"1\",\n  \"binType\": \"Standard\",\n  \"maxWeightKg\": 500,\n  \"maxVolumeCm3\": 500000\n}"
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "  pm.environment.set('bin_id', pm.response.json().id);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Update Bin",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Warehouses/bins/{{bin_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Warehouses",
+                                "bins",
+                                "{{bin_id}}"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"binType\": \"<string>\",\n  \"maxWeightKg\": 0\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Bin",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Warehouses/bins/{{bin_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Warehouses",
+                                "bins",
+                                "{{bin_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Warehouse Users",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Warehouses/{{warehouse_id}}/users",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Warehouses",
+                                "{{warehouse_id}}",
+                                "users"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Assign User Access",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Warehouses/{{warehouse_id}}/users",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Warehouses",
+                                "{{warehouse_id}}",
+                                "users"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"userId\": \"{{user_id}}\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Revoke User Access",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Warehouses/access/<accessId>",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Warehouses",
+                                "access",
+                                "<accessId>"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Putaway Suggestion",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Warehouses/{{warehouse_id}}/putaway-suggestion?productId={{product_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Warehouses",
+                                "{{warehouse_id}}",
+                                "putaway-suggestion"
+                            ],
+                            "query": [
+                                {
+                                    "key": "productId",
+                                    "value": "{{product_id}}"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Categories",
+            "item": [
+                {
+                    "name": "Get All Categories",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Categories",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Categories"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Category Tree",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Categories/tree",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Categories",
+                                "tree"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Category By ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Categories/{{category_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Categories",
+                                "{{category_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Category",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Categories",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Categories"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Electronics\",\n  \"code\": \"ELEC\",\n  \"parentId\": null\n}"
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "  pm.environment.set('category_id', pm.response.json().id);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Update Category",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Categories/{{category_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Categories",
+                                "{{category_id}}"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"<string>\",\n  \"code\": \"<string>\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Category",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Categories/{{category_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Categories",
+                                "{{category_id}}"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Products",
+            "item": [
+                {
+                    "name": "Get All Products",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Products?page=1&pageSize=20",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Products"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Search Products (Dynamic)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Products/search",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Products",
+                                "search"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"filters\": [{\"field\": \"Name\", \"operator\": \"contains\", \"value\": \"laptop\"}],\n  \"sortBy\": \"Name\",\n  \"sortDirection\": \"asc\",\n  \"page\": 1,\n  \"pageSize\": 20\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Get Product By ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Products/{{product_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Products",
+                                "{{product_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Product",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Products",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Products"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"HP Laptop 15s\",\n  \"sku\": \"HP-LAPTP-15S\",\n  \"description\": \"HP 15s Laptop Intel i5\",\n  \"categoryId\": \"{{category_id}}\",\n  \"unitPrice\": 55000.00,\n  \"reorderPoint\": 5,\n  \"reorderQuantity\": 20,\n  \"weightKg\": 2.0,\n  \"volumeCm3\": 2625.0\n}"
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "  pm.environment.set('product_id', pm.response.json().id);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Update Product",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Products/{{product_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Products",
+                                "{{product_id}}"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"<string>\",\n  \"unitPrice\": 0,\n  \"reorderPoint\": 0\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Product",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Products/{{product_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Products",
+                                "{{product_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Low Stock Products",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Products/low-stock?warehouseId={{warehouse_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Products",
+                                "low-stock"
+                            ],
+                            "query": [
+                                {
+                                    "key": "warehouseId",
+                                    "value": "{{warehouse_id}}"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get EOQ",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Products/{{product_id}}/eoq?warehouseId={{warehouse_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Products",
+                                "{{product_id}}",
+                                "eoq"
+                            ],
+                            "query": [
+                                {
+                                    "key": "warehouseId",
+                                    "value": "{{warehouse_id}}"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get ABC Classification",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Products/abc-classification?warehouseId={{warehouse_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Products",
+                                "abc-classification"
+                            ],
+                            "query": [
+                                {
+                                    "key": "warehouseId",
+                                    "value": "{{warehouse_id}}"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Trigger ABC Update",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Products/{{warehouse_id}}/update-abc",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Products",
+                                "{{warehouse_id}}",
+                                "update-abc"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Suppliers",
+            "item": [
+                {
+                    "name": "Get All Suppliers",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Suppliers",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Suppliers"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Supplier By ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Suppliers/{{supplier_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Suppliers",
+                                "{{supplier_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Register Supplier (Self)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/auth/register",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "auth",
+                                "register"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"ABC Technologies Pvt Ltd\",\n  \"gstin\": \"33AABCT1234C1Z5\",\n  \"pan\": \"AABCT1234C\",\n  \"address\": \"45 IT Park, Madurai\",\n  \"contactFullName\": \"Raj Kumar\",\n  \"email\": \"sales@abctech.com\",\n  \"phone\": \"+919876543210\",\n  \"password\": \"SecurePass123!\"\n}"
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "  console.log('Supplier registered and pending OTP verification.');",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Update Supplier",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Suppliers/{{supplier_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Suppliers",
+                                "{{supplier_id}}"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"contactPerson\": \"<string>\",\n  \"phone\": \"<string>\",\n  \"leadTimeDays\": 0\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Supplier",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Suppliers/{{supplier_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Suppliers",
+                                "{{supplier_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Supplier Products",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Suppliers/{{supplier_id}}/products",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Suppliers",
+                                "{{supplier_id}}",
+                                "products"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Add Supplier Product",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Suppliers/{{supplier_id}}/products",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Suppliers",
+                                "{{supplier_id}}",
+                                "products"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"productId\": \"{{product_id}}\",\n  \"unitPrice\": 50000.00,\n  \"leadTimeDays\": 7,\n  \"moq\": 5\n}"
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "  pm.environment.set('supplier_product_id', pm.response.json().id);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Update Supplier Product",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Suppliers/products/{{supplier_product_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Suppliers",
+                                "products",
+                                "{{supplier_product_id}}"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"unitPrice\": 0,\n  \"leadTimeDays\": 0,\n  \"moq\": 0\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Remove Supplier Product",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Suppliers/products/{{supplier_product_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Suppliers",
+                                "products",
+                                "{{supplier_product_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Supplier Performance",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Suppliers/{{supplier_id}}/performance",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Suppliers",
+                                "{{supplier_id}}",
+                                "performance"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Recalculate Supplier Rating",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Suppliers/{{supplier_id}}/recalculate-rating",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Suppliers",
+                                "{{supplier_id}}",
+                                "recalculate-rating"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Invite Supplier",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Suppliers/invite",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Suppliers",
+                                "invite"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"XYZ Pvt Ltd\",\n  \"gstin\": \"33XYZCT1234C1Z5\",\n  \"email\": \"contact@xyz.com\",\n  \"phone\": \"+919876543210\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Get Pending Reviews",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Suppliers/pending-reviews",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Suppliers",
+                                "pending-reviews"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Review Supplier (Approve/Reject)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Suppliers/{{supplier_id}}/review",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Suppliers",
+                                "{{supplier_id}}",
+                                "review"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"action\": \"Approve\",\n  \"notes\": \"Verified. Approved.\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Suspend Supplier",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Suppliers/{{supplier_id}}/suspend",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Suppliers",
+                                "{{supplier_id}}",
+                                "suspend"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"reason\": \"Compliance violation\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Activate Supplier",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Suppliers/{{supplier_id}}/activate",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Suppliers",
+                                "{{supplier_id}}",
+                                "activate"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "PurchaseOrders",
+            "item": [
+                {
+                    "name": "Get All Purchase Orders",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/PurchaseOrders",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "PurchaseOrders"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Search Purchase Orders",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/PurchaseOrders/search",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "PurchaseOrders",
+                                "search"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"filters\": [],\n  \"sortBy\": \"CreatedAt\",\n  \"sortDirection\": \"desc\",\n  \"page\": 1,\n  \"pageSize\": 20\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Get Purchase Order By ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/PurchaseOrders/{{po_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "PurchaseOrders",
+                                "{{po_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Purchase Order",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/PurchaseOrders",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "PurchaseOrders"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"supplierId\": \"{{supplier_id}}\",\n  \"warehouseId\": \"{{warehouse_id}}\",\n  \"expectedDelivery\": \"2026-07-01T00:00:00Z\",\n  \"notes\": \"Urgent restock\",\n  \"items\": [\n    {\n      \"productId\": \"{{product_id}}\",\n      \"quantity\": 50,\n      \"unitPrice\": 50000.00\n    }\n  ]\n}"
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "  pm.environment.set('po_id', pm.response.json().id);",
+                                    "  pm.environment.set('po_number', pm.response.json().poNumber);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Update Purchase Order",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/PurchaseOrders/{{po_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "PurchaseOrders",
+                                "{{po_id}}"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"notes\": \"<string>\",\n  \"expectedDelivery\": \"<datetime>\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Submit PO for Approval",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/PurchaseOrders/{{po_id}}/submit",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "PurchaseOrders",
+                                "{{po_id}}",
+                                "submit"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Approve Purchase Order",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/PurchaseOrders/{{po_id}}/approve",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "PurchaseOrders",
+                                "{{po_id}}",
+                                "approve"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"approved\": true,\n  \"notes\": \"Approved for procurement\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Cancel Purchase Order",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/PurchaseOrders/{{po_id}}/cancel",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "PurchaseOrders",
+                                "{{po_id}}",
+                                "cancel"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Receive Goods (GRN)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/PurchaseOrders/{{po_id}}/grn",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "PurchaseOrders",
+                                "{{po_id}}",
+                                "grn"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"warehouseId\": \"{{warehouse_id}}\",\n  \"deliveryChallan\": \"DC-2026-001\",\n  \"notes\": \"All items received in good condition\",\n  \"items\": [\n    {\n      \"purchaseOrderItemId\": \"{{po_item_id}}\",\n      \"receivedQuantity\": 50,\n      \"binLocationId\": \"{{bin_id}}\"\n    }\n  ]\n}"
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "  pm.environment.set('grn_id', pm.response.json().id);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Receive Goods Bulk (CSV)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/PurchaseOrders/{{po_id}}/grn/bulk",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "PurchaseOrders",
+                                "{{po_id}}",
+                                "grn",
+                                "bulk"
+                            ]
+                        },
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "warehouseId",
+                                    "value": "{{warehouse_id}}",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "file",
+                                    "type": "file",
+                                    "src": "<csv_file_path>"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Goods Receipts for PO",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/PurchaseOrders/{{po_id}}/grn",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "PurchaseOrders",
+                                "{{po_id}}",
+                                "grn"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Cancel Goods Receipt",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/PurchaseOrders/receipts/{{grn_id}}/cancel",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "PurchaseOrders",
+                                "receipts",
+                                "{{grn_id}}",
+                                "cancel"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Transfers",
+            "item": [
+                {
+                    "name": "Get All Transfers",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Transfers",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Transfers"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Search Transfers (Dynamic)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Transfers/search",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Transfers",
+                                "search"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"filters\": [],\n  \"sortBy\": \"CreatedAt\",\n  \"sortDirection\": \"desc\",\n  \"page\": 1,\n  \"pageSize\": 20\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Get Transfer By ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Transfers/{{transfer_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Transfers",
+                                "{{transfer_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Transfer",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Transfers",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Transfers"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"fromWarehouseId\": \"{{warehouse_id}}\",\n  \"toWarehouseId\": \"<guid>\",\n  \"notes\": \"Rebalancing stock\",\n  \"items\": [\n    {\n      \"productId\": \"{{product_id}}\",\n      \"quantity\": 10,\n      \"fromBinId\": \"{{bin_id}}\"\n    }\n  ]\n}"
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "  pm.environment.set('transfer_id', pm.response.json().id);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Approve Transfer",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Transfers/{{transfer_id}}/approve",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Transfers",
+                                "{{transfer_id}}",
+                                "approve"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"approved\": true,\n  \"notes\": \"Approved\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Dispatch Transfer",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Transfers/{{transfer_id}}/dispatch",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Transfers",
+                                "{{transfer_id}}",
+                                "dispatch"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Receive Transfer",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Transfers/{{transfer_id}}/receive",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Transfers",
+                                "{{transfer_id}}",
+                                "receive"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"items\": [\n    {\n      \"transferItemId\": \"<guid>\",\n      \"receivedQuantity\": 10,\n      \"toBinId\": \"{{bin_id}}\"\n    }\n  ]\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Bin-to-Bin Transfer",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Transfers/bin-to-bin",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Transfers",
+                                "bin-to-bin"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"warehouseId\": \"{{warehouse_id}}\",\n  \"productId\": \"{{product_id}}\",\n  \"fromBinId\": \"<guid>\",\n  \"toBinId\": \"{{bin_id}}\",\n  \"quantity\": 5\n}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "StockAdjustments",
+            "item": [
+                {
+                    "name": "Get All Adjustments",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/StockAdjustments",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "StockAdjustments"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Adjustment By ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/StockAdjustments/{{stock_adjustment_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "StockAdjustments",
+                                "{{stock_adjustment_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Adjustment",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/StockAdjustments",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "StockAdjustments"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"productId\": \"{{product_id}}\",\n  \"warehouseId\": \"{{warehouse_id}}\",\n  \"binLocationId\": \"{{bin_id}}\",\n  \"quantityChange\": -2,\n  \"reason\": \"Damaged during handling\",\n  \"adjustmentType\": \"Damage\"\n}"
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "  pm.environment.set('stock_adjustment_id', pm.response.json().id);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Approve Adjustment",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/StockAdjustments/{{stock_adjustment_id}}/approve",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "StockAdjustments",
+                                "{{stock_adjustment_id}}",
+                                "approve"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"approved\": true,\n  \"notes\": \"Verified and approved\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Cancel Adjustment",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/StockAdjustments/{{stock_adjustment_id}}/cancel",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "StockAdjustments",
+                                "{{stock_adjustment_id}}",
+                                "cancel"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Barcodes",
+            "item": [
+                {
+                    "name": "Generate Barcode",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Barcodes/generate",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Barcodes",
+                                "generate"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"productId\": \"{{product_id}}\",\n  \"barcodeType\": \"QRCode\",\n  \"isPrimary\": true\n}"
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "  pm.environment.set('barcode_id', pm.response.json().id);",
+                                    "  pm.environment.set('barcode_value', pm.response.json().barcodeValue);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Batch Generate Barcodes",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Barcodes/batch-generate",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Barcodes",
+                                "batch-generate"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[\n  {\n    \"productId\": \"{{product_id}}\",\n    \"barcodeType\": \"QRCode\",\n    \"isPrimary\": false\n  }\n]"
+                        }
+                    }
+                },
+                {
+                    "name": "Scan Barcode",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Barcodes/scan",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Barcodes",
+                                "scan"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"barcodeValue\": \"{{barcode_value}}\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Get Product Barcodes",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Barcodes/product/{{product_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Barcodes",
+                                "product",
+                                "{{product_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Barcode Image",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Barcodes/{{barcode_id}}/image",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Barcodes",
+                                "{{barcode_id}}",
+                                "image"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Invoices",
+            "item": [
+                {
+                    "name": "Mark Invoice Under Review",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Invoices/{{supplier_invoice_id}}/under-review",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Invoices",
+                                "{{supplier_invoice_id}}",
+                                "under-review"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"notes\": \"Under review by finance team\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Match Invoice",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Invoices/{{supplier_invoice_id}}/match",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Invoices",
+                                "{{supplier_invoice_id}}",
+                                "match"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"notes\": \"Matched with GRN-2026-001\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Pay Invoice",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Invoices/{{supplier_invoice_id}}/pay",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Invoices",
+                                "{{supplier_invoice_id}}",
+                                "pay"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"paymentReference\": \"NEFT-20260601\",\n  \"paidOn\": \"2026-06-01T00:00:00Z\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Void Invoice",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Invoices/{{supplier_invoice_id}}/void",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Invoices",
+                                "{{supplier_invoice_id}}",
+                                "void"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"reason\": \"Duplicate invoice\"\n}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Files",
+            "item": [
+                {
+                    "name": "Upload File",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Files/upload",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Files",
+                                "upload"
+                            ]
+                        },
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "File",
+                                    "type": "file",
+                                    "src": "<file_path>"
+                                },
+                                {
+                                    "key": "EntityType",
+                                    "value": "Supplier",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "EntityId",
+                                    "value": "{{supplier_id}}",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "Category",
+                                    "value": "PAN",
+                                    "type": "text"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Files for Entity",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Files/Supplier/{{supplier_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Files",
+                                "Supplier",
+                                "{{supplier_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Download File",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Files/<fileId>/download",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Files",
+                                "<fileId>",
+                                "download"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete File",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Files/<fileId>",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Files",
+                                "<fileId>"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Verify File",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Files/<fileId>/verify",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Files",
+                                "<fileId>",
+                                "verify"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Lookup",
+            "item": [
+                {
+                    "name": "Get Master Data",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Lookup/master-data",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Lookup",
+                                "master-data"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Notifications",
+            "item": [
+                {
+                    "name": "Get My Inbox",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Notifications",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Notifications"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Unread Count",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Notifications/unread-count",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Notifications",
+                                "unread-count"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Mark Notification Read",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Notifications/{{notification_id}}/read",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Notifications",
+                                "{{notification_id}}",
+                                "read"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Mark All Notifications Read",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Notifications/read-all",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Notifications",
+                                "read-all"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Reports",
+            "item": [
+                {
+                    "name": "Inventory Valuation",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Reports/inventory-valuation?warehouseId={{warehouse_id}}&method=WeightedAverage",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Reports",
+                                "inventory-valuation"
+                            ],
+                            "query": [
+                                {
+                                    "key": "warehouseId",
+                                    "value": "{{warehouse_id}}"
+                                },
+                                {
+                                    "key": "method",
+                                    "value": "WeightedAverage"
+                                },
+                                {
+                                    "key": "export",
+                                    "value": "false"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Stock Movements Report",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Reports/stock-movements?warehouseId={{warehouse_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Reports",
+                                "stock-movements"
+                            ],
+                            "query": [
+                                {
+                                    "key": "warehouseId",
+                                    "value": "{{warehouse_id}}"
+                                },
+                                {
+                                    "key": "export",
+                                    "value": "false"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Dead Stock Report",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Reports/dead-stock?warehouseId={{warehouse_id}}&daysThreshold=90",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Reports",
+                                "dead-stock"
+                            ],
+                            "query": [
+                                {
+                                    "key": "warehouseId",
+                                    "value": "{{warehouse_id}}"
+                                },
+                                {
+                                    "key": "daysThreshold",
+                                    "value": "90"
+                                },
+                                {
+                                    "key": "export",
+                                    "value": "false"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Shrinkage Report",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Reports/shrinkage?warehouseId={{warehouse_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Reports",
+                                "shrinkage"
+                            ],
+                            "query": [
+                                {
+                                    "key": "warehouseId",
+                                    "value": "{{warehouse_id}}"
+                                },
+                                {
+                                    "key": "export",
+                                    "value": "false"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Supplier Performance Report",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Reports/supplier-performance?supplierId={{supplier_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Reports",
+                                "supplier-performance"
+                            ],
+                            "query": [
+                                {
+                                    "key": "supplierId",
+                                    "value": "{{supplier_id}}"
+                                },
+                                {
+                                    "key": "export",
+                                    "value": "false"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "PO Fulfillment Report",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Reports/po-fulfillment?warehouseId={{warehouse_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Reports",
+                                "po-fulfillment"
+                            ],
+                            "query": [
+                                {
+                                    "key": "warehouseId",
+                                    "value": "{{warehouse_id}}"
+                                },
+                                {
+                                    "key": "export",
+                                    "value": "false"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Audit Log",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Reports/audit-log?page=1&pageSize=50",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Reports",
+                                "audit-log"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Warehouse Utilization",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Reports/warehouse-utilization?warehouseId={{warehouse_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Reports",
+                                "warehouse-utilization"
+                            ],
+                            "query": [
+                                {
+                                    "key": "warehouseId",
+                                    "value": "{{warehouse_id}}"
+                                },
+                                {
+                                    "key": "export",
+                                    "value": "false"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Override Audit Report",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/Reports/override-audit?warehouseId={{warehouse_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "Reports",
+                                "override-audit"
+                            ],
+                            "query": [
+                                {
+                                    "key": "warehouseId",
+                                    "value": "{{warehouse_id}}"
+                                },
+                                {
+                                    "key": "export",
+                                    "value": "false"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "SupplierAuth",
+            "item": [
+                {
+                    "name": "Supplier Login",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/auth/login",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "auth",
+                                "login"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"{{supplier_email}}\",\n  \"password\": \"<string>\"\n}"
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "  var j = pm.response.json();",
+                                    "  pm.environment.set('supplier_token', j.accessToken);",
+                                    "  pm.environment.set('supplier_refresh_token', j.refreshToken);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Supplier Refresh Token",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/auth/refresh",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "auth",
+                                "refresh"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"refreshToken\": \"{{supplier_refresh_token}}\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Supplier Logout",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{supplier_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/auth/logout",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "auth",
+                                "logout"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"refreshToken\": \"{{supplier_refresh_token}}\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Supplier Change Password",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{supplier_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/auth/change-password",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "auth",
+                                "change-password"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"currentPassword\": \"<string>\",\n  \"newPassword\": \"<string>\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Supplier Self-Register",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/auth/register",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "auth",
+                                "register"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"New Supplier Pvt Ltd\",\n  \"email\": \"info@newsupplier.com\",\n  \"phone\": \"+919876543210\",\n  \"gstin\": \"33AABCT1234C1Z5\",\n  \"pan\": \"AABCT1234C\",\n  \"address\": \"10 Main Road, Chennai\",\n  \"contactEmail\": \"contact@newsupplier.com\",\n  \"contactName\": \"Arjun Sharma\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Verify Email (OTP)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/auth/verify-email",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "auth",
+                                "verify-email"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"{{supplier_email}}\",\n  \"token\": \"{{supplier_otp}}\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Complete Registration (Invite Flow)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/auth/complete-registration",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "auth",
+                                "complete-registration"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"inviteToken\": \"{{invite_token}}\",\n  \"contactFullName\": \"Mohan Das\",\n  \"jobTitle\": \"Director\",\n  \"pan\": \"AABCT1234C\",\n  \"address\": \"45 IT Park, Madurai\",\n  \"password\": \"SecurePass123!\"\n}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "SupplierProfile",
+            "item": [
+                {
+                    "name": "Get My Profile",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{supplier_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/profile",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "profile"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Profile",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{supplier_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/profile",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "profile"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"contactName\": \"<string>\",\n  \"phoneNumber\": \"<string>\",\n  \"jobTitle\": \"<string>\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Upload Logo",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{supplier_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/profile/logo",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "profile",
+                                "logo"
+                            ]
+                        },
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "logo",
+                                    "type": "file",
+                                    "src": "<image_path>"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Onboarding Status",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{supplier_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/profile/status",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "profile",
+                                "status"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Submit Onboarding Info",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{supplier_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/profile/submit-info",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "profile",
+                                "submit-info"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"notes\": \"Updated compliance docs uploaded\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Get Agreement",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{supplier_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/profile/agreement",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "profile",
+                                "agreement"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Accept Agreement",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{supplier_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/profile/agreement/accept",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "profile",
+                                "agreement",
+                                "accept"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "SupplierDashboard",
+            "item": [
+                {
+                    "name": "Get Dashboard",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{supplier_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/dashboard",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "dashboard"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "SupplierCatalogue",
+            "item": [
+                {
+                    "name": "Get My Catalogue",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{supplier_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/catalogue",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "catalogue"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Add Catalogue Item",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{supplier_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/catalogue",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "catalogue"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"productId\": \"{{product_id}}\",\n  \"unitPrice\": 49000.00,\n  \"leadTimeDays\": 5,\n  \"moq\": 10\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Update Catalogue Item",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{supplier_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/catalogue/{{supplier_product_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "catalogue",
+                                "{{supplier_product_id}}"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"unitPrice\": 0,\n  \"leadTimeDays\": 0,\n  \"moq\": 0\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Deactivate Catalogue Item",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{supplier_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/catalogue/{{supplier_product_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "catalogue",
+                                "{{supplier_product_id}}"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "SupplierPurchaseOrders",
+            "item": [
+                {
+                    "name": "Get My Purchase Orders",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{supplier_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/purchase-orders",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "purchase-orders"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get PO Detail",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{supplier_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/purchase-orders/{{po_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "purchase-orders",
+                                "{{po_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Respond to PO (Accept/Decline)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{supplier_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/purchase-orders/{{po_id}}/respond",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "purchase-orders",
+                                "{{po_id}}",
+                                "respond"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"accept\": true,\n  \"notes\": \"We accept this order and will dispatch within 7 days.\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Update Delivery Date",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{supplier_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/purchase-orders/{{po_id}}/delivery-date",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "purchase-orders",
+                                "{{po_id}}",
+                                "delivery-date"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"expectedDelivery\": \"2026-07-10T00:00:00Z\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Mark Dispatched",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{supplier_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/purchase-orders/{{po_id}}/dispatch",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "purchase-orders",
+                                "{{po_id}}",
+                                "dispatch"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"trackingNumber\": \"DTDC-12345\",\n  \"notes\": \"Dispatched via DTDC courier\"\n}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "SupplierInvoices",
+            "item": [
+                {
+                    "name": "Upload Invoice (PDF)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{supplier_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/invoices",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "invoices"
+                            ]
+                        },
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "purchaseOrderId",
+                                    "value": "{{po_id}}",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "invoiceNumber",
+                                    "value": "INV-2026-001",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "amount",
+                                    "value": "2500000.00",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "currency",
+                                    "value": "INR",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "invoiceDate",
+                                    "value": "2026-06-01",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "file",
+                                    "type": "file",
+                                    "src": "<pdf_path>"
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "  pm.environment.set('supplier_invoice_id', pm.response.json().id);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Get My Invoices",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{supplier_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/invoices",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "invoices"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Invoice Detail",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{supplier_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/invoices/{{supplier_invoice_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "invoices",
+                                "{{supplier_invoice_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Download Invoice PDF",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{supplier_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/supplier/invoices/{{supplier_invoice_id}}/download",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "supplier",
+                                "invoices",
+                                "{{supplier_invoice_id}}",
+                                "download"
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

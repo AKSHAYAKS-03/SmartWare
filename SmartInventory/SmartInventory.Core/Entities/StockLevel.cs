@@ -8,6 +8,7 @@ public class StockLevel : BaseEntity
     public int QuantityOnHand { get; set; }
     public int QuantityReserved { get; set; }
     public int QuantityOnOrder { get; set; }
+    public int QuantityInTransit { get; set; }
     public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
 
     // Foreign Keys

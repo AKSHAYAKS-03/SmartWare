@@ -19,6 +19,7 @@ public class PurchaseOrderCreateDto
     public Guid CreatedBy { get; set; }
     public DateTime? ExpectedDelivery { get; set; }
     public string? Notes { get; set; }
+    public string? IdempotencyKey { get; set; }
     public List<PurchaseOrderItemDto> Items { get; set; } = [];
 }
 
@@ -57,12 +58,31 @@ public class PurchaseOrderResponseDto
     public DateTime? ExpectedDelivery { get; set; }
     public DateTime? ActualDelivery { get; set; }
     public string? Notes { get; set; }
+
+    // ── Supplier Portal Fields ────────────────────────────────────────────────
+    public string? SupplierNotes { get; set; }
+    public string? TrackingNumber { get; set; }
+    public DateTime? DispatchedAt { get; set; }
+    public bool? SupplierAccepted { get; set; }
+
+    /// <summary>
+    /// The delivery date the supplier promised when accepting this PO.
+    /// Compare against ActualDelivery to measure on-time performance.
+    /// </summary>
+    public DateTime? SupplierCommittedDeliveryDate { get; set; }
+
     public Guid CreatedBy { get; set; }
     public string CreatedByUserName { get; set; } = string.Empty;
     public Guid? ApprovedBy { get; set; }
     public string? ApprovedByUserName { get; set; }
     public List<PurchaseOrderItemResponseDto> Items { get; set; } = [];
     public DateTime CreatedAt { get; set; }
+}
+
+public class PurchaseOrderApprovalDto
+{
+    public bool Approve { get; set; }
+    public string? RejectionReason { get; set; }
 }
 
 public class PurchaseOrderQueryParameters : QueryParameters
@@ -79,19 +99,26 @@ public class PurchaseOrderQueryParameters : QueryParameters
 public class GoodsReceiptItemDto
 {
     public Guid PurchaseOrderItemId { get; set; }
-    public Guid? BinLocationId { get; set; }
+    /// <summary>Required. Stock must always be placed in a specific bin. Create bins before receiving goods.</summary>
+    public Guid BinLocationId { get; set; }
     public int QuantityReceived { get; set; }
     public int QuantityRejected { get; set; }
     public string? RejectionReason { get; set; }
+    public string? OverrideReason { get; set; }
 }
 
 public class GoodsReceiptCreateDto
 {
     public Guid PurchaseOrderId { get; set; }
+    /// <summary>Required when the PO has supplier shipments; optional for legacy PO-only receipts.</summary>
+    public Guid? PurchaseOrderShipmentId { get; set; }
     public Guid ReceivedBy { get; set; }
     public Guid WarehouseId { get; set; }
     public string? Notes { get; set; }
+    public string? IdempotencyKey { get; set; }
+    public bool BypassWarnings { get; set; }
     public List<GoodsReceiptItemDto> Items { get; set; } = [];
+    public List<Guid> AttachmentIds { get; set; } = [];
 }
 
 public class GoodsReceiptItemResponseDto
@@ -114,6 +141,8 @@ public class GoodsReceiptResponseDto
     public string GrnNumber { get; set; } = string.Empty;
     public Guid PurchaseOrderId { get; set; }
     public string PurchaseOrderNumber { get; set; } = string.Empty;
+    public Guid? PurchaseOrderShipmentId { get; set; }
+    public string? ShipmentNumber { get; set; }
     public Guid ReceivedBy { get; set; }
     public string ReceivedByUserName { get; set; } = string.Empty;
     public Guid WarehouseId { get; set; }

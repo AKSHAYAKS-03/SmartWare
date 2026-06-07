@@ -20,15 +20,25 @@ public class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
 
         builder.Property(x => x.Code)
             .IsRequired()
-            .HasMaxLength(20);
+            .HasMaxLength(20)
+            .HasDefaultValueSql("CONCAT('SUP-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_suppliers')::text, 5, '0'))")
+            .ValueGeneratedOnAdd();
+
+        builder.Property(x => x.GSTIN)
+            .HasMaxLength(15);
+
+        builder.Property(x => x.PAN)
+            .HasMaxLength(10);
 
         builder.Property(x => x.ContactPerson)
             .HasMaxLength(100);
 
         builder.Property(x => x.Email)
+            .IsRequired()
             .HasMaxLength(150);
 
         builder.Property(x => x.Phone)
+            .IsRequired()
             .HasMaxLength(20);
 
         builder.Property(x => x.Address)
@@ -48,6 +58,29 @@ public class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
 
         builder.Property(x => x.IsActive)
             .HasDefaultValue(true);
+
+        builder.Property(x => x.Status)
+            .HasConversion<int>()
+            .IsRequired();
+
+        builder.Property(x => x.RegistrationSource)
+            .HasConversion<int>()
+            .IsRequired();
+
+        builder.Property(x => x.InviteToken)
+            .HasMaxLength(100);
+
+        builder.Property(x => x.AgreementSignedIp)
+            .HasMaxLength(50);
+
+        builder.Property(x => x.RejectionReason)
+            .HasMaxLength(500);
+
+        builder.Property(x => x.SuspensionReason)
+            .HasMaxLength(500);
+
+        builder.Property(x => x.InfoRequestedMessage)
+            .HasMaxLength(500);
 
         builder.HasIndex(x => x.Code).IsUnique();
     }
@@ -122,5 +155,38 @@ public class SupplierPerformanceLogConfiguration : IEntityTypeConfiguration<Supp
             .WithMany(p => p.PerformanceLogs)
             .HasForeignKey(x => x.PurchaseOrderId)
             .OnDelete(DeleteBehavior.Cascade);
+    }
+}
+
+public class SupplierContactConfiguration : IEntityTypeConfiguration<SupplierContact>
+{
+    public void Configure(EntityTypeBuilder<SupplierContact> builder)
+    {
+        builder.ToTable("SupplierContacts");
+
+        builder.Property(x => x.FullName)
+            .IsRequired()
+            .HasMaxLength(150);
+
+        builder.Property(x => x.Email)
+            .IsRequired()
+            .HasMaxLength(150);
+
+        builder.Property(x => x.PasswordHash)
+            .IsRequired()
+            .HasMaxLength(250);
+
+        builder.Property(x => x.Phone)
+            .IsRequired()
+            .HasMaxLength(20);
+
+        builder.Property(x => x.JobTitle)
+            .HasMaxLength(100);
+
+        builder.Property(x => x.EmailVerifyToken)
+            .HasMaxLength(100);
+
+        builder.Property(x => x.EmailVerified)
+            .HasDefaultValue(false);
     }
 }
