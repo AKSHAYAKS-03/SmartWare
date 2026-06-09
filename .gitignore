@@ -68,3 +68,6 @@ node_modules/
 .vs/
 .idea/
 *.user
+
+
+SmartInventory/SmartInventory.API/appsettings.json
