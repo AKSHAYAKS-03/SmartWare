@@ -17,7 +17,7 @@ public class Product : BaseEntity, ISoftDelete
     public string Name { get; set; } = string.Empty;
 
     [Sortable]
-    public string SKU { get; set; } = string.Empty;
+    public string SKU { get; set; } = null!;
 
     public string? Description { get; set; }
 

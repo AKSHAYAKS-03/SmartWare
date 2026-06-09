@@ -25,6 +25,7 @@
     <ProjectReference Include="..\SmartInventory.Service\SmartInventory.Service.csproj" />
     <ProjectReference Include="..\SmartInventory.Core\SmartInventory.Core.csproj" />
     <ProjectReference Include="..\SmartInventory.Repository\SmartInventory.Repository.csproj" />
+    <ProjectReference Include="..\SmartInventory.Infrastructure\SmartInventory.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

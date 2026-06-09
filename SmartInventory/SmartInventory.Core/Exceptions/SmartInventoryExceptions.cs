@@ -1,8 +1,7 @@
 namespace SmartInventory.Core.Exceptions;
 
-/// <summary>
-/// Base exception for all SmartInventory business exceptions.
-/// </summary>
+
+//// Base exception for all SmartInventory business exceptions.
 public abstract class SmartInventoryException : Exception
 {
     public int StatusCode { get; }
@@ -16,36 +15,42 @@ public abstract class SmartInventoryException : Exception
     }
 }
 
-/// <summary>
-/// Entity not found (HTTP 404).
-/// </summary>
+
+//// Entity not found (HTTP 404).
 public class NotFoundException : SmartInventoryException
 {
     public NotFoundException(string entityName, object key)
         : base($"{entityName} with identifier '{key}' was not found.", 404, "NOT_FOUND") { }
 }
 
-/// <summary>
-/// Duplicate value conflict — e.g., duplicate SKU, email (HTTP 409).
-/// </summary>
+
+//// Duplicate value conflict — e.g., duplicate SKU, email (HTTP 409).
 public class ConflictException : SmartInventoryException
 {
     public ConflictException(string message)
         : base(message, 409, "CONFLICT") { }
 }
 
-/// <summary>
-/// Business rule violation (HTTP 422).
-/// </summary>
+
+//// Barcode already exists for a product (HTTP 409).
+public class BarcodeAlreadyExistsException : SmartInventoryException
+{
+    public BarcodeAlreadyExistsException()
+        : base("Product already has a barcode. Use the update barcode endpoint if changes are required.", 409, "BARCODE_ALREADY_EXISTS")
+    {
+    }
+}
+
+
+//// Business rule violation (HTTP 422).
 public class BusinessRuleException : SmartInventoryException
 {
     public BusinessRuleException(string message)
         : base(message, 422, "BUSINESS_RULE_VIOLATION") { }
 }
 
-/// <summary>
-/// Not enough stock for transfer/dispatch (HTTP 422).
-/// </summary>
+
+//// Not enough stock for transfer/dispatch (HTTP 422).
 public class InsufficientStockException : SmartInventoryException
 {
     public InsufficientStockException(string productName, int requested, int available)
@@ -53,18 +58,16 @@ public class InsufficientStockException : SmartInventoryException
             422, "INSUFFICIENT_STOCK") { }
 }
 
-/// <summary>
-/// No permission for warehouse or action (HTTP 403).
-/// </summary>
+
+//// No permission for warehouse or action (HTTP 403).
 public class ForbiddenAccessException : SmartInventoryException
 {
     public ForbiddenAccessException(string message = "You do not have permission to perform this action.")
         : base(message, 403, "FORBIDDEN") { }
 }
 
-/// <summary>
-/// Input validation failed (HTTP 400).
-/// </summary>
+
+//// Input validation failed (HTTP 400).
 public class InputValidationException : SmartInventoryException
 {
     public IDictionary<string, string[]> Errors { get; }
@@ -76,9 +79,8 @@ public class InputValidationException : SmartInventoryException
     }
 }
 
-/// <summary>
-/// Concurrency conflict — stale data (HTTP 409).
-/// </summary>
+
+//// Concurrency conflict — stale data (HTTP 409).
 public class StaleDataException : SmartInventoryException
 {
     public int? CurrentQuantity { get; }
@@ -91,9 +93,8 @@ public class StaleDataException : SmartInventoryException
     }
 }
 
-/// <summary>
-/// Action requires manager/admin approval (HTTP 202).
-/// </summary>
+
+// Action requires manager//admin approval (HTTP 202).
 public class ApprovalRequiredException : SmartInventoryException
 {
     public ApprovalRequiredException(string action)

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SmartInventory.Core.Entities;
+using SmartInventory.Core.Enums;
 
 namespace SmartInventory.Repository.Configurations;
 
@@ -214,6 +215,72 @@ public class SequenceCounterConfiguration : IEntityTypeConfiguration<SequenceCou
             .HasDefaultValue(0);
 
         builder.HasIndex(x => x.EntityName).IsUnique();
+    }
+}
+
+public class SupplierInvoiceConfiguration : IEntityTypeConfiguration<SupplierInvoice>
+{
+    public void Configure(EntityTypeBuilder<SupplierInvoice> builder)
+    {
+        builder.ToTable("SupplierInvoices");
+
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id).ValueGeneratedOnAdd();
+        builder.Property(x => x.CreatedAt).HasDefaultValueSql("NOW()");
+
+        builder.Property(x => x.InvoiceNumber)
+            .IsRequired()
+            .HasMaxLength(50)
+            .HasDefaultValueSql("CONCAT('INV-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_invoices')::text, 6, '0'))")
+            .ValueGeneratedOnAdd();
+
+        builder.Property(x => x.Amount)
+            .HasPrecision(18, 4)
+            .IsRequired();
+
+        builder.Property(x => x.Currency)
+            .HasMaxLength(3)
+            .HasDefaultValue("INR");
+
+        builder.Property(x => x.FilePath)
+            .IsRequired()
+            .HasMaxLength(500);
+
+        builder.Property(x => x.OriginalFileName)
+            .IsRequired()
+            .HasMaxLength(255);
+
+        builder.Property(x => x.Status)
+            .HasConversion<int>()
+            .IsRequired()
+            .HasDefaultValue(SupplierInvoiceStatus.Pending);
+
+        builder.Property(x => x.InternalNotes)
+            .HasMaxLength(1000);
+
+        builder.Property(x => x.RejectionReason)
+            .HasMaxLength(500);
+
+        builder.Property(x => x.PaymentReference)
+            .HasMaxLength(100);
+
+        builder.HasOne(x => x.Supplier)
+            .WithMany(s => s.Invoices)
+            .HasForeignKey(x => x.SupplierId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(x => x.PurchaseOrder)
+            .WithMany(po => po.SupplierInvoices)
+            .HasForeignKey(x => x.PurchaseOrderId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(x => x.UploadedByContact)
+            .WithMany()
+            .HasForeignKey(x => x.UploadedByContactId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(x => x.InvoiceNumber).IsUnique();
+        builder.HasIndex(x => new { x.SupplierId, x.PurchaseOrderId });
     }
 }
 

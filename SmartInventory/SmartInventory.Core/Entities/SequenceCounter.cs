@@ -1,9 +1,7 @@
 namespace SmartInventory.Core.Entities;
 
-/// <summary>
-/// Tracks auto-incrementing sequence numbers for entities (PO, GRN, TRF, ADJ, etc.).
-/// Updated atomically via PostgreSQL function.
-/// </summary>
+// Tracks auto-incrementing sequence numbers for entities (PO, GRN, TRF, ADJ, etc.).
+// Updated atomically
 public class SequenceCounter : BaseEntity
 {
     public string EntityName { get; set; } = string.Empty;

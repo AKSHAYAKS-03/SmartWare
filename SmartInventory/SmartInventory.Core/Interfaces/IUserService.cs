@@ -2,10 +2,6 @@ using SmartInventory.Core.DTOs;
 
 namespace SmartInventory.Core.Interfaces;
 
-/// <summary>
-/// User management service — Admin-only operations for creating, approving, and managing users.
-/// Also handles notification preference updates and warehouse access.
-/// </summary>
 public interface IUserService
 {
     Task<UserResponseDto> CreateUserAsync(UserCreateDto dto);
@@ -16,9 +12,7 @@ public interface IUserService
     Task<UserResponseDto> ApproveUserAsync(Guid userId, Guid approvedBy);
     Task UpdateNotificationPreferencesAsync(Guid userId, bool smsEnabled, bool emailEnabled);
 
-    /// <summary>
-    /// Regenerates the invite token and resends the welcome email.
-    /// Only valid if the employee has not yet set their password (IsPasswordSet = false).
-    /// </summary>
+    // Regenerates the invite token and resends the welcome email.
+    // Only valid if the employee has not yet set their password (IsPasswordSet = false).
     Task ResendInviteAsync(Guid userId);
 }

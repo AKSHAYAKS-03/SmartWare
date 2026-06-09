@@ -3,11 +3,8 @@ using SmartInventory.Core.DTOs.SupplierPortal;
 
 namespace SmartInventory.Core.Validators;
 
-// ──────────────────────────────────────────────────────────────────────────────
-// ONBOARDING VALIDATORS
-// ──────────────────────────────────────────────────────────────────────────────
 
-/// <summary>Admin invite — validates GSTIN/email/phone format before hitting the DB.</summary>
+//Admin invite — validates GSTIN/email/phone format before hitting the DB.</summary>
 public class SupplierInviteValidator : AbstractValidator<SupplierInviteRequest>
 {
     public SupplierInviteValidator()
@@ -32,7 +29,7 @@ public class SupplierInviteValidator : AbstractValidator<SupplierInviteRequest>
     }
 }
 
-/// <summary>Supplier self-registration — full validation of company and contact details.</summary>
+//Supplier self-registration — full validation of company and contact details.</summary>
 public class SupplierRegisterValidator : AbstractValidator<SupplierRegisterRequest>
 {
     public SupplierRegisterValidator()
@@ -77,7 +74,7 @@ public class SupplierRegisterValidator : AbstractValidator<SupplierRegisterReque
     }
 }
 
-/// <summary>OTP email verification — ensures email and token are present.</summary>
+//OTP email verification — ensures email and token are present.</summary>
 public class SupplierVerifyEmailValidator : AbstractValidator<SupplierVerifyEmailRequest>
 {
     public SupplierVerifyEmailValidator()
@@ -93,7 +90,7 @@ public class SupplierVerifyEmailValidator : AbstractValidator<SupplierVerifyEmai
     }
 }
 
-/// <summary>Invited supplier completing registration — validates invite token, PAN, password strength.</summary>
+//Invited supplier completing registration — validates invite token, PAN, password strength.</summary>
 public class SupplierCompleteRegistrationValidator : AbstractValidator<SupplierCompleteRegistrationRequest>
 {
     public SupplierCompleteRegistrationValidator()
@@ -127,7 +124,7 @@ public class SupplierCompleteRegistrationValidator : AbstractValidator<SupplierC
     }
 }
 
-/// <summary>Admin supplier review — validates action value and conditional approval fields.</summary>
+//Admin supplier review — validates action value and conditional approval fields.</summary>
 public class SupplierReviewValidator : AbstractValidator<SupplierReviewRequest>
 {
     private static readonly string[] AllowedActions = ["Approve", "Reject", "RequestMoreInfo"];
@@ -138,13 +135,6 @@ public class SupplierReviewValidator : AbstractValidator<SupplierReviewRequest>
             .NotEmpty().WithMessage("Action is required.")
             .Must(a => AllowedActions.Contains(a, StringComparer.OrdinalIgnoreCase))
             .WithMessage("Action must be one of: Approve, Reject, RequestMoreInfo.");
-
-        // On Approve: Code is required and must match format
-        RuleFor(x => x.Code)
-            .NotEmpty().WithMessage("Supplier Code is required for approval.")
-            .Matches(@"^[A-Z0-9-]{3,20}$")
-            .WithMessage("Supplier Code must be 3–20 characters, uppercase letters, digits, or hyphens.")
-            .When(x => x.Action.Equals("Approve", StringComparison.OrdinalIgnoreCase));
 
         // On Reject / RequestMoreInfo: Reason is required
         RuleFor(x => x.Reason)
@@ -157,7 +147,7 @@ public class SupplierReviewValidator : AbstractValidator<SupplierReviewRequest>
     }
 }
 
-/// <summary>Forgot password — validates email format.</summary>
+// <summary>Forgot password — validates email format.</summary>
 public class SupplierForgotPasswordValidator : AbstractValidator<SupplierForgotPasswordRequest>
 {
     public SupplierForgotPasswordValidator()
@@ -168,7 +158,7 @@ public class SupplierForgotPasswordValidator : AbstractValidator<SupplierForgotP
     }
 }
 
-/// <summary>Reset password — validates token presence and new password strength.</summary>
+// <summary>Reset password — validates token presence and new password strength.</summary>
 public class SupplierResetPasswordValidator : AbstractValidator<SupplierResetPasswordRequest>
 {
     public SupplierResetPasswordValidator()
@@ -185,7 +175,7 @@ public class SupplierResetPasswordValidator : AbstractValidator<SupplierResetPas
     }
 }
 
-/// <summary>Refresh token — ensures the token string is present.</summary>
+//<summary>Refresh token — ensures the token string is present.</summary>
 public class SupplierRefreshTokenValidator : AbstractValidator<SupplierRefreshTokenRequest>
 {
     public SupplierRefreshTokenValidator()
@@ -195,7 +185,7 @@ public class SupplierRefreshTokenValidator : AbstractValidator<SupplierRefreshTo
     }
 }
 
-/// <summary>Resend OTP — ensures a valid, non-empty ContactId is provided.</summary>
+// <summary>Resend OTP — ensures a valid, non-empty ContactId is provided.</summary>
 public class SupplierResendOtpValidator : AbstractValidator<SupplierResendOtpRequest>
 {
     public SupplierResendOtpValidator()
@@ -204,10 +194,6 @@ public class SupplierResendOtpValidator : AbstractValidator<SupplierResendOtpReq
             .NotEmpty().WithMessage("Contact ID is required.");
     }
 }
-
-// ──────────────────────────────────────────────────────────────────────────────
-// AUTH VALIDATORS
-// ──────────────────────────────────────────────────────────────────────────────
 
 public class SupplierLoginValidator : AbstractValidator<SupplierLoginRequest>
 {
@@ -242,9 +228,7 @@ public class SupplierChangePasswordValidator : AbstractValidator<SupplierChangeP
     }
 }
 
-// ──────────────────────────────────────────────────────────────────────────────
 // PURCHASE ORDER VALIDATORS
-// ──────────────────────────────────────────────────────────────────────────────
 
 public class SupplierRespondToPOValidator : AbstractValidator<SupplierRespondToPORequest>
 {
@@ -279,10 +263,6 @@ public class SupplierMarkDispatchedValidator : AbstractValidator<SupplierMarkDis
 {
     public SupplierMarkDispatchedValidator()
     {
-        RuleFor(x => x.TrackingNumber)
-            .MaximumLength(100).WithMessage("Tracking number cannot exceed 100 characters.")
-            .When(x => x.TrackingNumber != null);
-
         RuleFor(x => x.SupplierNotes)
             .MaximumLength(500).WithMessage("Notes cannot exceed 500 characters.")
             .When(x => x.SupplierNotes != null);
@@ -293,9 +273,6 @@ public class SupplierCreateShipmentValidator : AbstractValidator<SupplierCreateS
 {
     public SupplierCreateShipmentValidator()
     {
-        RuleFor(x => x.TrackingNumber)
-            .MaximumLength(100).When(x => x.TrackingNumber != null);
-
         RuleFor(x => x.CarrierName)
             .MaximumLength(100).When(x => x.CarrierName != null);
 
@@ -310,9 +287,7 @@ public class SupplierCreateShipmentValidator : AbstractValidator<SupplierCreateS
     }
 }
 
-// ──────────────────────────────────────────────────────────────────────────────
 // INVOICE VALIDATORS
-// ──────────────────────────────────────────────────────────────────────────────
 
 public class SupplierUploadInvoiceValidator : AbstractValidator<SupplierUploadInvoiceRequest>
 {
@@ -322,10 +297,6 @@ public class SupplierUploadInvoiceValidator : AbstractValidator<SupplierUploadIn
     {
         RuleFor(x => x.PurchaseOrderId)
             .NotEmpty().WithMessage("Purchase Order ID is required.");
-
-        RuleFor(x => x.InvoiceNumber)
-            .NotEmpty().WithMessage("Invoice number is required.")
-            .MaximumLength(50).WithMessage("Invoice number cannot exceed 50 characters.");
 
         RuleFor(x => x.Amount)
             .GreaterThan(0).WithMessage("Invoice amount must be greater than zero.");
@@ -347,9 +318,7 @@ public class SupplierUploadInvoiceValidator : AbstractValidator<SupplierUploadIn
     }
 }
 
-// ──────────────────────────────────────────────────────────────────────────────
 // CATALOGUE VALIDATORS
-// ──────────────────────────────────────────────────────────────────────────────
 
 public class SupplierUpdateCatalogueItemValidator : AbstractValidator<SupplierUpdateCatalogueItemRequest>
 {
@@ -386,9 +355,7 @@ public class SupplierAddCatalogueItemValidator : AbstractValidator<SupplierAddCa
     }
 }
 
-// ──────────────────────────────────────────────────────────────────────────────
 // PROFILE VALIDATORS
-// ──────────────────────────────────────────────────────────────────────────────
 
 public class SupplierUpdateProfileValidator : AbstractValidator<SupplierUpdateProfileRequest>
 {

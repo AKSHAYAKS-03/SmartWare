@@ -2,11 +2,11 @@ using System;
 
 namespace SmartInventory.Core.Attributes;
 
-/// <summary>
-/// Indicates that a property is indexed in the database and is safe for dynamic sorting.
-/// Prevents unindexed large text columns from causing "File Sort" exhaustion attacks.
-/// </summary>
 [AttributeUsage(AttributeTargets.Property)]
 public class SortableAttribute : Attribute
 {
 }
+
+
+// runtime checked for [sortable]
+//prevents large text columsn and hels to assingn a column as sortable 

@@ -1,6 +1,7 @@
 using SmartInventory.Core.Interfaces;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SmartInventory.Infrastructure.Services;
@@ -8,7 +9,7 @@ namespace SmartInventory.Infrastructure.Services;
 public class LocalFileStorageService : IFileStorageService
 {
     private readonly string _basePath;
-    private readonly string[] _allowedExtensions = { ".pdf", ".png", ".jpg", ".jpeg", ".csv" };
+    private readonly string[] _allowedExtensions = { ".pdf", ".png", ".jpg", ".jpeg", ".webp", ".csv" };
 
     public LocalFileStorageService()
     {
@@ -32,15 +33,30 @@ public class LocalFileStorageService : IFileStorageService
         return absolutePath;
     }
 
-    public async Task<string> SaveFileAsync(Stream fileStream, string fileName, string folderName)
+    public async Task<string> SaveFileAsync(Stream fileStream, string fileName, string folderName, string? storagePrefix = null)
     {
-        var ext = Path.GetExtension(fileName).ToLowerInvariant();
+        var originalFileName = Path.GetFileName(fileName);
+        var ext = Path.GetExtension(originalFileName).ToLowerInvariant();
         if (Array.IndexOf(_allowedExtensions, ext) < 0)
         {
             throw new UnauthorizedAccessException($"File extension {ext} is strictly forbidden.");
         }
 
-        var relativePath = Path.Combine(folderName, $"{Guid.NewGuid()}_{fileName}");
+        // Store files with a generated, filesystem-safe name. The original file
+        // name is preserved separately in the database for download/display.
+        var safePrefix = string.IsNullOrWhiteSpace(storagePrefix)
+            ? string.Empty
+            : new string(storagePrefix
+                .Trim()
+                .ToUpperInvariant()
+                .Where(ch => char.IsLetterOrDigit(ch) || ch == '-' || ch == '_')
+                .ToArray());
+
+        var generatedName = $"{DateTime.UtcNow:yyyyMMddHHmmss}_{Guid.NewGuid():N}{ext}";
+        var storageFileName = string.IsNullOrWhiteSpace(safePrefix)
+            ? generatedName
+            : $"{safePrefix}_{generatedName}";
+        var relativePath = Path.Combine(folderName, storageFileName);
         var absolutePath = GetSecureAbsolutePath(relativePath);
 
         var targetFolder = Path.GetDirectoryName(absolutePath);

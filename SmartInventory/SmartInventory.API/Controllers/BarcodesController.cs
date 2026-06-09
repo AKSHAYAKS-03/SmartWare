@@ -26,7 +26,7 @@ public class BarcodesController : ControllerBase
     }
 
     /// <summary>
-    /// Generates a secondary or custom barcode/QR code for a product.
+    /// Ensures a product barcode exists using the product's generated SKU as the barcode value.
     /// </summary>
     [EnableRateLimiting("mutations")]
     [HttpPost("generate")]
@@ -37,9 +37,17 @@ public class BarcodesController : ControllerBase
         return Ok(result);
     }
 
+    [EnableRateLimiting("mutations")]
+    [HttpPut("product/{productId:guid}")]
+    [Authorize(Policy = "RequireManager")]
+    public async Task<IActionResult> UpdateBarcode(Guid productId, [FromBody] BarcodeUpdateDto request)
+    {
+        var result = await _barcodeService.UpdateBarcodeRecordAsync(productId, request);
+        return Ok(result);
+    }
+
     /// <summary>
-    /// Generates multiple barcode records in a single transaction (max 500).
-    /// Designed for high-volume GRN workflows where hundreds of labels are needed at once.
+    /// Ensures multiple product barcodes exist in a single transaction (max 500).
     /// </summary>
     [EnableRateLimiting("mutations")]
     [HttpPost("batch-generate")]
@@ -60,6 +68,24 @@ public class BarcodesController : ControllerBase
     public async Task<IActionResult> ScanBarcode([FromBody] BarcodeScanDto dto)
     {
         var result = await _barcodeService.ProcessScanAsync(dto, _currentUser.UserId, _currentUser.WarehouseId);
+        return Ok(result);
+    }
+
+    [EnableRateLimiting("mutations")]
+    [HttpPost("scan/receipt/validate")]
+    [Authorize(Policy = "RequireStaff")]
+    public async Task<IActionResult> ValidateReceiptScan([FromBody] BarcodeScanReceiptValidationDto dto)
+    {
+        var result = await _barcodeService.ValidateReceiptScanAsync(dto, _currentUser.WarehouseId);
+        return Ok(result);
+    }
+
+    [EnableRateLimiting("mutations")]
+    [HttpPost("scan/transfer/validate")]
+    [Authorize(Policy = "RequireStaff")]
+    public async Task<IActionResult> ValidateTransferScan([FromBody] BarcodeScanTransferValidationDto dto)
+    {
+        var result = await _barcodeService.ValidateTransferScanAsync(dto, _currentUser.WarehouseId);
         return Ok(result);
     }
 

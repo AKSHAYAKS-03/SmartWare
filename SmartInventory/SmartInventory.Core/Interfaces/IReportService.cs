@@ -3,11 +3,6 @@ using SmartInventory.Core.Enums;
 
 namespace SmartInventory.Core.Interfaces;
 
-/// <summary>
-/// Reports and analytics service.
-/// Provides inventory valuation, movement history, dead stock, shrinkage, supplier performance,
-/// PO fulfillment reports, and generic CSV export.
-/// </summary>
 public interface IReportService
 {
     Task<IEnumerable<InventoryValuationDto>> GetInventoryValuationReportAsync(

@@ -7,7 +7,6 @@ namespace SmartInventory.Core.DTOs;
 public class SupplierCreateDto
 {
     public string Name { get; set; } = string.Empty;
-    public string Code { get; set; } = string.Empty;
     public string? GSTIN { get; set; }
     public string? PAN { get; set; }
     public string? ContactPerson { get; set; }
@@ -23,7 +22,6 @@ public class SupplierCreateDto
 public class SupplierUpdateDto
 {
     public string Name { get; set; } = string.Empty;
-    public string Code { get; set; } = string.Empty;
     public string? GSTIN { get; set; }
     public string? PAN { get; set; }
     public string? ContactPerson { get; set; }

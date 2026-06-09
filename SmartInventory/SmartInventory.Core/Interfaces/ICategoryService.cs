@@ -1,10 +1,6 @@
 using SmartInventory.Core.DTOs;
 
 namespace SmartInventory.Core.Interfaces;
-
-/// <summary>
-/// Product category management — supports hierarchical self-referencing categories.
-/// </summary>
 public interface ICategoryService
 {
     Task<CategoryResponseDto> CreateCategoryAsync(CategoryCreateDto dto);

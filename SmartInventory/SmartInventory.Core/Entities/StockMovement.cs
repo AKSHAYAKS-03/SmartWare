@@ -2,9 +2,7 @@ using SmartInventory.Core.Enums;
 
 namespace SmartInventory.Core.Entities;
 
-/// <summary>
-/// Append-only log of every stock movement. Never updated — new row per movement.
-/// </summary>
+
 public class StockMovement : BaseEntity
 {
     public MovementType MovementType { get; set; }

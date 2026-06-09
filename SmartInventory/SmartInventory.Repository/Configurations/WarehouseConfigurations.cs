@@ -22,7 +22,9 @@ public class WarehouseConfiguration : IEntityTypeConfiguration<Warehouse>
 
         builder.Property(x => x.Code)
             .IsRequired()
-            .HasMaxLength(20);
+            .HasMaxLength(20)
+            .HasDefaultValueSql("CONCAT('WH-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_warehouses')::text, 6, '0'))")
+            .ValueGeneratedOnAdd();
 
         builder.Property(x => x.Address)
             .HasMaxLength(250);
@@ -91,7 +93,9 @@ public class WarehouseZoneConfiguration : IEntityTypeConfiguration<WarehouseZone
 
         builder.Property(x => x.Code)
             .IsRequired()
-            .HasMaxLength(20);
+            .HasMaxLength(20)
+            .HasDefaultValueSql("CONCAT('ZN-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_zones')::text, 6, '0'))")
+            .ValueGeneratedOnAdd();
 
         builder.Property(x => x.ZoneType)
             .HasConversion<int>()
@@ -121,7 +125,9 @@ public class BinLocationConfiguration : IEntityTypeConfiguration<BinLocation>
 
         builder.Property(x => x.BinCode)
             .IsRequired()
-            .HasMaxLength(30);
+            .HasMaxLength(30)
+            .HasDefaultValueSql("CONCAT('BIN-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_bins')::text, 6, '0'))")
+            .ValueGeneratedOnAdd();
 
         builder.Property(x => x.Barcode)
             .HasMaxLength(50);

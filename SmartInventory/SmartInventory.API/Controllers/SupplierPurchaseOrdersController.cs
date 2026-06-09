@@ -87,7 +87,7 @@ public class SupplierPurchaseOrdersController : ControllerBase
     public async Task<IActionResult> MarkDispatched(Guid id, [FromBody] SupplierMarkDispatchedRequest request)
     {
         var shipment = await _service.CreateShipmentAsync(GetSupplierId(), id,
-            new SupplierCreateShipmentRequest(request.TrackingNumber, null, null, request.SupplierNotes, null));
+            new SupplierCreateShipmentRequest(null, null, request.SupplierNotes, null));
         return Ok(new { message = "Order marked as dispatched.", shipment });
     }
 

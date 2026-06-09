@@ -10,6 +10,7 @@ using SmartInventory.Core;
 using SmartInventory.Core.Interfaces;
 using SmartInventory.Repository;
 using SmartInventory.Repository.Repositories;
+using SmartInventory.Repository.Services;
 using SmartInventory.Service.Services;
 using SmartInventory.Infrastructure.Services;
 using SmartInventory.Infrastructure.BackgroundJobs;
@@ -201,6 +202,7 @@ builder.Services.AddScoped<ITransferRepository, TransferRepository>();
 builder.Services.AddScoped<IBarcodeRepository, BarcodeRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IStockLevelRepository, StockLevelRepository>();
+builder.Services.AddScoped<ISequenceNumberGenerator, SequenceNumberGenerator>();
 builder.Services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
 
 // ─────────────────────────────────────────────────────────────────────────────

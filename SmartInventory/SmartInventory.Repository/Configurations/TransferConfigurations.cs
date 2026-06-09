@@ -18,7 +18,7 @@ public class WarehouseTransferConfiguration : IEntityTypeConfiguration<Warehouse
         builder.Property(x => x.TransferNumber)
             .IsRequired()
             .HasMaxLength(50)
-            .HasDefaultValueSql("CONCAT('TRF-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_transfers')::text, 5, '0'))")
+            .HasDefaultValueSql("CONCAT('TRF-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_transfers')::text, 6, '0'))")
             .ValueGeneratedOnAdd();
 
         builder.Property(x => x.Status)

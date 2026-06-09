@@ -115,15 +115,30 @@ public class OutboxProcessorService : BackgroundService
         {
             using var transaction = await dbContext.Database.BeginTransactionAsync(stoppingToken);
 
-            var messages = await dbContext.OutboxMessages
-                .FromSqlRaw(@"
-                    SELECT * FROM outbox_messages 
-                    WHERE ""Status"" IN ('Pending', 'Failed') 
-                       OR (""Status"" = 'Processing' AND ""ProcessedAt"" IS NULL AND ""CreatedAt"" < NOW() - INTERVAL '5 minutes')
-                    ORDER BY ""CreatedAt""
-                    LIMIT 100
-                    FOR UPDATE SKIP LOCKED")
-                .ToListAsync(stoppingToken);
+            var messagesQuery = dbContext.OutboxMessages.AsQueryable();
+
+            if (dbContext.Database.IsRelational())
+            {
+                messagesQuery = dbContext.OutboxMessages
+                    .FromSqlRaw(@"
+                        SELECT * FROM outbox_messages 
+                        WHERE ""Status"" IN ('Pending', 'Failed') 
+                           OR (""Status"" = 'Processing' AND ""ProcessedAt"" IS NULL AND ""CreatedAt"" < NOW() - INTERVAL '5 minutes')
+                        ORDER BY ""CreatedAt""
+                        LIMIT 100
+                        FOR UPDATE SKIP LOCKED");
+            }
+            else
+            {
+                messagesQuery = messagesQuery.Where(msg =>
+                    msg.Status == "Pending" ||
+                    msg.Status == "Failed" ||
+                    (msg.Status == "Processing" && msg.ProcessedAt == null && msg.CreatedAt < DateTime.UtcNow.AddMinutes(-5)))
+                    .OrderBy(msg => msg.CreatedAt)
+                    .Take(100);
+            }
+
+            var messages = await messagesQuery.ToListAsync(stoppingToken);
 
             if (!messages.Any())
             {

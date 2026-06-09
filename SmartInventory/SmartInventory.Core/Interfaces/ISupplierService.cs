@@ -3,10 +3,6 @@ using SmartInventory.Core.DTOs.SupplierPortal;
 
 namespace SmartInventory.Core.Interfaces;
 
-/// <summary>
-/// Supplier directory and relationship management service.
-/// Handles supplier CRUD, supplier-product mappings, and performance rating calculations.
-/// </summary>
 public interface ISupplierService
 {
     Task<SupplierResponseDto> UpdateSupplierAsync(Guid supplierId, SupplierUpdateDto dto);
@@ -22,7 +18,7 @@ public interface ISupplierService
     Task<IEnumerable<SupplierPerformanceLogResponseDto>> GetSupplierPerformanceAsync(Guid supplierId);
     Task RecalculateSupplierRatingAsync(Guid supplierId);
 
-    // Onboarding Actions
+
     Task<SupplierResponseDto> InviteSupplierAsync(SupplierInviteRequest request);
     Task<SupplierResponseDto> ReviewSupplierAsync(Guid supplierId, SupplierReviewRequest request);
     Task SuspendSupplierAsync(Guid supplierId, string reason);

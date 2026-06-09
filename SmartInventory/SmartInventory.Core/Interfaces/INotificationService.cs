@@ -5,9 +5,8 @@ namespace SmartInventory.Core.Interfaces;
 
 public interface INotificationService
 {
-    /// <summary>
-    /// Dispatches a notification to a specific user via the selected channel.
-    /// </summary>
+    
+    //Dispatches a notification to a specific user via the selected channel.
     Task SendNotificationAsync(
         Guid userId,
         NotificationChannel channel,
@@ -17,94 +16,87 @@ public interface INotificationService
         string? entityType = null,
         Guid? entityId = null);
 
-    /// <summary>
-    /// Triggered when physical stock drops below or equals the reorder threshold.
-    /// </summary>
+    
+     //Triggered when physical stock drops below or equals the reorder threshold.
     Task SendLowStockAlertAsync(Guid productId, Guid warehouseId, int currentStock, int reorderPoint);
     Task SendSafetyStockAlertAsync(Guid productId, Guid warehouseId, int currentStock, int safetyStock);
+    Task SendOutOfStockAlertAsync(Guid productId, Guid warehouseId, int currentStock = 0);
     Task SendBinCapacityAlertAsync(Guid binId, string binCode, decimal utilizationPercentage);
     
-    /// <summary>
-    /// Triggered when a PO's expected delivery date has passed without a GRN being created.
-    /// </summary>
+    
+    // Triggered when a PO's expected delivery date has passed without a GRN being created.
     Task SendPOOverdueAlertAsync(Guid purchaseOrderId);
+    Task SendPurchaseOrderSubmittedAlertAsync(Guid purchaseOrderId);
+    Task SendSupplierPurchaseOrderResponseAlertAsync(Guid purchaseOrderId, bool accepted, string? supplierReason = null);
+    Task SendGoodsReceiptVarianceAlertAsync(Guid purchaseOrderId, Guid goodsReceiptId, int totalAcceptedQty, int totalRejectedQty, string? rejectionReasons, decimal remainingInvoiceableAmount);
+    Task SendPendingStockAdjustmentApprovalAlertAsync(Guid stockAdjustmentId);
+    Task SendInvoiceUploadedAlertAsync(Guid invoiceId);
+    Task SendInvoiceApprovedAlertAsync(Guid invoiceId);
+    Task SendInvoiceRejectedAlertAsync(Guid invoiceId, string rejectionReason);
+    Task SendInvoicePaymentCompletedAlertAsync(Guid invoiceId);
+    Task SendInvoicePaymentFailedAlertAsync(Guid invoiceId, string failureReason);
 
-    /// <summary>
-    /// Returns the notification inbox for a specific user (paginated).
-    /// </summary>
+    
+    //Returns the notification inbox for a specific user (paginated).
+    
     Task<PagedResult<NotificationResponseDto>> GetUserNotificationsAsync(Guid userId, QueryParameters queryParams);
 
-    /// <summary>
-    /// Returns the count of unread notifications for a user.
-    /// </summary>
+    
+    // Returns the count of unread notifications for a user.
     Task<int> GetUnreadCountAsync(Guid userId);
 
-    /// <summary>
-    /// Marks a single notification as read for the specified user.
-    /// </summary>
+    
+    // Marks a single notification as read for the specified user.
     Task MarkAsReadAsync(Guid notificationId, Guid userId);
 
-    /// <summary>
-    /// Marks all notifications as read for the specified user.
-    /// </summary>
+    
+    //Marks all notifications as read for the specified user.
     Task MarkAllAsReadAsync(Guid userId);
 
-    /// <summary>
-    /// Sends a welcome invitation email to a newly provisioned employee.
-    /// The email contains a one-time secure link for the employee to set their own password.
-    /// </summary>
+    
+    //Sends a welcome invitation email to a newly provisioned employee.
+    //The email contains a one-time secure link for the employee to set their own password.
     Task SendWelcomeInviteAsync(Guid userId, string toEmail, string fullName, string inviteToken);
 
-    // ─── Supplier Onboarding Email Notifications ──────────────────────────────
 
-    /// <summary>
-    /// Sends an invitation email to a supplier who was invited by admin.
-    /// Contains a link to complete registration.
-    /// </summary>
+    
+    //Sends an invitation email to a supplier who was invited by admin.
+    //Contains a link to complete registration.
     Task SendSupplierInviteAsync(Guid supplierId, string toEmail, string supplierName, string inviteToken);
 
-    /// <summary>
-    /// Sends the OTP email to a self-registered supplier for email verification.
-    /// </summary>
+    
+    //Sends the OTP email to a self-registered supplier for email verification.
     Task SendOtpEmailAsync(Guid contactId, string toEmail, string otp, string contactName);
 
-    /// <summary>
-    /// Sends approval email to supplier after admin approves their registration.
-    /// </summary>
+    
+    //Sends approval email to supplier after admin approves their registration.
     Task SendApprovalEmailAsync(Guid supplierId, string toEmail, string supplierName, string supplierCode);
 
-    /// <summary>
-    /// Sends rejection email to supplier when admin rejects their registration.
-    /// </summary>
+    
+    //Sends rejection email to supplier when admin rejects their registration.
     Task SendRejectionEmailAsync(Guid supplierId, string toEmail, string supplierName, string reason);
 
-    /// <summary>
-    /// Sends suspension email to supplier when admin suspends their account.
-    /// </summary>
+    
+    //Sends suspension email to supplier when admin suspends their account.
     Task SendSuspensionEmailAsync(Guid supplierId, string toEmail, string supplierName, string reason);
 
-    /// <summary>
-    /// Sends reactivation email to supplier when admin re-activates their account.
-    /// </summary>
+    
+    //Sends reactivation email to supplier when admin re-activates their account.
     Task SendReactivationEmailAsync(Guid supplierId, string toEmail, string supplierName);
 
-    /// <summary>
-    /// Sends password reset request email to supplier contact.
-    /// </summary>
+    
+    //Sends password reset request email to supplier contact.
     Task SendPasswordResetRequestAsync(Guid contactId, string toEmail, string resetToken, string contactName);
 
-    /// <summary>
-    /// Sends password reset success confirmation email to supplier contact.
-    /// </summary>
+    
+    //Sends password reset success confirmation email to supplier contact.
     Task SendPasswordResetSuccessAsync(Guid contactId, string toEmail, string contactName);
 
-    // ─── Supplier Finance Notifications ──────────────────────────────────────
 
-    /// <summary>
-    /// Notifies the supplier when a Goods Receipt (GRN) is processed against one of their POs.
-    /// Contains accepted/rejected quantity breakdown and the current remaining invoiceable amount.
-    /// Called from PurchaseOrderService.ReceiveGoodsAsync after commit.
-    /// </summary>
+    
+    //Notifies the supplier when a Goods Receipt (GRN) is processed against one of their POs.
+    //Contains accepted/rejected quantity breakdown and the current remaining invoiceable amount.
+    //Called from PurchaseOrderService.ReceiveGoodsAsync after commit.
     Task SendSupplierGoodsReceiptNotificationAsync(
         Guid supplierId,
         string supplierEmail,
@@ -117,11 +109,10 @@ public interface INotificationService
         decimal aggregateAcceptedGrnValue,
         decimal remainingInvoiceableAmount);
 
-    /// <summary>
-    /// Notifies the supplier when their invoice fails matching (IsMatch = false).
-    /// Contains the exact discrepancy reasons and the correct invoiceable amount.
-    /// Called from InvoiceProcessingService.MatchInvoiceAsync when IsMatch = false.
-    /// </summary>
+    
+    //Notifies the supplier when their invoice fails matching (IsMatch = false).
+    //Contains the exact discrepancy reasons and the correct invoiceable amount.
+    //Called from InvoiceProcessingService.MatchInvoiceAsync when IsMatch = false.
     Task SendSupplierInvoiceRejectedNotificationAsync(
         Guid supplierId,
         string supplierEmail,

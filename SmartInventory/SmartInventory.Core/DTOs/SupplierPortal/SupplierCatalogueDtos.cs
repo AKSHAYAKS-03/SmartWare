@@ -1,17 +1,15 @@
 namespace SmartInventory.Core.DTOs.SupplierPortal;
 
-// ──────────────────────────────────────────────────────────────────────────────
 // REQUEST DTOs
-// ──────────────────────────────────────────────────────────────────────────────
 
-/// <summary>Supplier updates the price and lead time for a product they supply.</summary>
+//Supplier updates the price and lead time for a product they supply
 public record SupplierUpdateCatalogueItemRequest(
     decimal UnitPrice,
     int LeadTimeDays,
     int MinOrderQuantity
 );
 
-/// <summary>Supplier adds a new product to their catalogue.</summary>
+//Supplier adds a new product to their catalogue
 public record SupplierAddCatalogueItemRequest(
     Guid ProductId,
     decimal UnitPrice,
@@ -19,11 +17,8 @@ public record SupplierAddCatalogueItemRequest(
     int MinOrderQuantity
 );
 
-// ──────────────────────────────────────────────────────────────────────────────
 // RESPONSE DTOs
-// ──────────────────────────────────────────────────────────────────────────────
 
-/// <summary>A product in the supplier's catalogue as viewed from the portal.</summary>
 public record SupplierCatalogueItemDto(
     Guid SupplierProductId,
     Guid ProductId,

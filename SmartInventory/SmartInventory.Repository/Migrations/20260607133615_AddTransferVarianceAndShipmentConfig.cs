@@ -147,11 +147,11 @@ namespace SmartInventory.Repository.Migrations
             // Backfill transfer variance linkage for existing LossInTransit adjustments
             migrationBuilder.Sql("""
                 UPDATE stock_adjustments sa
-                SET reference_type = 1, reference_id = wt."Id"
+                SET "ReferenceType" = 1, "ReferenceId" = wt."Id"
                 FROM warehouse_transfers wt
-                WHERE sa.reason = 8
-                  AND sa.reference_id IS NULL
-                  AND sa.notes LIKE 'Transit Variance on Transfer ' || wt."TransferNumber" || '%';
+                WHERE sa."Reason" = 8
+                  AND sa."ReferenceId" IS NULL
+                  AND sa."Notes" LIKE 'Transit Variance on Transfer ' || wt."TransferNumber" || '%';
                 """);
 
             migrationBuilder.AddForeignKey(

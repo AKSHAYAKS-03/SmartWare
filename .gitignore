@@ -48,3 +48,23 @@ keys/
 .nuget/
 **/packages/
 node_modules/
+
+
+
+# Application Logs
+**/Logs/*.txt
+**/Logs/*.log
+
+
+# Unit Test Results
+**/TestResults/
+
+
+# Build outputs
+[Bb]in/
+[Oo]bj/
+
+# IDEs
+.vs/
+.idea/
+*.user

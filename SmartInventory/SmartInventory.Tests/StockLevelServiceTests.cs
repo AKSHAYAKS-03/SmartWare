@@ -189,6 +189,56 @@ public class StockLevelServiceTests : IDisposable
         Assert.Equal(97.5m, averageValue);
     }
 
+    // Prevents valuation from drifting when stock exists but no accepted GRNs are available yet
+    [Fact]
+    public async Task GetInventoryValuationAsync_WeightedAverage_WithNoAcceptedGRNs_FallsBackToCostPrice()
+    {
+        // Arrange
+        var productId = Guid.NewGuid();
+        var warehouseId = Guid.NewGuid();
+
+        var category = new Category { Id = Guid.NewGuid(), Name = "Hardware", Description = "Tools" };
+        var product = new Product
+        {
+            Id = productId,
+            Name = "Product A",
+            SKU = "PRD-A",
+            CostPrice = 6m,
+            SellingPrice = 10m,
+            CategoryId = category.Id,
+            Category = category
+        };
+        var warehouse = new Warehouse { Id = warehouseId, Name = "WH1", Code = "WH1" };
+        var stockLevel = new StockLevel { Id = Guid.NewGuid(), ProductId = productId, WarehouseId = warehouseId, QuantityOnHand = 15 };
+
+        await _context.Categories.AddAsync(category);
+        await _context.Products.AddAsync(product);
+        await _context.Warehouses.AddAsync(warehouse);
+        await _context.StockLevels.AddAsync(stockLevel);
+        await _context.SaveChangesAsync();
+
+        // Act
+        var value = await _service.GetInventoryValuationAsync(productId, warehouseId, ValuationMethod.WeightedAverage);
+
+        // Assert
+        Assert.Equal(90m, value);
+    }
+
+    // Prevents missing products from causing valuation or EOQ failures in upstream callers
+    [Fact]
+    public async Task CalculateEoqAsync_MissingProduct_ReturnsZero()
+    {
+        // Arrange
+        var productId = Guid.NewGuid();
+        var warehouseId = Guid.NewGuid();
+
+        // Act
+        var eoq = await _service.CalculateEoqAsync(productId, warehouseId);
+
+        // Assert
+        Assert.Equal(0, eoq);
+    }
+
     public void Dispose()
     {
         _context.Dispose();

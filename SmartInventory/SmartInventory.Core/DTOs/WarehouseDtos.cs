@@ -7,7 +7,6 @@ namespace SmartInventory.Core.DTOs;
 public class WarehouseCreateDto
 {
     public string Name { get; set; } = string.Empty;
-    public string Code { get; set; } = string.Empty;
     public string? Address { get; set; }
     public string? City { get; set; }
     public string State { get; set; } = string.Empty;
@@ -31,7 +30,6 @@ public class WarehouseCreateDto
 public class WarehouseUpdateDto
 {
     public string Name { get; set; } = string.Empty;
-    public string Code { get; set; } = string.Empty;
     public string? Address { get; set; }
     public string? City { get; set; }
     public string State { get; set; } = string.Empty;
@@ -87,12 +85,10 @@ public class ZoneCreateDto
 {
     public Guid WarehouseId { get; set; }
     public string Name { get; set; } = string.Empty;
-    public string Code { get; set; } = string.Empty;
     public ZoneType ZoneType { get; set; }
-    /// <summary>
-    /// When true, the capacity engine enforces volume and weight limits on bins in this zone.
-    /// Default is false to preserve backward compatibility. Enable once bins have MaxVolumeCm3 / MaxWeightKg configured.
-    /// </summary>
+
+    // When true, the capacity engine enforces volume and weight limits on bins in this zone.
+    // Default is false to preserve backward compatibility. Enable once bins have MaxVolumeCm3 / MaxWeightKg configured.
     public bool IsCapacityEnforced { get; set; } = false;
     public bool IsActive { get; set; } = true;
     
@@ -104,7 +100,6 @@ public class ZoneCreateDto
 public class ZoneUpdateDto
 {
     public string Name { get; set; } = string.Empty;
-    public string Code { get; set; } = string.Empty;
     public ZoneType ZoneType { get; set; }
     public bool IsActive { get; set; }
     
@@ -135,24 +130,16 @@ public class ZoneResponseDto
 public class BinLocationCreateDto
 {
     public Guid ZoneId { get; set; }
-    public string BinCode { get; set; } = string.Empty;
-    public string? Barcode { get; set; }
     public BinType BinType { get; set; } = BinType.Standard;
-    /// <summary>Maximum volume this bin can hold in cm³. Used by the capacity engine.</summary>
     public decimal MaxVolumeCm3 { get; set; }
-    /// <summary>Maximum weight this bin can hold in kg. Used by the capacity engine.</summary>
     public decimal MaxWeightKg { get; set; } = 0;
     public bool IsActive { get; set; } = true;
 }
 
 public class BinLocationUpdateDto
 {
-    public string BinCode { get; set; } = string.Empty;
-    public string? Barcode { get; set; }
     public BinType BinType { get; set; } = BinType.Standard;
-    /// <summary>Maximum volume in cm³.</summary>
     public decimal MaxVolumeCm3 { get; set; }
-    /// <summary>Maximum weight in kg.</summary>
     public decimal MaxWeightKg { get; set; } = 0;
     public bool IsActive { get; set; }
 }
@@ -168,7 +155,6 @@ public class BinLocationResponseDto
     public string Code => BinCode;
     public string? Barcode { get; set; }
 
-    // Capacity configuration
     public BinType BinType { get; set; }
     public string BinTypeName => BinType.ToString();
     public decimal MaxVolumeCm3 { get; set; }
@@ -182,7 +168,7 @@ public class BinLocationResponseDto
     public decimal VolumeUtilizationPct => MaxVolumeCm3 > 0 ? Math.Round((UtilizedVolumeCm3 / MaxVolumeCm3) * 100, 1) : 0;
     public decimal WeightUtilizationPct => MaxWeightKg > 0 ? Math.Round((UtilizedWeightKg / MaxWeightKg) * 100, 1) : 0;
 
-    /// <summary>True when either MaxVolumeCm3 or MaxWeightKg is configured (> 0).</summary>
+   //True when either MaxVolumeCm3 or MaxWeightKg is configured (> 0).</summary>
     public bool IsCapacityConfigured => MaxVolumeCm3 > 0 || MaxWeightKg > 0;
 
     public bool IsActive { get; set; }

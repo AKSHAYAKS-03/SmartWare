@@ -30,16 +30,12 @@ public class ChangePasswordDto
     public string NewPassword { get; set; } = string.Empty;
 }
 
-/// <summary>
 /// Used by the employee to activate their account via the one-time invite link.
 /// No authentication required — the invite token IS the proof of identity.
-/// </summary>
 public class SetPasswordDto
 {
-    /// <summary>The invite token received in the welcome email.</summary>
     public string Token { get; set; } = string.Empty;
 
-    /// <summary>The employee's chosen password. Must meet complexity requirements.</summary>
     public string NewPassword { get; set; } = string.Empty;
 }
 
@@ -47,7 +43,6 @@ public class UserCreateDto
 {
     public string FullName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
-    // NOTE: No Password field — employee sets their own via invite email link.
     public string? PhoneNumber { get; set; }
     public string? EmployeeId { get; set; }
     public Guid RoleId { get; set; }

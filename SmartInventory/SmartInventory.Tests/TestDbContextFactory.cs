@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using SmartInventory.Repository;
 
 namespace SmartInventory.Tests;
@@ -13,6 +14,7 @@ public static class TestDbContextFactory
     {
         var options = new DbContextOptionsBuilder<TestAppDbContext>()
             .UseInMemoryDatabase($"SmartInventoryTests_{Guid.NewGuid()}")
+            .ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning))
             .Options;
 
         var context = new TestAppDbContext(options);

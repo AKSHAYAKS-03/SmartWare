@@ -11,10 +11,6 @@ public class ProductCreateValidator : AbstractValidator<ProductCreateDto>
             .NotEmpty().WithMessage("Product Name is required.")
             .Length(3, 200).WithMessage("Product Name must be between 3 and 200 characters.");
 
-        RuleFor(x => x.SKU)
-            .NotEmpty().WithMessage("SKU is required.")
-            .Matches(@"^[A-Z]{3}-\d{5}$").WithMessage("SKU must follow the format 'AAA-12345' (3 uppercase letters, a hyphen, and 5 digits).");
-
         RuleFor(x => x.CostPrice)
             .GreaterThan(0).WithMessage("Cost Price must be greater than 0.");
 
@@ -93,10 +89,6 @@ public class SupplierCreateValidator : AbstractValidator<SupplierCreateDto>
             .NotEmpty().WithMessage("Supplier Name is required.")
             .Length(2, 150).WithMessage("Supplier Name must be between 2 and 150 characters.");
 
-        RuleFor(x => x.Code)
-            .NotEmpty().WithMessage("Supplier Code is required.")
-            .Matches(@"^[A-Z0-9-]{3,10}$").WithMessage("Supplier Code must be 3-10 characters long, containing uppercase letters, numbers, or hyphens.");
-
         RuleFor(x => x.GSTIN)
             .NotEmpty().WithMessage("GSTIN is required.")
             .Matches(@"^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$")
@@ -130,10 +122,6 @@ public class SupplierUpdateValidator : AbstractValidator<SupplierUpdateDto>
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Supplier Name is required.")
             .Length(2, 150).WithMessage("Supplier Name must be between 2 and 150 characters.");
-
-        RuleFor(x => x.Code)
-            .NotEmpty().WithMessage("Supplier Code is required.")
-            .Matches(@"^[A-Z0-9-]{3,10}$").WithMessage("Supplier Code must be 3-10 characters long, containing uppercase letters, numbers, or hyphens.");
 
         RuleFor(x => x.GSTIN)
             .NotEmpty().WithMessage("GSTIN is required.")

@@ -1,8 +1,5 @@
 namespace SmartInventory.Core.Entities;
 
-/// <summary>
-/// Tracks supplier delivery performance per PO.
-/// </summary>
 public class SupplierPerformanceLog : BaseEntity
 {
     public int PromisedDays { get; set; }
@@ -10,11 +7,9 @@ public class SupplierPerformanceLog : BaseEntity
     public decimal FillRate { get; set; } // 0.0 - 1.0
     public string? Notes { get; set; }
 
-    // Foreign Keys
     public Guid SupplierId { get; set; }
     public Guid PurchaseOrderId { get; set; }
 
-    // Navigation
     public Supplier Supplier { get; set; } = null!;
     public PurchaseOrder PurchaseOrder { get; set; } = null!;
 }

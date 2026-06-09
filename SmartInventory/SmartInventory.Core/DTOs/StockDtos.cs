@@ -119,6 +119,9 @@ public class StockAdjustmentResponseDto
     public Guid? ApprovedBy { get; set; }
     public string? ApprovedByUserName { get; set; }
     public DateTime CreatedAt { get; set; }
+    public int CurrentQuantity { get; set; }
+    public bool IsStale { get; set; }
+    public string? WarningMessage { get; set; }
     public ReferenceType? ReferenceType { get; set; }
     public string? ReferenceTypeName => ReferenceType?.ToString();
     public Guid? ReferenceId { get; set; }

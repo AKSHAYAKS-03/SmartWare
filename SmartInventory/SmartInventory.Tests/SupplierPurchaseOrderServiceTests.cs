@@ -15,6 +15,7 @@ public class SupplierPurchaseOrderServiceTests : IDisposable
 {
     private readonly AppDbContext _context;
     private readonly ISupplierPurchaseOrderService _service;
+    private readonly Mock<INotificationService> _notificationServiceMock;
     private readonly Guid _supplierId;
     private readonly Guid _poId;
     private readonly Guid _poItemId;
@@ -35,13 +36,16 @@ public class SupplierPurchaseOrderServiceTests : IDisposable
             purchaseOrders.Object, transfers.Object, barcodes.Object,
             notifications.Object, stockLevels.Object);
 
-        var notificationService = new Mock<INotificationService>();
-        notificationService.Setup(n => n.SendNotificationAsync(
+        _notificationServiceMock = new Mock<INotificationService>();
+        _notificationServiceMock.Setup(n => n.SendNotificationAsync(
                 It.IsAny<Guid>(), It.IsAny<NotificationChannel>(), It.IsAny<string>(),
                 It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string?>(), It.IsAny<Guid?>()))
             .Returns(Task.CompletedTask);
+        _notificationServiceMock.Setup(n => n.SendSupplierPurchaseOrderResponseAlertAsync(
+                It.IsAny<Guid>(), It.IsAny<bool>(), It.IsAny<string?>()))
+            .Returns(Task.CompletedTask);
 
-        _service = new SupplierPurchaseOrderService(uow, notificationService.Object);
+        _service = new SupplierPurchaseOrderService(uow, _notificationServiceMock.Object);
 
         var supplier = new Supplier
         {
@@ -143,7 +147,6 @@ public class SupplierPurchaseOrderServiceTests : IDisposable
             _supplierId,
             _poId,
             new SupplierCreateShipmentRequest(
-                TrackingNumber: "TRACK-001",
                 CarrierName: "DHL",
                 ExpectedDelivery: DateTime.UtcNow.AddDays(2),
                 SupplierNotes: "Leave at dock",
@@ -153,6 +156,36 @@ public class SupplierPurchaseOrderServiceTests : IDisposable
         Assert.StartsWith("SHP-", result.ShipmentNumber);
         Assert.Single(result.Items);
         Assert.Equal(_poItemId, result.Items[0].PurchaseOrderItemId);
+    }
+
+    [Fact]
+    public async Task CreateShipmentAsync_Includes_UnitPrice_And_LineAmount()
+    {
+        var result = await _service.CreateShipmentAsync(
+            _supplierId,
+            _poId,
+            new SupplierCreateShipmentRequest(
+                CarrierName: "UPS",
+                ExpectedDelivery: DateTime.UtcNow.AddDays(3),
+                SupplierNotes: "Invoice ready",
+                Lines: null));
+
+        Assert.Single(result.Items);
+        Assert.Equal(10m, result.Items[0].UnitPrice);
+        Assert.Equal(100m, result.Items[0].LineAmount);
+        Assert.Equal(100m, result.TotalAmount);
+    }
+
+    [Fact]
+    public async Task RespondToPurchaseOrderAsync_Accepted_Triggers_Internal_And_Supplier_Notification()
+    {
+        await _service.RespondToPurchaseOrderAsync(
+            _supplierId,
+            _poId,
+            new SupplierRespondToPORequest(true, null, DateTime.UtcNow.AddDays(3)));
+
+        Assert.True(await _context.PurchaseOrders.AnyAsync(po => po.Id == _poId && po.SupplierAccepted == true));
+        _notificationServiceMock.Verify(n => n.SendSupplierPurchaseOrderResponseAlertAsync(_poId, true, null), Times.Once);
     }
 
     public void Dispose()

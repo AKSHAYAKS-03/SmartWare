@@ -23,19 +23,19 @@ namespace SmartInventory.Repository.Migrations
 
             migrationBuilder.Sql(@"
                 ALTER TABLE purchase_orders ALTER COLUMN ""PoNumber"" DROP DEFAULT;
-                ALTER TABLE purchase_orders ALTER COLUMN ""PoNumber"" SET DEFAULT CONCAT('PO-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_purchase_orders')::text, 5, '0'));
+                ALTER TABLE purchase_orders ALTER COLUMN ""PoNumber"" SET DEFAULT CONCAT('PO-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_purchase_orders')::text, 6, '0'));
                 
                 ALTER TABLE warehouse_transfers ALTER COLUMN ""TransferNumber"" DROP DEFAULT;
-                ALTER TABLE warehouse_transfers ALTER COLUMN ""TransferNumber"" SET DEFAULT CONCAT('TRF-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_transfers')::text, 5, '0'));
+                ALTER TABLE warehouse_transfers ALTER COLUMN ""TransferNumber"" SET DEFAULT CONCAT('TRF-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_transfers')::text, 6, '0'));
                 
                 ALTER TABLE stock_adjustments ALTER COLUMN ""AdjustmentNumber"" DROP DEFAULT;
-                ALTER TABLE stock_adjustments ALTER COLUMN ""AdjustmentNumber"" SET DEFAULT CONCAT('ADJ-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_adjustments')::text, 5, '0'));
+                ALTER TABLE stock_adjustments ALTER COLUMN ""AdjustmentNumber"" SET DEFAULT CONCAT('ADJ-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_adjustments')::text, 6, '0'));
                 
                 ALTER TABLE suppliers ALTER COLUMN ""Code"" DROP DEFAULT;
-                ALTER TABLE suppliers ALTER COLUMN ""Code"" SET DEFAULT CONCAT('SUP-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_suppliers')::text, 5, '0'));
+                ALTER TABLE suppliers ALTER COLUMN ""Code"" SET DEFAULT CONCAT('SUP-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_suppliers')::text, 6, '0'));
 
                 ALTER TABLE goods_receipts ALTER COLUMN ""GrnNumber"" DROP DEFAULT;
-                ALTER TABLE goods_receipts ALTER COLUMN ""GrnNumber"" SET DEFAULT CONCAT('GRN-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_goods_receipts')::text, 5, '0'));
+                ALTER TABLE goods_receipts ALTER COLUMN ""GrnNumber"" SET DEFAULT CONCAT('GRN-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_goods_receipts')::text, 6, '0'));
             ");
             migrationBuilder.Sql(@"
                 DO $BLOCK$ 

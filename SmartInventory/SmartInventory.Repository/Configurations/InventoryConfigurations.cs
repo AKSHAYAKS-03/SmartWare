@@ -56,7 +56,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.Property(x => x.SKU)
             .IsRequired()
-            .HasMaxLength(50);
+            .HasMaxLength(50)
+            .HasDefaultValueSql("CONCAT('PRD-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_products')::text, 6, '0'))")
+            .ValueGeneratedOnAdd();
 
         builder.Property(x => x.Description)
             .HasMaxLength(1000);
@@ -235,7 +237,7 @@ public class StockAdjustmentConfiguration : IEntityTypeConfiguration<StockAdjust
         builder.Property(x => x.AdjustmentNumber)
             .IsRequired()
             .HasMaxLength(50)
-            .HasDefaultValueSql("CONCAT('ADJ-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_adjustments')::text, 5, '0'))")
+            .HasDefaultValueSql("CONCAT('ADJ-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_adjustments')::text, 6, '0'))")
             .ValueGeneratedOnAdd();
 
         builder.Property(x => x.Reason)

@@ -46,9 +46,13 @@ public class BarcodeScanLogResponseDto
 public class BarcodeGenerateRequestDto
 {
     public Guid ProductId { get; set; }
-    public string BarcodeValue { get; set; } = string.Empty;
     public BarcodeType Type { get; set; } = BarcodeType.Code128;
     public bool IsPrimary { get; set; } = false;
+}
+
+public class BarcodeUpdateDto
+{
+    public BarcodeType Type { get; set; } = BarcodeType.Code128;
 }
 
 public class StockLocationDto
@@ -79,6 +83,81 @@ public class ScanResultDto
     public System.Collections.Generic.List<StockLocationDto> Locations { get; set; } = new();
     
     public string ScanLogConfirmation { get; set; } = string.Empty;
+}
+
+public class BarcodeGoodsReceiptItemDto
+{
+    public string BarcodeValue { get; set; } = string.Empty;
+    public string BinBarcode { get; set; } = string.Empty;
+    public int QuantityReceived { get; set; }
+    public int QuantityRejected { get; set; }
+    public string? RejectionReason { get; set; }
+    public string? OverrideReason { get; set; }
+}
+
+public class BarcodeGoodsReceiptCreateDto
+{
+    public Guid PurchaseOrderId { get; set; }
+    public Guid? PurchaseOrderShipmentId { get; set; }
+    public Guid ReceivedBy { get; set; }
+    public Guid WarehouseId { get; set; }
+    public string? Notes { get; set; }
+    public string? IdempotencyKey { get; set; }
+    public bool BypassWarnings { get; set; }
+    public List<BarcodeGoodsReceiptItemDto> Items { get; set; } = [];
+    public List<Guid> AttachmentIds { get; set; } = [];
+}
+
+public class BarcodeScanReceiptValidationDto
+{
+    public Guid? PurchaseOrderId { get; set; }
+    public Guid? PurchaseOrderShipmentId { get; set; }
+    public Guid? WarehouseId { get; set; }
+    public string BarcodeValue { get; set; } = string.Empty;
+    public string? BinBarcode { get; set; }
+}
+
+public class BarcodeScanReceiptValidationResultDto
+{
+    public bool IsValid { get; set; }
+    public string Message { get; set; } = string.Empty;
+    public Guid ProductId { get; set; }
+    public string ProductName { get; set; } = string.Empty;
+    public string ProductSKU { get; set; } = string.Empty;
+    public Guid? PurchaseOrderId { get; set; }
+    public string? PurchaseOrderNumber { get; set; }
+    public Guid? PurchaseOrderItemId { get; set; }
+    public int QuantityOrdered { get; set; }
+    public int QuantityReceived { get; set; }
+    public int QuantityRemaining { get; set; }
+    public Guid? BinLocationId { get; set; }
+    public string? BinCode { get; set; }
+    public string? WarehouseName { get; set; }
+}
+
+public class BarcodeScanTransferValidationDto
+{
+    public Guid TransferId { get; set; }
+    public string BarcodeValue { get; set; } = string.Empty;
+    public Guid? WarehouseId { get; set; }
+    public string? BinBarcode { get; set; }
+}
+
+public class BarcodeScanTransferValidationResultDto
+{
+    public bool IsValid { get; set; }
+    public string Message { get; set; } = string.Empty;
+    public Guid ProductId { get; set; }
+    public string ProductName { get; set; } = string.Empty;
+    public string ProductSKU { get; set; } = string.Empty;
+    public Guid TransferId { get; set; }
+    public Guid? TransferItemId { get; set; }
+    public int QuantityRequested { get; set; }
+    public int QuantityDispatched { get; set; }
+    public int QuantityRemaining { get; set; }
+    public Guid? BinLocationId { get; set; }
+    public string? BinCode { get; set; }
+    public string? WarehouseName { get; set; }
 }
 #endregion
 

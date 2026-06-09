@@ -2,11 +2,6 @@ using SmartInventory.Core.DTOs;
 using SmartInventory.Core.Enums;
 
 namespace SmartInventory.Core.Interfaces;
-
-/// <summary>
-/// Warehouse, zone, and bin location management service.
-/// Also handles user-warehouse access assignments and putaway guidance.
-/// </summary>
 public interface IWarehouseService
 {
     Task<WarehouseResponseDto> CreateWarehouseAsync(WarehouseCreateDto dto);

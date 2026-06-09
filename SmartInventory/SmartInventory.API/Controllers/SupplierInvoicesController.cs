@@ -42,7 +42,6 @@ public class SupplierInvoicesController : ControllerBase
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> Upload(
         [FromForm] Guid purchaseOrderId,
-        [FromForm] string invoiceNumber,
         [FromForm] decimal amount,
         [FromForm] string currency,
         [FromForm] DateTime invoiceDate,
@@ -55,7 +54,6 @@ public class SupplierInvoicesController : ControllerBase
             return BadRequest(new { detail = "Only PDF files are allowed." });
         var request = new SupplierUploadInvoiceRequest(
             PurchaseOrderId: purchaseOrderId,
-            InvoiceNumber: invoiceNumber,
             Amount: amount,
             Currency: currency,
             InvoiceDate: invoiceDate,

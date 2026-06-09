@@ -1,8 +1,6 @@
 namespace SmartInventory.Core;
 
-/// <summary>
 /// Configuration for JWT token generation.
-/// </summary>
 public class JWTsettings
 {
     public string SecretKey { get; set; } = string.Empty;

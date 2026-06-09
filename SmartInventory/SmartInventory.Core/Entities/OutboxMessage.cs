@@ -6,7 +6,7 @@ namespace SmartInventory.Core.Entities;
 public class OutboxMessage : BaseEntity
 {
     public string EventType { get; set; } = string.Empty;
-    public string Payload { get; set; } = string.Empty; // JSON format
+    public string Payload { get; set; } = string.Empty; 
     [Sortable]
     public string Status { get; set; } = "Pending"; // Pending, Processed, Failed
     public string? ErrorMessage { get; set; }

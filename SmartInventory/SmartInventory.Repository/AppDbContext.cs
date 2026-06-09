@@ -94,6 +94,12 @@ public class AppDbContext : DbContext
             modelBuilder.HasSequence<int>("seq_adjustments").StartsAt(1);
             modelBuilder.HasSequence<int>("seq_suppliers").StartsAt(1);
             modelBuilder.HasSequence<int>("seq_shipments").StartsAt(1);
+            modelBuilder.HasSequence<int>("seq_products").StartsAt(1);
+            modelBuilder.HasSequence<int>("seq_warehouses").StartsAt(1);
+            modelBuilder.HasSequence<int>("seq_zones").StartsAt(1);
+            modelBuilder.HasSequence<int>("seq_bins").StartsAt(1);
+            modelBuilder.HasSequence<int>("seq_invoices").StartsAt(1);
+            modelBuilder.HasSequence<int>("seq_tracking_numbers").StartsAt(1);
 
             // Register PostgreSQL Trigram extension for advanced LIKE/contains searching
             modelBuilder.HasPostgresExtension("pg_trgm");

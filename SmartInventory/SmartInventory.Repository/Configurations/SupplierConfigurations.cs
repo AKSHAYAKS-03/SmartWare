@@ -21,7 +21,7 @@ public class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
         builder.Property(x => x.Code)
             .IsRequired()
             .HasMaxLength(20)
-            .HasDefaultValueSql("CONCAT('SUP-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_suppliers')::text, 5, '0'))")
+            .HasDefaultValueSql("CONCAT('SUP-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_suppliers')::text, 6, '0'))")
             .ValueGeneratedOnAdd();
 
         builder.Property(x => x.GSTIN)

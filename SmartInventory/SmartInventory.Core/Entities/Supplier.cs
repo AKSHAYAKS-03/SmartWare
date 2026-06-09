@@ -4,9 +4,6 @@ using SmartInventory.Core.Interfaces;
 
 namespace SmartInventory.Core.Entities;
 
-/// <summary>
-/// Supplier profile with contact, payment, and performance info.
-/// </summary>
 public class Supplier : BaseEntity, ISoftDelete
 {
     [Sortable]

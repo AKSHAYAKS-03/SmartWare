@@ -17,7 +17,7 @@ public class PurchaseOrderConfiguration : IEntityTypeConfiguration<PurchaseOrder
         builder.Property(x => x.PoNumber)
             .IsRequired()
             .HasMaxLength(50)
-            .HasDefaultValueSql("CONCAT('PO-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_purchase_orders')::text, 5, '0'))")
+            .HasDefaultValueSql("CONCAT('PO-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_purchase_orders')::text, 6, '0'))")
             .ValueGeneratedOnAdd();
 
         builder.Property(x => x.Status)
@@ -106,7 +106,7 @@ public class GoodsReceiptConfiguration : IEntityTypeConfiguration<GoodsReceipt>
         builder.Property(x => x.GrnNumber)
             .IsRequired()
             .HasMaxLength(50)
-            .HasDefaultValueSql("CONCAT('GRN-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_goods_receipts')::text, 5, '0'))")
+            .HasDefaultValueSql("CONCAT('GRN-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_goods_receipts')::text, 6, '0'))")
             .ValueGeneratedOnAdd();
 
         builder.Property(x => x.ReceivedDate)
@@ -157,10 +157,13 @@ public class PurchaseOrderShipmentConfiguration : IEntityTypeConfiguration<Purch
             .IsRequired()
             .HasMaxLength(50);
         builder.Property(x => x.ShipmentNumber)
-            .HasDefaultValueSql("CONCAT('SHP-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_shipments')::text, 5, '0'))")
+            .HasDefaultValueSql("CONCAT('SHP-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_shipments')::text, 6, '0'))")
             .ValueGeneratedOnAdd();
 
         builder.Property(x => x.TrackingNumber).HasMaxLength(100);
+        builder.Property(x => x.TrackingNumber)
+            .HasDefaultValueSql("CONCAT('TRK-', TO_CHAR(CURRENT_DATE, 'YYYY'), '-', LPAD(nextval('seq_tracking_numbers')::text, 6, '0'))")
+            .ValueGeneratedOnAdd();
         builder.Property(x => x.CarrierName).HasMaxLength(100);
         builder.Property(x => x.SupplierNotes).HasMaxLength(500);
 

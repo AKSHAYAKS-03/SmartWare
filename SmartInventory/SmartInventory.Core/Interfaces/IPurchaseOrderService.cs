@@ -9,6 +9,7 @@ public interface IPurchaseOrderService
     Task<PurchaseOrderResponseDto> SubmitForApprovalAsync(Guid poId);
     Task<PurchaseOrderResponseDto> ApprovePurchaseOrderAsync(Guid poId, PurchaseOrderApprovalDto dto);
     Task<GoodsReceiptResponseDto> ReceiveGoodsAsync(GoodsReceiptCreateDto dto);
+    Task<GoodsReceiptResponseDto> ReceiveGoodsByBarcodeAsync(BarcodeGoodsReceiptCreateDto dto);
     Task<PurchaseOrderResponseDto> GetPurchaseOrderByIdAsync(Guid poId);
     Task<PagedResult<PurchaseOrderResponseDto>> GetPurchaseOrdersAsync(PurchaseOrderQueryParameters queryParams);
     Task<PagedResult<PurchaseOrderResponseDto>> SearchPurchaseOrdersAsync(DynamicQueryRequest request);

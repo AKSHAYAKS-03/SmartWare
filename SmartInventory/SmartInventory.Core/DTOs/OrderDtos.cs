@@ -59,16 +59,14 @@ public class PurchaseOrderResponseDto
     public DateTime? ActualDelivery { get; set; }
     public string? Notes { get; set; }
 
-    // ── Supplier Portal Fields ────────────────────────────────────────────────
+    // ── Supplier Portal Fields ─
     public string? SupplierNotes { get; set; }
     public string? TrackingNumber { get; set; }
     public DateTime? DispatchedAt { get; set; }
     public bool? SupplierAccepted { get; set; }
 
-    /// <summary>
-    /// The delivery date the supplier promised when accepting this PO.
-    /// Compare against ActualDelivery to measure on-time performance.
-    /// </summary>
+    // The delivery date the supplier promised when accepting this PO.
+   // Compare against ActualDelivery to measure on-time performance.
     public DateTime? SupplierCommittedDeliveryDate { get; set; }
 
     public Guid CreatedBy { get; set; }
@@ -99,7 +97,7 @@ public class PurchaseOrderQueryParameters : QueryParameters
 public class GoodsReceiptItemDto
 {
     public Guid PurchaseOrderItemId { get; set; }
-    /// <summary>Required. Stock must always be placed in a specific bin. Create bins before receiving goods.</summary>
+    //Required. Stock must always be placed in a specific bin. Create bins before receiving goods.
     public Guid BinLocationId { get; set; }
     public int QuantityReceived { get; set; }
     public int QuantityRejected { get; set; }
@@ -110,7 +108,7 @@ public class GoodsReceiptItemDto
 public class GoodsReceiptCreateDto
 {
     public Guid PurchaseOrderId { get; set; }
-    /// <summary>Required when the PO has supplier shipments; optional for legacy PO-only receipts.</summary>
+    //Required when the PO has supplier shipments; optional for legacy PO-only receipts.
     public Guid? PurchaseOrderShipmentId { get; set; }
     public Guid ReceivedBy { get; set; }
     public Guid WarehouseId { get; set; }

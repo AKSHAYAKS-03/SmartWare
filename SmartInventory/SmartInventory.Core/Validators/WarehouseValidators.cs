@@ -11,10 +11,6 @@ public class WarehouseCreateValidator : AbstractValidator<WarehouseCreateDto>
             .NotEmpty().WithMessage("Warehouse Name is required.")
             .Length(2, 100).WithMessage("Warehouse Name must be between 2 and 100 characters.");
 
-        RuleFor(x => x.Code)
-            .NotEmpty().WithMessage("Warehouse Code is required.")
-            .Matches(@"^[A-Z0-9-]{3,10}$").WithMessage("Warehouse Code must be 3-10 characters long, containing uppercase letters, numbers, or hyphens.");
-
         RuleFor(x => x.State)
             .NotEmpty().WithMessage("State is required for Indian compliance and reporting.");
 
@@ -47,10 +43,6 @@ public class WarehouseUpdateValidator : AbstractValidator<WarehouseUpdateDto>
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Warehouse Name is required.")
             .Length(2, 100).WithMessage("Warehouse Name must be between 2 and 100 characters.");
-
-        RuleFor(x => x.Code)
-            .NotEmpty().WithMessage("Warehouse Code is required.")
-            .Matches(@"^[A-Z0-9-]{3,10}$").WithMessage("Warehouse Code must be 3-10 characters long, containing uppercase letters, numbers, or hyphens.");
 
         RuleFor(x => x.State)
             .NotEmpty().WithMessage("State is required for Indian compliance and reporting.");
@@ -88,10 +80,6 @@ public class ZoneCreateValidator : AbstractValidator<ZoneCreateDto>
             .NotEmpty().WithMessage("Zone Name is required.")
             .Length(2, 50).WithMessage("Zone Name must be between 2 and 50 characters.");
 
-        RuleFor(x => x.Code)
-            .NotEmpty().WithMessage("Zone Code is required.")
-            .Matches(@"^[A-Z0-9-]{2,10}$").WithMessage("Zone Code must be 2-10 characters long, containing uppercase letters, numbers, or hyphens.");
-
         RuleFor(x => x.AreaSqFt).GreaterThan(0).WithMessage("Zone Area must be greater than 0. A Zone must have a defined capacity allocation from its parent Warehouse.");
         RuleFor(x => x.MaxVolumeCm3).GreaterThan(0).WithMessage("Zone Volume must be greater than 0. A Zone must have a defined capacity allocation from its parent Warehouse.");
         RuleFor(x => x.MaxWeightKg).GreaterThan(0).WithMessage("Zone Weight must be greater than 0. A Zone must have a defined capacity allocation from its parent Warehouse.");
@@ -106,10 +94,6 @@ public class ZoneUpdateValidator : AbstractValidator<ZoneUpdateDto>
             .NotEmpty().WithMessage("Zone Name is required.")
             .Length(2, 50).WithMessage("Zone Name must be between 2 and 50 characters.");
 
-        RuleFor(x => x.Code)
-            .NotEmpty().WithMessage("Zone Code is required.")
-            .Matches(@"^[A-Z0-9-]{2,10}$").WithMessage("Zone Code must be 2-10 characters long, containing uppercase letters, numbers, or hyphens.");
-
         RuleFor(x => x.AreaSqFt).GreaterThan(0).WithMessage("Zone Area must be greater than 0. A Zone must have a defined capacity allocation from its parent Warehouse.");
         RuleFor(x => x.MaxVolumeCm3).GreaterThan(0).WithMessage("Zone Volume must be greater than 0. A Zone must have a defined capacity allocation from its parent Warehouse.");
         RuleFor(x => x.MaxWeightKg).GreaterThan(0).WithMessage("Zone Weight must be greater than 0. A Zone must have a defined capacity allocation from its parent Warehouse.");
@@ -122,16 +106,6 @@ public class BinLocationCreateValidator : AbstractValidator<BinLocationCreateDto
     {
         RuleFor(x => x.ZoneId)
             .NotEmpty().WithMessage("Zone ID is required.");
-
-        RuleFor(x => x.BinCode)
-            .NotEmpty().WithMessage("BinCode is required.")
-            .Length(1, 30).WithMessage("BinCode must be between 1 and 30 characters.")
-            .Matches(@"^[A-Z0-9][A-Z0-9\-_]{0,29}$")
-            .WithMessage("BinCode must start with an uppercase letter or number and contain only uppercase letters, numbers, hyphens, or underscores (e.g. B01, SHELF-1, BIN_A).");
-
-        RuleFor(x => x.Barcode)
-            .Matches(@"^[A-Za-z0-9-]{3,30}$").When(x => !string.IsNullOrEmpty(x.Barcode))
-            .WithMessage("Bin Barcode must be between 3 and 30 characters and alphanumeric.");
 
         RuleFor(x => x.MaxVolumeCm3)
             .GreaterThan(0)
@@ -147,16 +121,6 @@ public class BinLocationUpdateValidator : AbstractValidator<BinLocationUpdateDto
 {
     public BinLocationUpdateValidator()
     {
-        RuleFor(x => x.BinCode)
-            .NotEmpty().WithMessage("BinCode is required.")
-            .Length(1, 30).WithMessage("BinCode must be between 1 and 30 characters.")
-            .Matches(@"^[A-Z0-9][A-Z0-9\-_]{0,29}$")
-            .WithMessage("BinCode must start with an uppercase letter or number and contain only uppercase letters, numbers, hyphens, or underscores.");
-
-        RuleFor(x => x.Barcode)
-            .Matches(@"^[A-Za-z0-9-]{3,30}$").When(x => !string.IsNullOrEmpty(x.Barcode))
-            .WithMessage("Bin Barcode must be between 3 and 30 characters and alphanumeric.");
-
         RuleFor(x => x.MaxVolumeCm3)
             .GreaterThan(0)
             .WithMessage("Bin Volume must be greater than 0. Unlimited bins are not supported in this system.");

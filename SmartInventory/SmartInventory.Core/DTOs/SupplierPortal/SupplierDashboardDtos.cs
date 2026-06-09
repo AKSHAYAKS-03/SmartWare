@@ -1,10 +1,8 @@
 namespace SmartInventory.Core.DTOs.SupplierPortal;
 
-// ──────────────────────────────────────────────────────────────────────────────
 // RESPONSE DTOs
-// ──────────────────────────────────────────────────────────────────────────────
 
-/// <summary>Top-level summary dashboard for the supplier portal home page.</summary>
+//Top-level summary dashboard for the supplier portal home page
 public record SupplierDashboardSummaryDto(
     int TotalOrders,
     int PendingOrders,
@@ -17,7 +15,7 @@ public record SupplierDashboardSummaryDto(
     List<SupplierFillRateHistoryDto> FillRateHistory
 );
 
-/// <summary>Fill rate per individual purchase order for chart rendering.</summary>
+//Fill rate per individual purchase order for chart rendering
 public record SupplierFillRateHistoryDto(
     string PoNumber,
     DateTime OrderDate,

@@ -116,6 +116,17 @@ public class PurchaseOrdersController : ControllerBase
         return Ok(result);
     }
 
+    [HttpPost("{id:guid}/grn/scan")]
+    [Authorize(Policy = "RequireStaff")]
+    [EnableRateLimiting("mutations")]
+    public async Task<IActionResult> ReceiveGoodsByScan(Guid id, [FromBody] BarcodeGoodsReceiptCreateDto dto)
+    {
+        dto.PurchaseOrderId = id;
+        dto.ReceivedBy = _currentUser.UserId;
+        var result = await _poService.ReceiveGoodsByBarcodeAsync(dto);
+        return Ok(result);
+    }
+
     [HttpPost("{id:guid}/grn/bulk")]
     [Authorize(Policy = "RequireStaff")]
     [EnableRateLimiting("mutations")]

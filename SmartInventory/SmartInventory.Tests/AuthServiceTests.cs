@@ -13,6 +13,8 @@ using SmartInventory.Repository.Repositories;
 using SmartInventory.Service.Services;
 using Xunit;
 using System;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 namespace SmartInventory.Tests;
 
@@ -29,6 +31,7 @@ public class AuthServiceTests : IDisposable
     private readonly AppDbContext _context;
     private readonly IUnitOfWork _uow;
     private readonly AuthService _service;
+    private readonly Mock<ITokenBlacklistService> _blacklistMock;
 
     private static readonly JWTsettings JwtSettings = new()
     {
@@ -56,7 +59,9 @@ public class AuthServiceTests : IDisposable
             notifications.Object, stockLevels.Object);
 
         var jwtOptions = Options.Create(JwtSettings);
-        _service = new AuthService(_uow, jwtOptions, new Mock<ITokenBlacklistService>().Object);
+        _blacklistMock = new Mock<ITokenBlacklistService>();
+        _blacklistMock.Setup(b => b.BlacklistUserAsync(It.IsAny<Guid>())).Returns(Task.CompletedTask);
+        _service = new AuthService(_uow, jwtOptions, _blacklistMock.Object);
     }
 
     private async Task<(Role role, User user)> SeedActiveUserAsync()
@@ -256,6 +261,110 @@ public class AuthServiceTests : IDisposable
 
         // Assert
         Assert.Null(refreshResult);
+    }
+
+    // Prevents old passwords and active sessions from surviving a password rotation
+    [Fact]
+    public async Task ChangePasswordAsync_ValidCurrentPassword_RevokesTokensAndBlacklistsUser()
+    {
+        // Arrange
+        var (_, user) = await SeedActiveUserAsync();
+        var login = await _service.SignInAsync(new LoginDto
+        {
+            Email = user.Email,
+            Password = "SecurePass123!"
+        });
+
+        Assert.NotNull(login);
+
+        // Act
+        await _service.ChangePasswordAsync(user.Id, new ChangePasswordDto
+        {
+            OldPassword = "SecurePass123!",
+            NewPassword = "N3wSecurePass!456"
+        });
+
+        // Assert
+        var storedUser = await _context.Users.FirstAsync(u => u.Id == user.Id);
+        Assert.True(BCrypt.Net.BCrypt.Verify("N3wSecurePass!456", storedUser.PasswordHash));
+
+        var activeTokens = await _context.RefreshTokens.Where(t => t.UserId == user.Id).ToListAsync();
+        Assert.All(activeTokens, token => Assert.True(token.IsRevoked));
+        _blacklistMock.Verify(b => b.BlacklistUserAsync(user.Id), Times.Once);
+
+        var oldLogin = await _service.SignInAsync(new LoginDto
+        {
+            Email = user.Email,
+            Password = "SecurePass123!"
+        });
+        Assert.Null(oldLogin);
+    }
+
+    // Prevents invite links from being reused after an employee sets their password
+    [Fact]
+    public async Task SetPasswordAsync_ValidInviteToken_ActivatesUserAndClearsToken()
+    {
+        // Arrange
+        var role = await _context.Roles.FirstAsync(r => r.Name == "Staff");
+        var inviteTokenPlain = "invite-token-123";
+        var inviteTokenHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(inviteTokenPlain)));
+
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            FullName = "Invite User",
+            Email = "invite@test.com",
+            PasswordHash = string.Empty,
+            RoleId = role.Id,
+            Role = role,
+            Status = UserStatus.PendingVerification,
+            IsActive = true,
+            IsPasswordSet = false,
+            InviteToken = inviteTokenHash,
+            InviteTokenExpiresAt = DateTime.UtcNow.AddHours(2),
+            CreatedAt = DateTime.UtcNow
+        };
+
+        await _context.Users.AddAsync(user);
+        await _context.SaveChangesAsync();
+
+        // Act
+        await _service.SetPasswordAsync(new SetPasswordDto
+        {
+            Token = inviteTokenPlain,
+            NewPassword = "MyNewPassword!123"
+        });
+
+        // Assert
+        var storedUser = await _context.Users.FirstAsync(u => u.Id == user.Id);
+        Assert.True(storedUser.IsPasswordSet);
+        Assert.Equal(UserStatus.Active, storedUser.Status);
+        Assert.Null(storedUser.InviteToken);
+        Assert.Null(storedUser.InviteTokenExpiresAt);
+        Assert.True(BCrypt.Net.BCrypt.Verify("MyNewPassword!123", storedUser.PasswordHash));
+    }
+
+    // Prevents refresh token replay after a rotation has already issued a replacement token
+    [Fact]
+    public async Task RefreshTokenAsync_ReusedOldToken_ReturnsNull()
+    {
+        // Arrange
+        await SeedActiveUserAsync();
+        var loginResult = await _service.SignInAsync(new LoginDto
+        {
+            Email = "manager@test.com",
+            Password = "SecurePass123!"
+        });
+        Assert.NotNull(loginResult);
+
+        var rotated = await _service.RefreshTokenAsync(loginResult.RefreshToken);
+        Assert.NotNull(rotated);
+
+        // Act
+        var reused = await _service.RefreshTokenAsync(loginResult.RefreshToken);
+
+        // Assert
+        Assert.Null(reused);
     }
 
     public void Dispose()

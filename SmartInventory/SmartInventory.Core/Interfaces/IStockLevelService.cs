@@ -17,18 +17,12 @@ public class AbcClassificationResultDto
 
 public interface IStockLevelService
 {
-    /// <summary>
-    /// Computes the dynamic ABC classification for all inventory products.
-    /// </summary>
+    // Computes the dynamic ABC classification for all inventory products.
     Task<List<AbcClassificationResultDto>> GetAbcClassificationAsync(Guid? warehouseId = null);
 
-    /// <summary>
-    /// Calculates the Economic Order Quantity (EOQ) for a product in a warehouse.
-    /// </summary>
+    // Calculates the Economic Order Quantity (EOQ) for a product in a warehouse.
     Task<double> CalculateEoqAsync(Guid productId, Guid warehouseId);
 
-    /// <summary>
-    /// Calculates the stock value of a product in a warehouse using FIFO or Weighted Average method.
-    /// </summary>
+    // Calculates the stock value of a product in a warehouse using FIFO or Weighted Average method.
     Task<decimal> GetInventoryValuationAsync(Guid productId, Guid warehouseId, ValuationMethod method);
 }

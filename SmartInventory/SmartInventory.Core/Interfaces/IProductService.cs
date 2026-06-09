@@ -2,10 +2,6 @@ using SmartInventory.Core.DTOs;
 
 namespace SmartInventory.Core.Interfaces;
 
-/// <summary>
-/// Full product catalog management service.
-/// Handles CRUD, role-scoped listing, low-stock detection, dead stock, and ABC category persistence.
-/// </summary>
 public interface IProductService
 {
     Task<ProductResponseDto> CreateProductAsync(ProductCreateDto dto);

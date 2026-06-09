@@ -2,9 +2,6 @@ using SmartInventory.Core.Enums;
 
 namespace SmartInventory.Core.Entities;
 
-/// <summary>
-/// In-app notification for a user.
-/// </summary>
 public class Notification : BaseEntity
 {
     public NotificationChannel Channel { get; set; }
@@ -15,9 +12,7 @@ public class Notification : BaseEntity
     public Guid? EntityId { get; set; }
     public bool IsRead { get; set; } = false;
 
-    // Foreign Keys
     public Guid UserId { get; set; }
 
-    // Navigation
     public User User { get; set; } = null!;
 }

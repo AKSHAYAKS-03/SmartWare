@@ -48,7 +48,6 @@ public class CategoryTreeDto
 public class ProductCreateDto
 {
     public string Name { get; set; } = string.Empty;
-    public string SKU { get; set; } = string.Empty;
     public string? Description { get; set; }
     public UnitOfMeasure UnitOfMeasure { get; set; }
     public decimal CostPrice { get; set; }
@@ -134,7 +133,6 @@ public class ProductVariantCreateDto
 {
     public Guid ProductId { get; set; }
     public string VariantName { get; set; } = string.Empty;
-    public string SkuSuffix { get; set; } = string.Empty;
     public string? Attributes { get; set; } // JSON string
     public bool IsActive { get; set; } = true;
 }
@@ -142,7 +140,6 @@ public class ProductVariantCreateDto
 public class ProductVariantUpdateDto
 {
     public string VariantName { get; set; } = string.Empty;
-    public string SkuSuffix { get; set; } = string.Empty;
     public string? Attributes { get; set; }
     public bool IsActive { get; set; }
 }
@@ -153,7 +150,6 @@ public class ProductVariantResponseDto
     public Guid ProductId { get; set; }
     public string ProductName { get; set; } = string.Empty;
     public string VariantName { get; set; } = string.Empty;
-    public string SkuSuffix { get; set; } = string.Empty;
     public string? Attributes { get; set; }
     public bool IsActive { get; set; }
     public DateTime CreatedAt { get; set; }
