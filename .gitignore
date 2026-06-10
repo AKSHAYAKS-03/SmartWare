@@ -69,5 +69,5 @@ node_modules/
 .idea/
 *.user
 
-
+#appsettings
 SmartInventory/SmartInventory.API/appsettings.json
