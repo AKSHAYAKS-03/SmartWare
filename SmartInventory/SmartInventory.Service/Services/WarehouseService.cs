@@ -8,15 +8,7 @@ using Mapster;
 
 namespace SmartInventory.Service.Services;
 
-/// <summary>
-/// Warehouse, zone, and bin location management.
-///
-/// Business rules:
-///   — Warehouse code must be unique.
-///   — Putaway guidance suggests the best bin based on zone type matching the product category.
-///   — User access assignments are scoped: one access record per user per warehouse.
-///   — Bin locations auto-generate a barcode from ZoneCode-BinCode if not provided.
-/// </summary>
+
 public class WarehouseService : IWarehouseService
 {
     private readonly IUnitOfWork _uow;
@@ -32,8 +24,9 @@ public class WarehouseService : IWarehouseService
         _sequenceNumberGenerator = sequenceNumberGenerator;
     }
 
-    // ─── Warehouse CRUD ───────────────────────────────────────────────────────
 
+
+    //Warehouse
     public async Task<WarehouseResponseDto> CreateWarehouseAsync(WarehouseCreateDto dto)
     {
         var warehouseCode = await _sequenceNumberGenerator.GenerateAsync("seq_warehouses", "WH");
@@ -173,14 +166,13 @@ public class WarehouseService : IWarehouseService
         };
     }
 
-    // ─── Zones ────────────────────────────────────────────────────────────────
+    //  Zones
 
     public async Task<ZoneResponseDto> CreateZoneAsync(ZoneCreateDto dto)
     {
         var warehouse = await _uow.Repository<Warehouse>().GetByIdAsync(dto.WarehouseId);
         if (warehouse == null) throw new NotFoundException("Warehouse", dto.WarehouseId);
 
-        // Hierarchical Capacity Constraints
         var usedArea = await _uow.Repository<WarehouseZone>().Query().Where(z => z.WarehouseId == dto.WarehouseId).SumAsync(z => z.AreaSqFt);
         var usedVolume = await _uow.Repository<WarehouseZone>().Query().Where(z => z.WarehouseId == dto.WarehouseId).SumAsync(z => z.MaxVolumeCm3);
         var usedWeight = await _uow.Repository<WarehouseZone>().Query().Where(z => z.WarehouseId == dto.WarehouseId).SumAsync(z => z.MaxWeightKg);
@@ -228,7 +220,6 @@ public class WarehouseService : IWarehouseService
 
         if (zone == null) throw new NotFoundException("WarehouseZone", zoneId);
 
-        // Hierarchical Capacity Constraints
         var usedArea = await _uow.Repository<WarehouseZone>().Query().Where(z => z.WarehouseId == zone.WarehouseId && z.Id != zoneId).SumAsync(z => z.AreaSqFt);
         var usedVolume = await _uow.Repository<WarehouseZone>().Query().Where(z => z.WarehouseId == zone.WarehouseId && z.Id != zoneId).SumAsync(z => z.MaxVolumeCm3);
         var usedWeight = await _uow.Repository<WarehouseZone>().Query().Where(z => z.WarehouseId == zone.WarehouseId && z.Id != zoneId).SumAsync(z => z.MaxWeightKg);
@@ -287,7 +278,7 @@ public class WarehouseService : IWarehouseService
         return zones.Adapt<IEnumerable<ZoneResponseDto>>();
     }
 
-    // ─── Bin Locations ────────────────────────────────────────────────────────
+    // Bin Locations 
 
     public async Task<BinLocationResponseDto> CreateBinLocationAsync(BinLocationCreateDto dto)
     {
@@ -295,7 +286,6 @@ public class WarehouseService : IWarehouseService
             .Query().Include(z => z.Warehouse).FirstOrDefaultAsync(z => z.Id == dto.ZoneId);
         if (zone == null) throw new NotFoundException("WarehouseZone", dto.ZoneId);
 
-        // Hierarchical Capacity Constraints
         var usedVolume = await _uow.Repository<BinLocation>().Query().Where(b => b.ZoneId == dto.ZoneId).SumAsync(b => b.MaxVolumeCm3);
         var usedWeight = await _uow.Repository<BinLocation>().Query().Where(b => b.ZoneId == dto.ZoneId).SumAsync(b => b.MaxWeightKg);
 
@@ -341,7 +331,6 @@ public class WarehouseService : IWarehouseService
 
         if (bin == null) throw new NotFoundException("BinLocation", binId);
 
-        // Hierarchical Capacity Constraints
         var usedVolume = await _uow.Repository<BinLocation>().Query().Where(b => b.ZoneId == bin.ZoneId && b.Id != binId).SumAsync(b => b.MaxVolumeCm3);
         var usedWeight = await _uow.Repository<BinLocation>().Query().Where(b => b.ZoneId == bin.ZoneId && b.Id != binId).SumAsync(b => b.MaxWeightKg);
 
@@ -402,7 +391,7 @@ public class WarehouseService : IWarehouseService
         return result;
     }
 
-    // ─── User Access ──────────────────────────────────────────────────────────
+    //  User Access 
 
     public async Task<UserWarehouseAccessResponseDto> AssignUserAccessAsync(UserWarehouseAccessCreateDto dto)
     {
@@ -412,7 +401,7 @@ public class WarehouseService : IWarehouseService
         var warehouse = await _uow.Repository<Warehouse>().GetByIdAsync(dto.WarehouseId);
         if (warehouse == null) throw new NotFoundException("Warehouse", dto.WarehouseId);
 
-        // Remove existing access if any (upsert behaviour)
+        // Remove existing access if any 
         var existing = await _uow.Repository<UserWarehouseAccess>()
             .Query()
             .FirstOrDefaultAsync(a => a.UserId == dto.UserId && a.WarehouseId == dto.WarehouseId);
@@ -487,11 +476,9 @@ public class WarehouseService : IWarehouseService
         return accesses.Adapt<IEnumerable<UserWarehouseAccessResponseDto>>();
     }
 
-    /// <summary>
-    /// Suggests the most suitable bin location for a product in a given warehouse.
-    /// Algorithm: find bins in zones that match the product's category type with available capacity.
-    /// Falls back to any active bin if no typed zone match is found.
-    /// </summary>
+    // Suggests the most suitable bin location for a product in a given warehouse.
+    // Algorithm: find bins in zones that match the product's category type with available capacity.
+    // Falls back to any active bin if no typed zone match is found.
     public async Task<BinLocationResponseDto?> GetPutawaySuggestionAsync(Guid productId, Guid warehouseId)
     {
         // Get an available bin — prefer bins that are not fully occupied
@@ -502,7 +489,7 @@ public class WarehouseService : IWarehouseService
             .Distinct()
             .ToListAsync();
 
-        // First: try to find an empty bin
+        //try to find an empty bin
         var suggestedBin = await _uow.Repository<BinLocation>()
             .Query()
             .Include(b => b.Zone).ThenInclude(z => z.Warehouse)
@@ -512,7 +499,7 @@ public class WarehouseService : IWarehouseService
             .OrderBy(b => b.Zone.Code).ThenBy(b => b.BinCode)
             .FirstOrDefaultAsync();
 
-        // Fallback: any active bin in this warehouse
+        // Fallback to any active bin in this warehouse
         suggestedBin ??= await _uow.Repository<BinLocation>()
             .Query()
             .Include(b => b.Zone).ThenInclude(z => z.Warehouse)

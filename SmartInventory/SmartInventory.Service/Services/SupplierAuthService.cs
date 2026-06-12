@@ -14,12 +14,7 @@ using SmartInventory.Core.Enums;
 
 namespace SmartInventory.Service.Services;
 
-/// <summary>
-/// Issues supplier-scoped JWTs that are distinct from the internal user JWT flow.
-/// Supplier tokens embed: sub (contactId), supplierId, role = "Supplier".
-/// These tokens are blocked by SupplierAuthorizationMiddleware from accessing
-/// internal /api/* endpoints.
-/// </summary>
+
 public class SupplierAuthService : ISupplierAuthService
 {
     private readonly IUnitOfWork _uow;
@@ -35,9 +30,7 @@ public class SupplierAuthService : ISupplierAuthService
         _emailService = emailService;
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // LOGIN
-    // ─────────────────────────────────────────────────────────────────────────
+
 
     public async Task<SupplierAuthResponse> LoginAsync(SupplierLoginRequest request, string ipAddress)
     {
@@ -79,10 +72,6 @@ public class SupplierAuthService : ISupplierAuthService
         return BuildAuthResponse(accessToken, refreshToken.Token, contact);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // REFRESH TOKEN
-    // ─────────────────────────────────────────────────────────────────────────
-
     public async Task<SupplierAuthResponse> RefreshTokenAsync(SupplierRefreshTokenRequest request, string ipAddress)
     {
         // 1. Find valid, non-expired, non-revoked supplier refresh token
@@ -116,9 +105,6 @@ public class SupplierAuthService : ISupplierAuthService
         return BuildAuthResponse(newAccessToken, newRefreshToken.Token, contact);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // REVOKE (LOGOUT)
-    // ─────────────────────────────────────────────────────────────────────────
 
     public async Task RevokeTokenAsync(string token, string ipAddress)
     {
@@ -134,9 +120,6 @@ public class SupplierAuthService : ISupplierAuthService
         await _uow.CommitAsync();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // CHANGE PASSWORD
-    // ─────────────────────────────────────────────────────────────────────────
 
     public async Task ChangePasswordAsync(Guid contactId, SupplierChangePasswordRequest request)
     {
@@ -168,14 +151,7 @@ public class SupplierAuthService : ISupplierAuthService
         await _uow.CommitAsync();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // PRIVATE HELPERS
-    // ─────────────────────────────────────────────────────────────────────────
 
-    /// <summary>
-    /// Generates a JWT with role="Supplier", supplierId, and contactId embedded.
-    /// The "Supplier" role is blocked by middleware from accessing internal /api/* routes.
-    /// </summary>
     private string GenerateAccessToken(SupplierContact contact)
     {
         var claims = new List<Claim>
@@ -241,9 +217,7 @@ public class SupplierAuthService : ISupplierAuthService
         );
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // REGISTER
-    // ─────────────────────────────────────────────────────────────────────────
+ 
     public async Task<Guid> RegisterAsync(SupplierRegisterRequest request)
     {
         // Validate duplicate GSTIN
@@ -328,9 +302,7 @@ public class SupplierAuthService : ISupplierAuthService
         return contact.Id;
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // VERIFY EMAIL
-    // ─────────────────────────────────────────────────────────────────────────
+ 
     public async Task VerifyEmailAsync(SupplierVerifyEmailRequest request)
     {
         var contact = await _uow.Repository<SupplierContact>().Query()
@@ -402,9 +374,6 @@ public class SupplierAuthService : ISupplierAuthService
         await _emailService.SendEmailAsync(contact.Email, "SmartInventory - Email Verified", htmlBody);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // RESEND OTP
-    // ─────────────────────────────────────────────────────────────────────────
     public async Task ResendOtpAsync(Guid contactId)
     {
         var contact = await _uow.Repository<SupplierContact>().Query()
@@ -444,9 +413,6 @@ public class SupplierAuthService : ISupplierAuthService
         await _uow.CommitAsync();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // COMPLETE REGISTRATION (Admin invited completion)
-    // ─────────────────────────────────────────────────────────────────────────
     public async Task CompleteRegistrationAsync(SupplierCompleteRegistrationRequest request)
     {
         var supplier = await _uow.Repository<Supplier>().Query()
@@ -507,9 +473,7 @@ public class SupplierAuthService : ISupplierAuthService
         await _uow.CommitAsync();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // FORGOT PASSWORD
-    // ─────────────────────────────────────────────────────────────────────────
+
     public async Task ForgotPasswordAsync(string email)
     {
         var contact = await _uow.Repository<SupplierContact>().Query()
@@ -534,9 +498,6 @@ public class SupplierAuthService : ISupplierAuthService
         await _notificationService.SendPasswordResetRequestAsync(contact.Id, email, resetLink, contact.FullName);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // RESET PASSWORD
-    // ─────────────────────────────────────────────────────────────────────────
     public async Task ResetPasswordAsync(string token, string newPassword)
     {
         var contact = await _uow.Repository<SupplierContact>().Query()

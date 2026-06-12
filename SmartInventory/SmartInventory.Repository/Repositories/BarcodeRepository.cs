@@ -5,9 +5,6 @@ using SmartInventory.Core.Interfaces;
 
 namespace SmartInventory.Repository.Repositories;
 
-/// <summary>
-/// Specialized Barcode repository implementing rapid scan value lookups.
-/// </summary>
 public class BarcodeRepository : GenericRepository<Barcode>, IBarcodeRepository
 {
     public BarcodeRepository(AppDbContext context) : base(context)

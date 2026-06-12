@@ -58,16 +58,18 @@ public class BarcodeService : IBarcodeService
                 Width = width,
                 Height = height,
                 Margin = 2,
-                PureBarcode = type == BarcodeType.Code128 // Don't show human-readable text underneath inside the barcode raw pixels
+                PureBarcode = type == BarcodeType.Code128 
             }
         };
 
         var pixelData = writer.Write(contents);
 
         // Convert the raw BGRA pixel bytes into a valid 32-bit BMP file byte array.
-        // This is 100% portable across Windows, macOS, and Linux with zero external drawing dependencies.
         return ConvertToBmp(pixelData.Pixels, pixelData.Width, pixelData.Height);
     }
+
+    //ConvertToBmp manually constructs a valid BMP image file by creating the BMP file header, image information header, 
+    // and appending the raw BGRA pixel data, returning the complete BMP file as a byte array.
 
     private static byte[] ConvertToBmp(byte[] bgraPixels, int width, int height)
     {

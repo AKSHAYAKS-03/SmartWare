@@ -8,16 +8,7 @@ using System.Security.Claims;
 
 namespace SmartInventory.API.Controllers;
 
-/// <summary>
-/// Supplier portal purchase order endpoints.
-/// Route prefix: /api/supplier/purchase-orders
-///
-/// GET    /api/supplier/purchase-orders           — List my POs [Supplier]
-/// GET    /api/supplier/purchase-orders/{id}      — PO detail [Supplier]
-/// POST   /api/supplier/purchase-orders/{id}/respond — Accept/decline [Supplier]
-/// PUT    /api/supplier/purchase-orders/{id}/delivery-date — Update delivery date [Supplier]
-/// POST   /api/supplier/purchase-orders/{id}/dispatch — Mark dispatched [Supplier]
-/// </summary>
+
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/supplier/purchase-orders")]
@@ -34,10 +25,7 @@ public class SupplierPurchaseOrdersController : ControllerBase
     private Guid GetSupplierId() =>
         Guid.Parse(User.FindFirstValue("supplierId")!);
 
-    /// <summary>
-    /// Returns all purchase orders raised against this supplier.
-    /// Scoped to the authenticated supplier — no other supplier POs are visible.
-    /// </summary>
+
     [HttpGet]
     public async Task<IActionResult> GetMyPurchaseOrders()
     {
@@ -45,9 +33,7 @@ public class SupplierPurchaseOrdersController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Returns full details of a specific PO including line items.
-    /// </summary>
+
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetDetail(Guid id)
     {
@@ -55,10 +41,7 @@ public class SupplierPurchaseOrdersController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Supplier accepts or declines a PO.
-    /// Only valid for POs in Submitted or Approved status that have not been responded to yet.
-    /// </summary>
+
     [EnableRateLimiting("mutations")]
     [HttpPost("{id:guid}/respond")]
     public async Task<IActionResult> Respond(Guid id, [FromBody] SupplierRespondToPORequest request)
@@ -67,10 +50,7 @@ public class SupplierPurchaseOrdersController : ControllerBase
         return Ok(new { message = request.Accept ? "Purchase order accepted." : "Purchase order declined." });
     }
 
-    /// <summary>
-    /// Supplier updates the expected delivery date.
-    /// Not allowed after the order has been dispatched.
-    /// </summary>
+
     [EnableRateLimiting("mutations")]
     [HttpPut("{id:guid}/delivery-date")]
     public async Task<IActionResult> UpdateDeliveryDate(Guid id, [FromBody] SupplierUpdateDeliveryDateRequest request)
@@ -79,9 +59,6 @@ public class SupplierPurchaseOrdersController : ControllerBase
         return Ok(new { message = "Expected delivery date updated." });
     }
 
-    /// <summary>
-    /// Supplier marks the order as dispatched with an optional tracking number.
-    /// </summary>
     [EnableRateLimiting("mutations")]
     [HttpPost("{id:guid}/dispatch")]
     public async Task<IActionResult> MarkDispatched(Guid id, [FromBody] SupplierMarkDispatchedRequest request)
@@ -91,7 +68,6 @@ public class SupplierPurchaseOrdersController : ControllerBase
         return Ok(new { message = "Order marked as dispatched.", shipment });
     }
 
-    /// <summary>Creates a partial or full supplier ASN/shipment.</summary>
     [EnableRateLimiting("mutations")]
     [HttpPost("{id:guid}/shipments")]
     public async Task<IActionResult> CreateShipment(Guid id, [FromBody] SupplierCreateShipmentRequest request)
@@ -100,7 +76,6 @@ public class SupplierPurchaseOrdersController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>Lists all shipments for a purchase order.</summary>
     [HttpGet("{id:guid}/shipments")]
     public async Task<IActionResult> GetShipments(Guid id)
     {

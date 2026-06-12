@@ -53,7 +53,7 @@ public class StockAdjustmentService : IStockAdjustmentService
             }
         }
 
-        // 1. Validate target references exist
+        //  Validate target references exist
         if (dto.QuantityAfter < 0)
             throw new BusinessRuleException("Quantity after adjustment cannot be negative.");
 
@@ -77,7 +77,7 @@ public class StockAdjustmentService : IStockAdjustmentService
                 throw new NotFoundException("BinLocation", dto.BinLocationId.Value);
         }
 
-        // 2. Fetch or assume stock level
+        // Fetch or assume stock level
         var stockLevel = await _uow.Repository<StockLevel>()
             .Query()
             .FirstOrDefaultAsync(sl => sl.ProductId == dto.ProductId &&
@@ -91,7 +91,7 @@ public class StockAdjustmentService : IStockAdjustmentService
         int qtyChange = dto.QuantityAfter - qtyBefore;
         int absChange = Math.Abs(qtyChange);
 
-        // 3. Compute variance threshold metrics
+        // Compute variance threshold metrics
         double percentageVariance = qtyBefore > 0 ? ((double)absChange / qtyBefore) * 100.0 : 100.0;
         decimal valueVariance = absChange * product.CostPrice;
 
@@ -117,7 +117,7 @@ public class StockAdjustmentService : IStockAdjustmentService
 
         await _uow.Repository<StockAdjustment>().AddAsync(adjustment);
 
-        // ── Enterprise Capacity Engine Checks (Validation & Auto-Approve) ─────────
+        // Capacity Engine Checks (Validation & Auto-Approve)
         if (dto.BinLocationId.HasValue && qtyChange != 0)
         {
             var targetBin = await _uow.Repository<BinLocation>()
@@ -202,8 +202,7 @@ public class StockAdjustmentService : IStockAdjustmentService
                 }
             }
         }
-        // ─────────────────────────────────────────────────────────────────────────
-
+       
         if (!requiresApproval)
         {
             // Auto approve: Update physical stock level immediately
@@ -304,7 +303,6 @@ public class StockAdjustmentService : IStockAdjustmentService
         if (adjustment.Status != AdjustmentStatus.Pending)
             throw new BusinessRuleException("This stock adjustment is not in a pending state.");
 
-        // SECURED: Extract approver from token, preventing IDOR spoofing
         var secureApproverId = _currentUserService.UserId;
 
         var approver = await _uow.Repository<User>().Query().Include(u => u.Role).FirstOrDefaultAsync(u => u.Id == secureApproverId);
@@ -325,7 +323,6 @@ public class StockAdjustmentService : IStockAdjustmentService
 
         if (dto.Approve)
         {
-            // Enforcement Gate A: Anti-Theft / Damage Write-offs
             if (adjustment.Reason == AdjustmentReason.Damage || 
                 adjustment.Reason == AdjustmentReason.Theft || 
                 adjustment.Reason == AdjustmentReason.WriteOff)
@@ -343,7 +340,7 @@ public class StockAdjustmentService : IStockAdjustmentService
 
             adjustment.Status = AdjustmentStatus.Approved;
             
-            // ── Enterprise Capacity Engine Checks (Manual Approve) ───────────────────
+            //Capacity Engine Checks (Manual Approve)
             if (adjustment.BinLocationId.HasValue && adjustment.QuantityChange != 0)
             {
                 var targetBin = await _uow.Repository<BinLocation>()
@@ -361,7 +358,6 @@ public class StockAdjustmentService : IStockAdjustmentService
                         if (targetBin.MaxVolumeCm3 > 0 && targetBin.UtilizedVolumeCm3 + volumeChange > targetBin.MaxVolumeCm3)
                             throw new BusinessRuleException($"CapacityExceeded: Bin {targetBin.Barcode ?? targetBin.BinCode} is at capacity. Cannot approve.");
                         
-                        // We assume warnings were acknowledged during creation if it was allowed to be created as Pending.
                     }
 
                     targetBin.UtilizedVolumeCm3 += volumeChange;
@@ -384,7 +380,7 @@ public class StockAdjustmentService : IStockAdjustmentService
                     }
                 }
             }
-            // ─────────────────────────────────────────────────────────────────────────
+          
 
             // Update the physical stock level
             var stockLevel = await _uow.Repository<StockLevel>()
@@ -432,14 +428,13 @@ public class StockAdjustmentService : IStockAdjustmentService
                 BinLocationId = adjustment.BinLocationId,
                 MovementType = adjustment.Reason == AdjustmentReason.LossInTransit ? MovementType.WriteOff : MovementType.Adjustment,
                 Quantity = Math.Abs(adjustment.QuantityChange),
-                ReferenceType = ReferenceType.Adjustment, // Correct ReferenceType
+                ReferenceType = ReferenceType.Adjustment,
                 ReferenceId = adjustment.Id,
                 PerformedBy = adjustment.PerformedBy,
                 CreatedAt = DateTime.UtcNow
             };
             await _uow.Repository<StockMovement>().AddAsync(movement);
             
-            // Trigger notifications
             await _notificationService.SendNotificationAsync(adjustment.PerformedBy, NotificationChannel.InApp, 
                 "AdjustmentApproved", "Stock Adjustment Approved", 
                 $"Your adjustment request {adjustment.AdjustmentNumber} has been approved by {approver.FullName}.", 
@@ -449,7 +444,6 @@ public class StockAdjustmentService : IStockAdjustmentService
         {
             adjustment.Status = AdjustmentStatus.Rejected;
             
-            // Trigger notifications
             await _notificationService.SendNotificationAsync(adjustment.PerformedBy, NotificationChannel.InApp, 
                 "AdjustmentRejected", "Stock Adjustment Rejected", 
                 $"Your adjustment request {adjustment.AdjustmentNumber} has been rejected by {approver.FullName}.", 
@@ -695,7 +689,7 @@ public class StockAdjustmentService : IStockAdjustmentService
             }
             else
             {
-                // Reverse the change. If original change was +10, we do -10.
+                // Reverse the change.
                 stock.QuantityOnHand -= adjustment.QuantityChange;
                 if (stock.QuantityOnHand < 0) 
                     throw new InsufficientStockException(adjustment.ProductId.ToString(), adjustment.QuantityChange, stock.QuantityOnHand + adjustment.QuantityChange);
@@ -720,10 +714,7 @@ public class StockAdjustmentService : IStockAdjustmentService
             };
             await _uow.Repository<StockMovement>().AddAsync(movement);
 
-            // ── Reverse Bin Spatial Capacity ───────────────────────────────────────
-            // If the original adjustment added stock (QuantityChange > 0), capacity was increased.
-            // Cancelling reverses that increase. If adjustment removed stock (QuantityChange < 0),
-            // capacity was decreased; cancelling restores that capacity.
+            //Reverse Bin Spatial Capacity
             if (adjustment.BinLocationId.HasValue && adjustment.QuantityChange != 0)
             {
                 var product = await _uow.Repository<Product>().GetByIdAsync(adjustment.ProductId);
@@ -742,7 +733,6 @@ public class StockAdjustmentService : IStockAdjustmentService
                     _uow.Repository<BinLocation>().Update(binForCapacity);
                 }
             }
-            // ─────────────────────────────────────────────────────────────────────────
         }
 
         adjustment.Status = AdjustmentStatus.Cancelled;

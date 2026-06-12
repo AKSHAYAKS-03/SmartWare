@@ -77,7 +77,6 @@ public class SmtpEmailService : IEmailService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to send email to {To}. Subject: {Subject}", to, subject);
-            // We usually don't want to bring down the calling process just because an email failed.
             // Throwing might break background processors if not caught, but here we just log it.
         }
     }

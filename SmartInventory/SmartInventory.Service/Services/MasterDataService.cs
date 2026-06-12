@@ -21,14 +21,14 @@ public class MasterDataService : IMasterDataService
 
     public async Task<MasterDataResponseDto> GetMasterDataAsync()
     {
-        // 1. Attempt to fetch from Redis/Memory Cache
+        //from cache
         var cachedData = await _cacheService.GetAsync<MasterDataResponseDto>(CacheKey);
         if (cachedData != null)
         {
             return cachedData;
         }
 
-        // 2. If Cache Miss, fetch from PostgreSQL using AsNoTracking for pure read speed
+        //from postresql
         var categories = await _uow.Repository<Category>().GetAllAsync(trackChanges: false);
         var warehouses = await _uow.Repository<Warehouse>().GetAllAsync(trackChanges: false);
         var roles = await _uow.Repository<Role>().GetAllAsync(trackChanges: false);
@@ -40,7 +40,7 @@ public class MasterDataService : IMasterDataService
             Roles = roles.Select(r => new LookupItemDto { Id = r.Id, Name = r.Name }).OrderBy(r => r.Name).ToList()
         };
 
-        // 3. Save to Cache for 1 Hour (Enterprise optimization)
+        // 3. Save to Cache for 1 Hour 
         await _cacheService.SetAsync(CacheKey, response, TimeSpan.FromHours(1));
 
         return response;

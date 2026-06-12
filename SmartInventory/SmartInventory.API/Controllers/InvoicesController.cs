@@ -9,9 +9,7 @@ using System.Threading.Tasks;
 
 namespace SmartInventory.API.Controllers;
 
-/// <summary>
-/// Internal endpoints for managing Supplier Invoices (Review, Match, Pay).
-/// </summary>
+
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]")]

@@ -6,13 +6,6 @@ using SmartInventory.Core.Exceptions;
 using SmartInventory.Core.Interfaces;
 
 namespace SmartInventory.Service.Services;
-
-/// <summary>
-/// Handles supplier invoice upload, history listing, and PDF download.
-/// SECURITY: All invoice reads/downloads validate that the invoice SupplierId
-/// matches the JWT claim supplierId. Internal finance notes (InternalNotes) are
-/// never returned in supplier-facing DTOs.
-/// </summary>
 public class SupplierInvoiceService : ISupplierInvoiceService
 {
     private readonly IUnitOfWork _uow;
@@ -28,13 +21,10 @@ public class SupplierInvoiceService : ISupplierInvoiceService
         _sequenceNumberGenerator = sequenceNumberGenerator;
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // UPLOAD INVOICE
-    // ─────────────────────────────────────────────────────────────────────────
 
     public async Task<SupplierInvoiceDetailDto> UploadInvoiceAsync(Guid supplierId, Guid contactId, SupplierUploadInvoiceRequest request)
     {
-        // 1. Validate PO belongs to this supplier — include GRNs and existing invoices for validation
+
         var po = await _uow.Repository<PurchaseOrder>().Query()
             .Include(p => p.Items)
             .Include(p => p.GoodsReceipts).ThenInclude(g => g.Items)
@@ -47,11 +37,11 @@ public class SupplierInvoiceService : ISupplierInvoiceService
         if (po.Status == PurchaseOrderStatus.Cancelled || po.Status == PurchaseOrderStatus.Closed)
             throw new BusinessRuleException($"Cannot upload an invoice against a PO in '{po.Status}' status.");
 
-        // 2. Over-Billing Prevention
-        // Upload Ceiling = MIN(PO Total Amount, Aggregate Accepted GRN Value)
-        // This prevents invoicing goods that have not yet been accepted by the warehouse.
 
-        // 2a. Aggregate Accepted GRN Value
+
+
+
+
         decimal aggregateAcceptedGrnValue = 0;
         var acceptedGrns = po.GoodsReceipts
             .Where(g => g.Status == GoodsReceiptStatus.Accepted || g.Status == GoodsReceiptStatus.PartiallyAccepted);
@@ -69,10 +59,10 @@ public class SupplierInvoiceService : ISupplierInvoiceService
             }
         }
 
-        // 2b. Upload Ceiling = MIN(PO Total, Aggregate Accepted GRN Value)
+
         decimal uploadCeiling = Math.Min(po.TotalAmount, aggregateAcceptedGrnValue);
 
-        // 2c. Sum all in-flight invoices (Pending, UnderReview, Matched, Paid)
+
         decimal alreadyCommitted = po.SupplierInvoices
             .Where(i => i.Status == SupplierInvoiceStatus.Pending
                      || i.Status == SupplierInvoiceStatus.UnderReview
@@ -88,7 +78,7 @@ public class SupplierInvoiceService : ISupplierInvoiceService
                 $"(MIN of PO Total {po.TotalAmount:N2} and Aggregate Accepted GRN Value {aggregateAcceptedGrnValue:N2}). " +
                 $"Please wait for additional goods to be accepted or adjust your invoice amount.");
 
-        // 3. Save the PDF using the file storage service
+
         var filePath = await _fileStorage.SaveFileAsync(
             request.FileStream,
             request.FileName,
@@ -96,7 +86,7 @@ public class SupplierInvoiceService : ISupplierInvoiceService
             $"SUPINV_{po.PoNumber}"
         );
 
-        // 4. Persist the invoice record
+
         var invoiceNumber = await _sequenceNumberGenerator.GenerateAsync("seq_invoices", "INV");
         var invoice = new SupplierInvoice
         {
@@ -122,9 +112,6 @@ public class SupplierInvoiceService : ISupplierInvoiceService
         return MapToDetailDto(invoice, po.PoNumber);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // GET MY INVOICES
-    // ─────────────────────────────────────────────────────────────────────────
 
     public async Task<List<SupplierInvoiceListItemDto>> GetMyInvoicesAsync(Guid supplierId)
     {
@@ -146,9 +133,6 @@ public class SupplierInvoiceService : ISupplierInvoiceService
         )).ToList();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // GET INVOICE DETAIL
-    // ─────────────────────────────────────────────────────────────────────────
 
     public async Task<SupplierInvoiceDetailDto> GetInvoiceDetailAsync(Guid supplierId, Guid invoiceId)
     {
@@ -162,10 +146,6 @@ public class SupplierInvoiceService : ISupplierInvoiceService
         return MapToDetailDto(invoice, invoice.PurchaseOrder?.PoNumber ?? string.Empty);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // DOWNLOAD INVOICE
-    // ─────────────────────────────────────────────────────────────────────────
-
     public async Task<(Stream Stream, string ContentType, string FileName)> DownloadInvoiceAsync(Guid supplierId, Guid invoiceId)
     {
         var invoice = await _uow.Repository<SupplierInvoice>().Query()
@@ -178,14 +158,7 @@ public class SupplierInvoiceService : ISupplierInvoiceService
         return (stream, "application/pdf", invoice.OriginalFileName);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // PRIVATE HELPERS
-    // ─────────────────────────────────────────────────────────────────────────
 
-    /// <summary>
-    /// Maps an invoice to the supplier-facing detail DTO.
-    /// NOTE: InternalNotes are intentionally excluded — suppliers cannot see finance team notes.
-    /// </summary>
     private static SupplierInvoiceDetailDto MapToDetailDto(SupplierInvoice invoice, string poNumber)
     {
         return new SupplierInvoiceDetailDto(

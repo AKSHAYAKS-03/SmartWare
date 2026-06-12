@@ -40,13 +40,14 @@ public class CurrentUserService : ICurrentUserService
 
             return Guid.TryParse(claim, out var id)
                 ? id
-                : Guid.Empty; // FAIL SECURELY: Prevents unauthenticated users from gaining Admin privileges
+                : Guid.Empty; //  Prevents unauthenticated users from gaining Admin privileges
         }
     }
 
     /// <summary>
     /// The role name from the "role" JWT claim. Used for authorization decisions in the service layer.
     /// </summary>
+    /// 
     public string? Role =>
         _httpContextAccessor.HttpContext?.User.FindFirst("role")?.Value;
 
@@ -67,14 +68,18 @@ public class CurrentUserService : ICurrentUserService
     /// <summary>
     /// The client IP address — captured for audit log entries.
     /// </summary>
+    /// 
     public string? IpAddress =>
         _httpContextAccessor.HttpContext?.Connection.RemoteIpAddress?.ToString();
+
 
     /// <summary>
     /// Checks whether the current user has one of the specified roles.
     /// </summary>
     public bool IsInRole(params string[] roles) =>
         roles.Contains(Role, StringComparer.OrdinalIgnoreCase);
+
+
 
     /// <summary>
     /// Gets the current ClaimsPrincipal for use with IAuthorizationService.

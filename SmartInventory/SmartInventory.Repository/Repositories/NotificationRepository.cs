@@ -8,10 +8,7 @@ using SmartInventory.Core.Interfaces;
 
 namespace SmartInventory.Repository.Repositories;
 
-/// <summary>
-/// Specialized Notification repository.
-/// Scopes all operations to the authenticated user's notification box.
-/// </summary>
+
 public class NotificationRepository : GenericRepository<Notification>, INotificationRepository
 {
     public NotificationRepository(AppDbContext context) : base(context)
@@ -20,24 +17,22 @@ public class NotificationRepository : GenericRepository<Notification>, INotifica
 
     public async Task<PagedResult<Notification>> GetPagedNotificationsAsync(NotificationQueryParameters queryParams, Guid userId)
     {
-        // Enforce user ownership scoping at database level
         var query = _dbSet
             .Where(n => n.UserId == userId)
             .AsQueryable();
 
-        // 1. Filter by Read/Unread state
+        // Filter by Read/Unread state
         if (queryParams.IsRead.HasValue)
         {
             query = query.Where(n => n.IsRead == queryParams.IsRead.Value);
         }
 
-        // Count
         int totalCount = await query.CountAsync();
 
-        // Sort
+        
         query = ApplySorting(query, queryParams.SortBy, queryParams.SortDir);
 
-        // Page
+    
         int skip = (queryParams.Page - 1) * queryParams.PageSize;
         var data = await query.Skip(skip).Take(queryParams.PageSize).ToListAsync();
 

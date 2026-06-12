@@ -6,12 +6,7 @@ using System.Security.Claims;
 
 namespace SmartInventory.API.Controllers;
 
-/// <summary>
-/// Supplier portal performance dashboard endpoint.
-/// Route prefix: /api/supplier/dashboard
-///
-/// GET /api/supplier/dashboard — Get performance summary [Supplier]
-/// </summary>
+
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/supplier/dashboard")]
@@ -27,13 +22,6 @@ public class SupplierDashboardController : ControllerBase
 
     private Guid GetSupplierId() => Guid.Parse(User.FindFirstValue("supplierId")!);
 
-    /// <summary>
-    /// Returns the supplier's own performance dashboard.
-    /// Includes: total orders, pending/dispatched/completed counts,
-    /// total volume, on-time delivery %, average fill rate, and fill rate history chart data.
-    /// 
-    /// No cross-supplier comparison data is included.
-    /// </summary>
     [HttpGet]
     public async Task<IActionResult> GetDashboard()
     {

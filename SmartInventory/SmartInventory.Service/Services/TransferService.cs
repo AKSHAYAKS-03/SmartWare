@@ -384,7 +384,7 @@ public class TransferService : ITransferService
         if (transfer.Status != TransferStatus.InTransit)
             throw new BusinessRuleException("Can only receive transfers that are currently in-transit.");
 
-        // ─── Validation: Ensure all submitted TransferItemIds belong to this transfer ───
+        //  Ensure all submitted TransferItemIds belong to this transfer ───
         var validTransferItemIds = transfer.Items.Select(i => i.Id).ToHashSet();
         var submittedItemIds = dto.Items.Select(i => i.TransferItemId).ToHashSet();
         var invalidItemIds = submittedItemIds.Except(validTransferItemIds).ToList();
@@ -412,7 +412,7 @@ public class TransferService : ITransferService
             item.QuantityReceived = actualReceived;
             _uow.Repository<TransferItem>().Update(item);
 
-            // ── Enterprise Capacity Engine Checks ────────────────────────────────────
+            // Enterprise Capacity Engine Checks 
             if (actualReceived > 0 && item.ToBinId.HasValue)
             {
                 var targetBin = await _uow.Repository<BinLocation>()
@@ -485,7 +485,7 @@ public class TransferService : ITransferService
                     }
                 }
             }
-            // ─────────────────────────────────────────────────────────────────────────
+            
 
             // Increment destination physical stock level
             var destStock = await _uow.Repository<StockLevel>()
@@ -784,7 +784,7 @@ public class TransferService : ITransferService
                                        sl.WarehouseId == dto.WarehouseId && 
                                        sl.BinLocationId == dto.ToBinId);
 
-        // ── Enterprise Capacity Engine Checks ────────────────────────────────────
+        //  Enterprise Capacity Engine Checks 
         var fromBin = await _uow.Repository<BinLocation>().GetByIdAsync(dto.FromBinId);
         var toBin = await _uow.Repository<BinLocation>().Query().Include(b => b.Zone).FirstOrDefaultAsync(b => b.Id == dto.ToBinId);
         var product = await _uow.Repository<Product>().GetByIdAsync(dto.ProductId);
@@ -864,7 +864,6 @@ public class TransferService : ITransferService
                 _uow.Repository<BinLocation>().Update(fromBin);
             }
         }
-        // ─────────────────────────────────────────────────────────────────────────
 
         var createdToStock = false;
         if (toStock == null)

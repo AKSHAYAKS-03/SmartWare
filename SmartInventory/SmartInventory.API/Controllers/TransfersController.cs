@@ -38,10 +38,7 @@ public class TransfersController : ControllerBase
     {
         if (_currentUser.WarehouseId.HasValue)
         {
-            // For transfers, scoping means they can view it if it either comes FROM or goes TO their warehouse.
-            // A simple equal filter might restrict too much if not handled properly at the repository, 
-            // but we'll apply a FromWarehouseId filter for safety, or rely on service-level logic.
-            // For now, adding a strict FromWarehouseId filter to match the DTO approach.
+           
             request.Filters.Add(new FilterCriteria
             {
                 Field = "FromWarehouseId",

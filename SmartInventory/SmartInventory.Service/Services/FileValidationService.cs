@@ -7,14 +7,15 @@ namespace SmartInventory.Service.Services;
 
 public class FileValidationService : IFileValidationService
 {
-    // Common file signatures (Magic Numbers)
     private static readonly Dictionary<string, List<byte[]>> _fileSignatures = new()
     {
         { ".jpeg", new List<byte[]> { new byte[] { 0xFF, 0xD8, 0xFF, 0xE0 }, new byte[] { 0xFF, 0xD8, 0xFF, 0xE2 }, new byte[] { 0xFF, 0xD8, 0xFF, 0xE3 } } },
         { ".jpg", new List<byte[]> { new byte[] { 0xFF, 0xD8, 0xFF, 0xE0 }, new byte[] { 0xFF, 0xD8, 0xFF, 0xE1 }, new byte[] { 0xFF, 0xD8, 0xFF, 0xE8 } } },
         { ".png", new List<byte[]> { new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A } } },
         { ".pdf", new List<byte[]> { new byte[] { 0x25, 0x50, 0x44, 0x46 } } },
-        { ".csv", new List<byte[]> { } } // CSVs are plain text and don't have a reliable magic number, but we can accept them based on extension for now, or read content to verify it's printable text.
+        { ".csv", new List<byte[]> { } }
+         // CSVs are plain text and don't have a reliable magic number,
+         // but we can accept them based on extension for now, orr ead content to verify it's printable text.
     };
 
     public bool IsValidFileSignature(Stream fileStream, string fileName)

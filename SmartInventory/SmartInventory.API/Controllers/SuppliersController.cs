@@ -91,9 +91,7 @@ public class SuppliersController : ControllerBase
         return NoContent();
     }
 
-    /// <summary>
     /// Invites a supplier to register, creating a record in InviteSent state and generating a secure invite token.
-    /// </summary>
     [EnableRateLimiting("mutations")]
     [HttpPost("invite")]
     [Authorize(Policy = "RequireManager")]
@@ -103,9 +101,6 @@ public class SuppliersController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Returns the list of all suppliers currently awaiting registration review.
-    /// </summary>
     [HttpGet("pending-reviews")]
     [Authorize(Policy = "RequireManager")]
     public async Task<IActionResult> GetPendingReviews()
@@ -114,9 +109,6 @@ public class SuppliersController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Submits a review action (Approve, Reject, RequestMoreInfo) for a pending supplier registration.
-    /// </summary>
     [EnableRateLimiting("mutations")]
     [HttpPost("{id:guid}/review")]
     [Authorize(Policy = "RequireManager")]
@@ -126,9 +118,7 @@ public class SuppliersController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Suspends an active supplier, locking their portal access.
-    /// </summary>
+
     [EnableRateLimiting("mutations")]
     [HttpPost("{id:guid}/suspend")]
     [Authorize(Policy = "RequireAdmin")]
@@ -138,9 +128,7 @@ public class SuppliersController : ControllerBase
         return NoContent();
     }
 
-    /// <summary>
-    /// Re-activates a suspended or rejected supplier.
-    /// </summary>
+  
     [EnableRateLimiting("mutations")]
     [HttpPost("{id:guid}/activate")]
     [Authorize(Policy = "RequireAdmin")]

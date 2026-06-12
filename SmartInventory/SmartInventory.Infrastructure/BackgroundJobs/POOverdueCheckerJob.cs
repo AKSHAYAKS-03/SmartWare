@@ -9,10 +9,12 @@ using SmartInventory.Core.Interfaces;
 namespace SmartInventory.Infrastructure.BackgroundJobs;
 
 /// <summary>
-/// Nightly background service that checks for overdue Purchase Orders.
-/// Business rationale: Proactively alert supply chain managers when a vendor misses a committed delivery date.
-/// Schedule: Runs daily (every 24 hours).
+/// Nightly background service that checks for overdue Purchase Orders. Runs daily (every 24 hours).
+/// 
+/// Approved+Expected date exists+Expected date passed+Actual delivery missing
 /// </summary>
+/// 
+/// 
 public class POOverdueCheckerJob : BackgroundService
 {
     private readonly IServiceScopeFactory _scopeFactory;
@@ -74,3 +76,6 @@ public class POOverdueCheckerJob : BackgroundService
         _logger.LogInformation("Completed PO Overdue scan. Found and alerted on {Count} overdue POs.", overduePOs.Count);
     }
 }
+
+
+

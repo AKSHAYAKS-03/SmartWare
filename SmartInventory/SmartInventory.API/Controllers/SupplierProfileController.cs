@@ -8,14 +8,7 @@ using System.Security.Claims;
 
 namespace SmartInventory.API.Controllers;
 
-/// <summary>
-/// Supplier portal profile management endpoints.
-/// Route prefix: /api/supplier/profile
-///
-/// GET    /api/supplier/profile       — View profile [Supplier]
-/// PUT    /api/supplier/profile       — Update contact details [Supplier]
-/// POST   /api/supplier/profile/logo  — Upload logo [Supplier]
-/// </summary>
+
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/supplier/profile")]
@@ -32,10 +25,7 @@ public class SupplierProfileController : ControllerBase
     private Guid GetSupplierId() => Guid.Parse(User.FindFirstValue("supplierId")!);
     private Guid GetContactId() => Guid.Parse(User.FindFirstValue("contactId")!);
 
-    /// <summary>
-    /// Returns the supplier's profile including contact person details.
-    /// Shows only the authenticated supplier's own data.
-    /// </summary>
+
     [HttpGet]
     public async Task<IActionResult> GetProfile()
     {
@@ -43,10 +33,7 @@ public class SupplierProfileController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Updates the contact person's name, phone number, and job title.
-    /// Does not allow editing the supplier's core details (name, code, payment terms).
-    /// </summary>
+
     [EnableRateLimiting("mutations")]
     [HttpPut]
     public async Task<IActionResult> UpdateProfile([FromBody] SupplierUpdateProfileRequest request)
@@ -55,10 +42,6 @@ public class SupplierProfileController : ControllerBase
         return Ok(new { message = "Profile updated successfully." });
     }
 
-    /// <summary>
-    /// Uploads a new logo image for the supplier.
-    /// Accepts common image formats (JPEG, PNG, WebP).
-    /// </summary>
     [EnableRateLimiting("mutations")]
     [HttpPost("logo")]
     [Consumes("multipart/form-data")]
@@ -73,9 +56,7 @@ public class SupplierProfileController : ControllerBase
         return Ok(new { message = "Logo uploaded successfully.", path = logoPath });
     }
 
-    /// <summary>
-    /// Returns the current onboarding status, verification details, and request/rejection messages.
-    /// </summary>
+
     [HttpGet("status")]
     public async Task<IActionResult> GetOnboardingStatus()
     {
@@ -83,9 +64,7 @@ public class SupplierProfileController : ControllerBase
         return Ok(status);
     }
 
-    /// <summary>
-    /// Submits updated/requested profile details, transitioning the status back to PendingReview.
-    /// </summary>
+
     [EnableRateLimiting("mutations")]
     [HttpPost("submit-info")]
     public async Task<IActionResult> SubmitOnboardingInfo([FromBody] SupplierSubmitInfoRequest request)
@@ -94,9 +73,6 @@ public class SupplierProfileController : ControllerBase
         return Ok(new { message = "Information submitted successfully. Your profile is now pending review." });
     }
 
-    /// <summary>
-    /// Retrieves the text of the onboarding partnership agreement.
-    /// </summary>
     [HttpGet("agreement")]
     public async Task<IActionResult> GetAgreement()
     {
@@ -104,9 +80,7 @@ public class SupplierProfileController : ControllerBase
         return Ok(new { agreementText = text });
     }
 
-    /// <summary>
-    /// Accepts the agreement and transitions the supplier to Active.
-    /// </summary>
+
     [EnableRateLimiting("mutations")]
     [HttpPost("agreement/accept")]
     public async Task<IActionResult> AcceptAgreement()

@@ -261,3 +261,32 @@ public class OutboxProcessorService : BackgroundService
         await dbContext.Set<NotificationLog>().AddAsync(log);
     }
 }
+
+
+// User Updates Stock
+//           ↓
+// Transaction
+//           ↓
+// OutboxMessage Insert
+//           ↓
+// Commit
+//           ↓
+// --------------------------------
+
+// OutboxProcessorService
+//           ↓
+// Reads Outbox
+//           ↓
+// StockLevelChanged ?
+//           ↓
+// Redis Publish
+
+// OR
+
+// SendNotification ?
+//           ↓
+// Email / SMS / InApp
+//           ↓
+// NotificationLog
+//           ↓
+// Processed

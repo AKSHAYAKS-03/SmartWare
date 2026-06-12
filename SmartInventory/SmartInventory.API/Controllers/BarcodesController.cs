@@ -25,9 +25,7 @@ public class BarcodesController : ControllerBase
         _currentUser = currentUser;
     }
 
-    /// <summary>
-    /// Ensures a product barcode exists using the product's generated SKU as the barcode value.
-    /// </summary>
+
     [EnableRateLimiting("mutations")]
     [HttpPost("generate")]
     [Authorize(Policy = "RequireManager")]
@@ -46,9 +44,7 @@ public class BarcodesController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Ensures multiple product barcodes exist in a single transaction (max 500).
-    /// </summary>
+
     [EnableRateLimiting("mutations")]
     [HttpPost("batch-generate")]
     [Authorize(Policy = "RequireManager")]
@@ -58,10 +54,6 @@ public class BarcodesController : ControllerBase
         return Ok(results);
     }
 
-    /// <summary>
-    /// Processes a scan audit event for a scanned barcode, returning rich operational context.
-    /// Restricted to operational roles only.
-    /// </summary>
     [EnableRateLimiting("mutations")]
     [HttpPost("scan")]
     [Authorize(Policy = "RequireStaff")]
@@ -89,9 +81,6 @@ public class BarcodesController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Retrieves all barcode records associated with a product.
-    /// </summary>
     [HttpGet("product/{productId:guid}")]
     public async Task<IActionResult> GetProductBarcodes(Guid productId)
     {
@@ -99,10 +88,6 @@ public class BarcodesController : ControllerBase
         return Ok(list);
     }
 
-    /// <summary>
-    /// Generates and streams the raw barcode image file (BMP) directly.
-    /// Requires authentication — barcode data is commercially sensitive product catalog information.
-    /// </summary>
     [HttpGet("{id:guid}/image")]
     public async Task<IActionResult> GetBarcodeImage(Guid id)
     {

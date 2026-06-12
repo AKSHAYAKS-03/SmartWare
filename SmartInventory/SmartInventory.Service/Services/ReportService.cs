@@ -7,21 +7,7 @@ using SmartInventory.Core.Interfaces;
 
 namespace SmartInventory.Service.Services;
 
-/// <summary>
-/// Analytics and reporting service. All reports are read-only and use IQueryable
-/// to ensure database-level filtering, aggregation, and sorting.
-///
-/// Reports implemented:
-///   1. Inventory Valuation (FIFO / Weighted Average)
-///   2. Stock Movement Trend
-///   3. Dead Stock (no outbound movement for N days)
-///   4. Shrinkage (adjustments with ShrinkageReason set)
-///   5. Supplier Performance
-///   6. PO Fulfillment
-///   7. Audit Log Viewer
-///   8. Generic CSV Export
-///   9. Audit Log Viewer
-/// </summary>
+
 public class ReportService : IReportService
 {
     private readonly IUnitOfWork _uow;
@@ -34,7 +20,7 @@ public class ReportService : IReportService
     }
 
 
-    // ─── 1. Inventory Valuation ───────────────────────────────────────────────
+    // Inventory Valuation 
 
     public async Task<IEnumerable<InventoryValuationDto>> GetInventoryValuationReportAsync(
         Guid? warehouseId, ValuationMethod method = ValuationMethod.WeightedAverage)
@@ -56,7 +42,7 @@ public class ReportService : IReportService
                 ProductSKU = g.Key.Product.SKU,
                 CategoryName = g.Key.Category?.Name ?? "Uncategorized",
                 TotalStock = g.Sum(sl => sl.QuantityOnHand),
-                UnitCost = g.Key.Product.CostPrice // simplified — full FIFO per product via StockLevelService
+                UnitCost = g.Key.Product.CostPrice
             })
             .Where(r => r.TotalStock > 0)
             .OrderByDescending(r => r.TotalValue)
@@ -65,7 +51,7 @@ public class ReportService : IReportService
         return results;
     }
 
-    // ─── 2. Stock Movement Trend ──────────────────────────────────────────────
+    // Stock Movement Trend 
 
     public async Task<IEnumerable<StockMovementTrendDto>> GetStockMovementReportAsync(
         Guid? warehouseId, Guid? productId, DateTime? from, DateTime? to)
@@ -93,7 +79,7 @@ public class ReportService : IReportService
         return movements;
     }
 
-    // ─── 3. Dead Stock ────────────────────────────────────────────────────────
+    //  Dead Stock 
 
     public async Task<IEnumerable<DeadStockDto>> GetDeadStockReportAsync(
         Guid? warehouseId, int daysThreshold = 90)
@@ -129,7 +115,7 @@ public class ReportService : IReportService
         }).OrderByDescending(r => r.DaysSinceLastMovement).ToList();
     }
 
-    // ─── 4. Shrinkage Report ──────────────────────────────────────────────────
+    //  Shrinkage Report
 
     public async Task<IEnumerable<StockAdjustmentResponseDto>> GetShrinkageReportAsync(
         Guid? warehouseId, DateTime? from, DateTime? to)
@@ -172,7 +158,7 @@ public class ReportService : IReportService
         });
     }
 
-    // ─── 5. Supplier Performance ──────────────────────────────────────────────
+    //  Supplier Performance 
 
     public async Task<IEnumerable<SupplierPerformanceDto>> GetSupplierPerformanceReportAsync(
         Guid? supplierId = null, Guid? warehouseId = null)
@@ -206,7 +192,7 @@ public class ReportService : IReportService
             .ToList();
     }
 
-    // ─── 6. PO Fulfillment ────────────────────────────────────────────────────
+    // PO Fulfillment
 
     public async Task<IEnumerable<PurchaseOrderResponseDto>> GetPoFulfillmentReportAsync(
         Guid? warehouseId, DateTime? from, DateTime? to)
@@ -260,7 +246,7 @@ public class ReportService : IReportService
         });
     }
 
-    // ─── 7. Audit Log Viewer ──────────────────────────────────────────────────
+    // Audit Log Viewer
 
     public async Task<PagedResult<AuditLogResponseDto>> GetAuditLogAsync(
         AuditLogQueryParameters queryParams)
@@ -313,7 +299,7 @@ public class ReportService : IReportService
         };
     }
 
-    // ─── 8. Capacity & Utilization Reports ────────────────────────────────────
+    // Capacity & Utilization Reports 
 
     public async Task<IEnumerable<WarehouseUtilizationDto>> GetWarehouseUtilizationAsync(Guid warehouseId)
     {
@@ -367,7 +353,7 @@ public class ReportService : IReportService
         });
     }
 
-    // ─── 9. Transfer Variance Report ──────────────────────────────────────────
+    //  Transfer Variance Report
 
     public async Task<IEnumerable<TransferVarianceReportDto>> GetTransferVarianceReportAsync(
         Guid? warehouseId, DateTime? from, DateTime? to, AdjustmentStatus? adjustmentStatus = null)
@@ -459,12 +445,9 @@ public class ReportService : IReportService
         };
     }
 
-    // ─── 10. CSV Export ───────────────────────────────────────────────────────
+    //  CSV Export
 
-    /// <summary>
-    /// Generic CSV exporter. Reflects on public properties of T and writes header + rows.
-    /// Returns UTF-8 encoded byte array — controller streams it as file download.
-    /// </summary>
+
     public Task<byte[]> ExportToCsvAsync<T>(IEnumerable<T> data)
     {
         var sb = new StringBuilder();

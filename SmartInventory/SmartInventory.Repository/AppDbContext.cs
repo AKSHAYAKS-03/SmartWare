@@ -16,6 +16,7 @@ namespace SmartInventory.Repository;
 public class AppDbContext : DbContext
 {
     private readonly ICurrentUserService? _currentUserService;
+    
 
     public AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserService? currentUserService = null) : base(options)
     {
@@ -166,26 +167,23 @@ public class AppDbContext : DbContext
         SeedData(modelBuilder);
     }
 
-    /// <summary>
-    /// Overridden save changes method that orchestrates transactional safety, soft delete mutations, and automated audit trails.
-    /// </summary>
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        // 1. Convert actual Hard Deletes to Soft Deletes for ISoftDelete entities
+        // Convert actual Hard Deletes to Soft Deletes for ISoftDelete entities
         HandleSoftDelete();
 
-        // 1.5 Update UpdatedAt for BaseEntity
+        //  Update UpdatedAt for BaseEntity
         HandleUpdatedAt();
 
-        // 1.8 Create Outbox messages for StockLevel changes
+        // Create Outbox messages for StockLevel changes
         HandleStockLevelOutbox();
 
-        // 2. Capture entity state changes in-memory before saving database modifications
+        // Capture entity state changes in-memory before saving database modifications
         var auditEntries = OnBeforeSaveChanges();
 
         var hasOutboxMessages = ChangeTracker.Entries<OutboxMessage>().Any(e => e.State == EntityState.Added);
 
-        // 3. Save actual changes to the database
+        // Save actual changes to the database
         var result = await base.SaveChangesAsync(cancellationToken);
 
         if (hasOutboxMessages && Database.IsNpgsql())
@@ -193,7 +191,7 @@ public class AppDbContext : DbContext
             await Database.ExecuteSqlRawAsync("NOTIFY outbox_ready;", cancellationToken);
         }
 
-        // 4. Save audit logs (if any modifications occurred)
+        // Save audit logs (if any modifications occurred)
         if (auditEntries.Any())
         {
             await SaveAuditLogsAsync(auditEntries, cancellationToken);
@@ -202,16 +200,13 @@ public class AppDbContext : DbContext
         return result;
     }
 
-    /// <summary>
-    /// Walk the change tracker to convert hard deletes to soft deletes.
-    /// </summary>
+
     private void HandleSoftDelete()
     {
         foreach (var entry in ChangeTracker.Entries<ISoftDelete>())
         {
             if (entry.State == EntityState.Deleted)
             {
-                // Alter state to Modified and mark the record as inactive
                 entry.State = EntityState.Modified;
                 entry.Entity.IsActive = false;
             }
@@ -324,9 +319,7 @@ public class AppDbContext : DbContext
         return auditEntries;
     }
 
-    /// <summary>
-    /// Save collected audit logs to database under a separate, final execution sequence.
-    /// </summary>
+
     private async Task SaveAuditLogsAsync(List<AuditEntry> auditEntries, CancellationToken cancellationToken)
     {
         foreach (var auditEntry in auditEntries)
@@ -384,9 +377,7 @@ public class AppDbContext : DbContext
     }
 }
 
-/// <summary>
-/// Helper class representing a tracked entity transaction to form a structured JSONB log.
-/// </summary>
+// Helper class representing a tracked entity transaction to form a structured JSONB log.
 internal class AuditEntry
 {
     public AuditEntry(EntityEntry entry)

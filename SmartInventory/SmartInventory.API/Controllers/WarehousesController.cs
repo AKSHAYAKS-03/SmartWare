@@ -18,7 +18,8 @@ public class WarehousesController : ControllerBase
     public WarehousesController(IWarehouseService warehouseService) =>
         _warehouseService = warehouseService;
 
-    // ─── Warehouse CRUD ───────────────────────────────────────────────────────
+
+    // ─────────────── Warehouse ──────────────
 
     [HttpGet]
     public async Task<IActionResult> GetWarehouses([FromQuery] QueryParameters queryParams) =>
@@ -55,7 +56,8 @@ public class WarehousesController : ControllerBase
         return NoContent();
     }
 
-    // ─── Zones ────────────────────────────────────────────────────────────────
+    // ────────────────────Zones ─────────────────────
+
 
     [HttpGet("{id:guid}/zones")]
     public async Task<IActionResult> GetZones(Guid id) =>
@@ -88,7 +90,8 @@ public class WarehousesController : ControllerBase
         return NoContent();
     }
 
-    // ─── Bin Locations ────────────────────────────────────────────────────────
+    // ────────────────────Bin Locations─────────────────────
+
 
     [HttpGet("zones/{zoneId:guid}/bins")]
     public async Task<IActionResult> GetBins(Guid zoneId) =>
@@ -121,7 +124,7 @@ public class WarehousesController : ControllerBase
         return NoContent();
     }
 
-    // ─── User Access ──────────────────────────────────────────────────────────
+    // ────────────────────User Access─────────────────────
 
     [HttpGet("{id:guid}/users")]
     [Authorize(Policy = "RequireManager")]
@@ -148,7 +151,7 @@ public class WarehousesController : ControllerBase
         return NoContent();
     }
 
-    // ─── Putaway Guidance ─────────────────────────────────────────────────────
+    // ──────────────────Putaway Guidance ──────────────────
 
     [HttpGet("{id:guid}/putaway-suggestion")]
     public async Task<IActionResult> GetPutawaySuggestion(Guid id, [FromQuery] Guid productId)
@@ -158,7 +161,7 @@ public class WarehousesController : ControllerBase
         return Ok(suggestion);
     }
 
-    // ─── Capacity Summary ─────────────────────────────────────────────────────
+    // ───────────────────Capacity Summary──────────────────────
 
     [HttpGet("{id:guid}/capacity")]
     public async Task<IActionResult> GetWarehouseCapacity(Guid id)

@@ -11,7 +11,7 @@ namespace SmartInventory.API.Controllers;
 [ApiController]
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiVersion("1.0")]
-[Authorize] // Require basic authentication to hit lookups
+[Authorize] 
 public class LookupController : ControllerBase
 {
     private readonly IMasterDataService _masterDataService;
@@ -21,12 +21,8 @@ public class LookupController : ControllerBase
         _masterDataService = masterDataService;
     }
 
-    /// <summary>
-    /// Retrieves a unified payload of all static master data for dropdowns (Categories, Warehouses, Roles).
-    /// Highly optimized with server-side caching.
-    /// </summary>
     [HttpGet("master-data")]
-    [EnableRateLimiting("reports")] // Use a standard rate limit to prevent spam
+    [EnableRateLimiting("reports")] 
     [ProducesResponseType(typeof(MasterDataResponseDto), 200)]
     public async Task<IActionResult> GetMasterData()
     {

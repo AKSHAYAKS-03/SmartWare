@@ -91,7 +91,7 @@ public class PurchaseOrdersController : ControllerBase
     [EnableRateLimiting("mutations")]
     public async Task<IActionResult> ApprovePurchaseOrder(Guid id, [FromBody] PurchaseOrderApprovalDto dto)
     {
-        // SECURED: ID is now extracted from token inside the Service layer
+        // ID is now extracted from token inside the Service layer
         var result = await _poService.ApprovePurchaseOrderAsync(id, dto);
         return Ok(result);
     }

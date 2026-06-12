@@ -22,7 +22,6 @@ public class UsersController : ControllerBase
         _currentUser = currentUser;
     }
 
-    /// <summary>Returns the currently authenticated user's own profile.</summary>
     [HttpGet("me")]
     [Authorize]
     public async Task<IActionResult> GetMyProfile() =>
@@ -86,11 +85,6 @@ public class UsersController : ControllerBase
         return NoContent();
     }
 
-    /// <summary>
-    /// Regenerates the invite token and resends the welcome email to the employee.
-    /// Use when: the employee never received the email, or the 48-hour link has expired.
-    /// Only valid for accounts that have NOT yet set their password (IsPasswordSet = false).
-    /// </summary>
     [EnableRateLimiting("mutations")]
     [HttpPost("{id:guid}/resend-invite")]
     [Authorize(Policy = "RequireAdmin")]
@@ -101,7 +95,6 @@ public class UsersController : ControllerBase
     }
 }
 
-/// <summary>Simple DTO for notification preference updates.</summary>
 public class NotificationPreferencesDto
 {
     public bool SmsEnabled { get; set; }

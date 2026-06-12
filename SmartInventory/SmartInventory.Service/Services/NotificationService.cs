@@ -12,7 +12,7 @@ public class NotificationService : INotificationService
     private const string LowStockCooldownPrefix = "notification:cooldown:lowstock:";
     private const string SafetyStockCooldownPrefix = "notification:cooldown:safetystock:";
     private const string OutOfStockCooldownPrefix = "notification:cooldown:outofstock:";
-    private static readonly TimeSpan StockAlertCooldown = TimeSpan.FromHours(1);
+    private static readonly TimeSpan StockAlertCooldown = TimeSpan.FromHours(1); 
 
     private readonly IUnitOfWork _uow;
     private readonly IRealtimeService _realtimeService;
@@ -52,7 +52,7 @@ public class NotificationService : INotificationService
 
         Guid? notificationId = null;
 
-        // 1. Create a persistent In-App notification record in the database if channel is InApp
+        // 1. In-App notification record 
         if (channel == NotificationChannel.InApp)
         {
             var notification = new Notification
@@ -565,13 +565,9 @@ public class NotificationService : INotificationService
         if (unread.Any()) await _uow.CommitAsync();
     }
 
-    /// <summary>
-    /// Sends a welcome/invitation email to a newly provisioned employee.
-    /// Contains a one-time secure link for the employee to set their own password.
-    /// </summary>
+
     public async Task SendWelcomeInviteAsync(Guid userId, string toEmail, string fullName, string inviteToken)
     {
-        // Construct the invite link (frontend base URL should come from config in production)
         var inviteLink = $"https://app.smartware.com/set-password?token={inviteToken}";
 
         _logger.LogInformation(
@@ -585,13 +581,8 @@ public class NotificationService : INotificationService
             <p>This link will expire in 48 hours.</p>
         ";
 
-        // Dispatch via the Transactional Outbox so the API thread doesn't wait for SMTP
         await SendNotificationAsync(userId, NotificationChannel.Email, "WelcomeInvite", "Welcome to SmartInventory", htmlBody, "User", userId);
     }
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // SUPPLIER ONBOARDING EMAIL NOTIFICATIONS
-    // ─────────────────────────────────────────────────────────────────────────
 
     public async Task SendSupplierInviteAsync(Guid supplierId, string toEmail, string supplierName, string inviteToken)
     {
@@ -736,15 +727,8 @@ public class NotificationService : INotificationService
         await SendExternalEmailAsync(toEmail, "Password Changed Successfully - SmartInventory", htmlBody);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // SUPPLIER FINANCE NOTIFICATIONS
-    // ─────────────────────────────────────────────────────────────────────────
 
-    /// <summary>
-    /// Dispatched by PurchaseOrderService after ReceiveGoodsAsync completes.
-    /// Informs the supplier of the GRN outcome and the exact invoiceable amount.
-    /// Uses supplierId as the notification target to go through the Outbox.
-    /// </summary>
+
     public async Task SendSupplierGoodsReceiptNotificationAsync(
         Guid supplierId,
         string supplierEmail,
@@ -787,10 +771,7 @@ public class NotificationService : INotificationService
         await SendExternalEmailAsync(supplierEmail, $"Goods Receipt Processed for {poNumber}", htmlBody);
     }
 
-    /// <summary>
-    /// Dispatched by InvoiceProcessingService when MatchInvoiceAsync results in IsMatch = false.
-    /// Informs the supplier of the exact discrepancy and what amount they should re-invoice for.
-    /// </summary>
+
     public async Task SendSupplierInvoiceRejectedNotificationAsync(
         Guid supplierId,
         string supplierEmail,

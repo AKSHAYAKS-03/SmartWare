@@ -34,7 +34,7 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbConte
         // Fallback for default local database connection string in development
         if (string.IsNullOrEmpty(connectionString))
         {
-            connectionString = "Host=localhost;Port=5432;Database=smart_inventory;Username=postgres;Password=postgres";
+            connectionString = "Host=localhost;Port=5432;Database=smart_inventory;Username=postgres;Password=12345";
         }
 
         var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
@@ -43,3 +43,17 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbConte
         return new AppDbContext(optionsBuilder.Options);
     }
 }
+
+
+// Find appsettings
+// ↓
+// Read Connection String
+// ↓
+// Configure PostgreSQL
+// ↓
+// Create AppDbContext
+// ↓
+// Return
+
+// Compare Entity Models
+// Generate Migration

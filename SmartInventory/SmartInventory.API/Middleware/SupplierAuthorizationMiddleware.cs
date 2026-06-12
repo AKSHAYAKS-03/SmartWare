@@ -5,13 +5,11 @@ using SmartInventory.Repository;
 
 namespace SmartInventory.API.Middleware;
 
-/// <summary>
 /// Security middleware that blocks requests carrying the "Supplier" role
 /// from accessing any internal API route that does NOT start with /api/supplier/.
 ///
 /// Also enforces onboarding state rules: non-Active suppliers cannot access
 /// transactional features (POs, Invoices, Catalogue, Dashboard).
-/// </summary>
 public class SupplierAuthorizationMiddleware
 {
     private readonly RequestDelegate _next;

@@ -39,8 +39,6 @@ public class BinCapacityEventHandlers :
         _logger.LogWarning("Domain Event Received: CapacityOverridePerformedEvent. User {UserId} overrode {RuleBroken} on Bin {BinCode}. Reason: {Reason}", 
             notification.UserId, notification.RuleBroken, notification.BinCode, notification.OverrideReason);
 
-        // In a real enterprise system, this might dispatch a highly secure email to the Audit/Compliance team
-        // or trigger a webhook to a SIEM system. For now, structured logging is sufficient.
         
         return Task.CompletedTask;
     }

@@ -4,10 +4,9 @@ using System.Threading.Tasks;
 
 namespace SmartInventory.Infrastructure.Hubs;
 
-/// <summary>
-/// SignalR Hub for pushing real-time notifications to authenticated clients.
-/// </summary>
-public class NotificationHub : Hub
+// SignalR Hub for pushing real-time notifications to authenticated clients.
+//Hub - contoller for websocket
+public class NotificationHub : Hub 
 {
     public override async Task OnConnectedAsync()
     {

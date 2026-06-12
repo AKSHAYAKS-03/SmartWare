@@ -3,12 +3,9 @@ using SmartInventory.Core.Enums;
 using SmartInventory.Core.Events;
 using SmartInventory.Core.Interfaces;
 
-namespace SmartInventory.Service.Handlers;
+namespace SmartInventory.Service.EventHandlers;
 
-/// <summary>
-/// Handles Purchase Order approval/rejection events asynchronously.
-/// This cleanly decouples the notification logic from the main database transaction.
-/// </summary>
+
 public class PurchaseOrderNotificationHandler : 
     INotificationHandler<PurchaseOrderApprovedEvent>, 
     INotificationHandler<PurchaseOrderRejectedEvent>

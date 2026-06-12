@@ -7,15 +7,7 @@ using Mapster;
 
 namespace SmartInventory.Service.Services;
 
-/// <summary>
-/// Product category management with self-referencing hierarchy support.
-///
-/// Business rules:
-///   — Category name must be unique within the same parent scope.
-///   — A category cannot be set as its own parent (circular reference protection).
-///   — Slug is auto-generated from name if not provided.
-///   — Cannot delete a category that has active products or sub-categories.
-/// </summary>
+
 public class CategoryService : ICategoryService
 {
     private readonly IUnitOfWork _uow;
@@ -146,10 +138,7 @@ public class CategoryService : ICategoryService
         };
     }
 
-    /// <summary>
-    /// Returns the full hierarchical category tree (root nodes with nested children).
-    /// Used by the Angular category picker and navigation sidebar.
-    /// </summary>
+  
     public async Task<IEnumerable<CategoryTreeDto>> GetCategoryTreeAsync()
     {
         var cacheKey = "category:tree";

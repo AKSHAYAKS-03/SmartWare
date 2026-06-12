@@ -15,10 +15,7 @@ using Mapster;
 
 namespace SmartInventory.Service.Services;
 
-/// Full authentication service implementing JWT access tokens, BCrypt password hashing,
-/// refresh-token rotation, and secure token revocation.
-///
-/// Security principles applied:
+
 /// — Passwords are NEVER stored in plaintext. BCrypt with work factor 12 is used.
 /// — JWT tokens embed userId, role, AND assignedWarehouseId so downstream services
 ///   can scope queries without additional DB lookups per request.
@@ -39,10 +36,6 @@ public class AuthService : IAuthService
     }
 
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // SIGN IN
-    // ─────────────────────────────────────────────────────────────────────────
-
     /// Authenticates a user by email + password and returns a token pair plus user profile.
     /// The JWT includes: sub (userId), role, warehouseId (primary assigned warehouse).
     
@@ -56,7 +49,6 @@ public class AuthService : IAuthService
 
         if (user == null) return null;
 
-        // Check if account has expired (enterprise auto-expiry logic)
         if (user.ExpiresAt.HasValue && user.ExpiresAt.Value < DateTime.UtcNow)
             return null;
 
@@ -85,11 +77,6 @@ public class AuthService : IAuthService
         };
     }
 
-
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // REFRESH TOKEN
-    // ─────────────────────────────────────────────────────────────────────────
 
         /// Validates a refresh token and issues a new access + refresh token pair (rotation).
     /// The consumed token is immediately revoked — cannot be reused (replay attack protection).
@@ -138,9 +125,7 @@ public class AuthService : IAuthService
         };
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // REVOKE TOKEN (LOGOUT)
-    // ─────────────────────────────────────────────────────────────────────────
+
 
         /// Revokes a refresh token — called on explicit logout.
     /// Silently succeeds if token is already revoked or not found.
@@ -159,10 +144,7 @@ public class AuthService : IAuthService
         await _uow.CommitAsync();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // CHANGE PASSWORD
-    // ─────────────────────────────────────────────────────────────────────────
-
+   
         /// Verifies the current password, then replaces it with a new BCrypt hash.
     /// Revokes ALL existing refresh tokens for the user on password change (force re-login).
     
@@ -194,12 +176,9 @@ public class AuthService : IAuthService
         await _uow.CommitAsync();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // SET PASSWORD (INVITE FLOW)
-    // ─────────────────────────────────────────────────────────────────────────
-
+    
         /// Validates the one-time invite token and sets the employee's own password.
-    /// On success:
+    
     ///   — Password is hashed with BCrypt (work factor 12).
     ///   — InviteToken is cleared (single-use, cannot be replayed).
     ///   — IsPasswordSet = true (prevents re-use of this endpoint).
@@ -234,12 +213,9 @@ public class AuthService : IAuthService
     }
 
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // PRIVATE HELPERS
-    // ─────────────────────────────────────────────────────────────────────────
+
 
         /// Generates a signed JWT access token with userId, role, and warehouseId claims.
-    /// WarehouseId is critical — service-layer role scoping reads this claim directly.
     
     private string GenerateAccessToken(User user, Guid? warehouseId)
     {
@@ -251,11 +227,10 @@ public class AuthService : IAuthService
             new(ClaimTypes.Role, user.Role.Name),
             new("role", user.Role.Name),
             new("userId", user.Id.ToString()),
-            // WarehouseId claim — used by ICurrentUserService to scope all queries
             new("warehouseId", warehouseId?.ToString() ?? string.Empty)
         };
 
-        // -- NEW: Inject True Permissions into the Token --
+
         if (user.Role?.Permissions != null)
         {
             foreach (var permission in user.Role.Permissions)
@@ -263,7 +238,6 @@ public class AuthService : IAuthService
                 claims.Add(new Claim("Permission", permission));
             }
         }
-        // ------------------------------------------------
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

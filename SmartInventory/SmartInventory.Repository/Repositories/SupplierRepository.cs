@@ -8,9 +8,6 @@ using SmartInventory.Core.Interfaces;
 
 namespace SmartInventory.Repository.Repositories;
 
-/// <summary>
-/// Specialized Supplier repository supporting full catalog filtering, lead time analysis, and search.
-/// </summary>
 public class SupplierRepository : GenericRepository<Supplier>, ISupplierRepository
 {
     public SupplierRepository(AppDbContext context) : base(context)
@@ -21,7 +18,7 @@ public class SupplierRepository : GenericRepository<Supplier>, ISupplierReposito
     {
         var query = _dbSet.AsQueryable();
 
-        // 1. Text-based search matching Name, Code, Contact, or Email
+        //  Text-based search matching Name, Code, Contact, or Email
         if (!string.IsNullOrWhiteSpace(queryParams.Search))
         {
             var searchPattern = queryParams.Search.Trim().ToLower();
@@ -30,14 +27,10 @@ public class SupplierRepository : GenericRepository<Supplier>, ISupplierReposito
                                   || (s.ContactPerson != null && s.ContactPerson.ToLower().Contains(searchPattern))
                                   || (s.Email != null && s.Email.ToLower().Contains(searchPattern)));
         }
-
-        // 2. Count before extraction
         int totalCount = await query.CountAsync();
 
-        // 3. Sorting
         query = ApplySorting(query, queryParams.SortBy, queryParams.SortDir);
 
-        // 4. Paged Window
         int skip = (queryParams.Page - 1) * queryParams.PageSize;
         var data = await query.Skip(skip).Take(queryParams.PageSize).ToListAsync();
 

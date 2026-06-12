@@ -6,11 +6,7 @@ using SmartInventory.Core.Interfaces;
 
 namespace SmartInventory.Service.Services;
 
-/// <summary>
-/// Manages the supplier's product catalogue within the portal.
-/// SECURITY: All reads and mutations filter on supplierId from JWT — suppliers
-/// cannot see or edit other suppliers' prices or catalogue entries.
-/// </summary>
+
 public class SupplierCatalogueService : ISupplierCatalogueService
 {
     private readonly IUnitOfWork _uow;
@@ -20,9 +16,6 @@ public class SupplierCatalogueService : ISupplierCatalogueService
         _uow = uow;
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // GET MY CATALOGUE
-    // ─────────────────────────────────────────────────────────────────────────
 
     public async Task<List<SupplierCatalogueItemDto>> GetMyCatalogueAsync(Guid supplierId)
     {
@@ -35,9 +28,6 @@ public class SupplierCatalogueService : ISupplierCatalogueService
         return items.Select(sp => MapToDto(sp)).ToList();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // UPDATE CATALOGUE ITEM
-    // ─────────────────────────────────────────────────────────────────────────
 
     public async Task UpdateCatalogueItemAsync(Guid supplierId, Guid supplierProductId, SupplierUpdateCatalogueItemRequest request)
     {
@@ -51,9 +41,6 @@ public class SupplierCatalogueService : ISupplierCatalogueService
         await _uow.CommitAsync();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // ADD CATALOGUE ITEM
-    // ─────────────────────────────────────────────────────────────────────────
 
     public async Task<SupplierCatalogueItemDto> AddCatalogueItemAsync(Guid supplierId, SupplierAddCatalogueItemRequest request)
     {
@@ -93,9 +80,6 @@ public class SupplierCatalogueService : ISupplierCatalogueService
         return MapToDto(newItem);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // DEACTIVATE CATALOGUE ITEM
-    // ─────────────────────────────────────────────────────────────────────────
 
     public async Task DeactivateCatalogueItemAsync(Guid supplierId, Guid supplierProductId)
     {
@@ -109,9 +93,6 @@ public class SupplierCatalogueService : ISupplierCatalogueService
         await _uow.CommitAsync();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // PRIVATE HELPERS
-    // ─────────────────────────────────────────────────────────────────────────
 
     private async Task<SupplierProduct> GetSupplierProductOrThrowAsync(Guid supplierId, Guid supplierProductId)
     {

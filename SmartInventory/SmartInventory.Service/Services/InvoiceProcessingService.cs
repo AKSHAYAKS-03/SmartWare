@@ -64,7 +64,6 @@ public class InvoiceProcessingService : IInvoiceProcessingService
 
         var po = invoice.PurchaseOrder;
 
-        // ── Formula: Aggregate Accepted GRN Value ────────────────────────────
         // SUM((QuantityReceived - QuantityRejected) × POItem.UnitPrice)
         // for all Accepted / PartiallyAccepted GRNs
         decimal aggregateAcceptedGrnValue = 0;
@@ -81,7 +80,6 @@ public class InvoiceProcessingService : IInvoiceProcessingService
             }
         }
 
-        // ── Formula: Already Matched/Paid Invoice Amount ─────────────────────
         // SUM(ApprovedAmount) WHERE Status IN (Matched, Paid) AND InvoiceId != current
         decimal alreadyMatchedPaidAmount = po.SupplierInvoices
             .Where(i => i.Id != invoiceId
@@ -90,7 +88,6 @@ public class InvoiceProcessingService : IInvoiceProcessingService
 
         decimal invoiceTotal = invoice.Amount;
 
-        // ── Formula: Remaining Invoiceable Amount ────────────────────────────
         // AggregateAcceptedGrnValue - AlreadyMatchedPaidAmount
         decimal remainingInvoiceableAmount = aggregateAcceptedGrnValue - alreadyMatchedPaidAmount;
 
@@ -100,8 +97,7 @@ public class InvoiceProcessingService : IInvoiceProcessingService
             IsMatch = true
         };
 
-        // ── Match Validation: Aggregate Ceiling Check ────────────────────────
-        // Rule: (AlreadyMatchedPaid + CurrentInvoiceAmount) <= AggregateAcceptedGrnValue
+        // (AlreadyMatchedPaid + CurrentInvoiceAmount) <= AggregateAcceptedGrnValue
         // This correctly supports partial invoicing across multiple GRNs.
         if (alreadyMatchedPaidAmount + invoiceTotal > aggregateAcceptedGrnValue)
         {
@@ -113,7 +109,6 @@ public class InvoiceProcessingService : IInvoiceProcessingService
                 $"Remaining invoiceable amount is {remainingInvoiceableAmount:N2}.");
         }
 
-        // ── Safety Guard: Cannot exceed PO Total Amount ───────────────────────
         if (invoiceTotal > po.TotalAmount)
         {
             result.IsMatch = false;

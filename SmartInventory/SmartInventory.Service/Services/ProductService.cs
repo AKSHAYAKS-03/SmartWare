@@ -9,16 +9,7 @@ using SmartInventory.Core.Interfaces;
 
 namespace SmartInventory.Service.Services;
 
-/// <summary>
-/// Product catalog service.
-///
-/// Business rules enforced:
-///   — SKU must be unique across all active products.
-///   — Soft delete is blocked when the product has active stock (quantity > 0).
-///   — Barcode generation is triggered automatically on product creation.
-///   — Manager and Staff roles see only products with stock in their assigned warehouse.
-///   — ABC category is persisted after running the classification engine.
-/// </summary>
+
 public class ProductService : IProductService
 {
     private readonly IUnitOfWork _uow;
@@ -183,7 +174,7 @@ public class ProductService : IProductService
     {
         IQueryable<Product> query = _uow.Repository<Product>().Query().Include(p => p.Category);
 
-        // Scoped access: if the user has a warehouse scope claim (Manager, Staff, or Scoped Viewer), they see only products with stock in their warehouse
+        //if the user has a warehouse scope claim (Manager, Staff, or Scoped Viewer), they see only products with stock in their warehouse
         if (_currentUser.WarehouseId.HasValue)
         {
             var warehouseId = _currentUser.WarehouseId.Value;
@@ -248,7 +239,6 @@ public class ProductService : IProductService
 
     public async Task<PagedResult<ProductResponseDto>> SearchProductsAsync(DynamicQueryRequest request)
     {
-        // Execute dynamic search. Include Category to ensure DTO mapping has all required navigation properties.
         var pagedResult = await _uow.Repository<Product>()
             .GetPagedDynamicAsync(request, p => p.Category);
 
@@ -287,7 +277,6 @@ public class ProductService : IProductService
     {
         var cutoff = DateTime.UtcNow.AddDays(-daysThreshold);
 
-        // Get product IDs that had outbound movement after the cutoff (still active)
         var activeProductIds = await _uow.Repository<StockMovement>()
             .Query()
             .Where(m => m.CreatedAt >= cutoff &&
@@ -297,7 +286,7 @@ public class ProductService : IProductService
             .Distinct()
             .ToListAsync();
 
-        // Dead stock = products with stock on hand but no recent outbound movement
+
         var deadProducts = await _uow.Repository<Product>()
             .Query()
             .Include(p => p.Category)
@@ -308,10 +297,7 @@ public class ProductService : IProductService
         return deadProducts.Adapt<IEnumerable<ProductResponseDto>>();
     }
 
-    /// <summary>
-    /// Runs the ABC classification engine and persists the category (A/B/C) to each product row.
-    /// Called on-demand or by a scheduled job. Scoped to a specific warehouse.
-    /// </summary>
+
     public async Task UpdateAbcCategoriesAsync(Guid warehouseId)
     {
         var stockLevels = await _uow.Repository<StockLevel>()

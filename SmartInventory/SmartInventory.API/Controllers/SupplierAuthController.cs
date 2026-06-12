@@ -8,15 +8,6 @@ using System.Security.Claims;
 
 namespace SmartInventory.API.Controllers;
 
-/// <summary>
-/// Supplier portal authentication endpoints.
-/// Route prefix: /api/supplier/auth
-///
-/// POST /api/supplier/auth/login          — Supplier login (public)
-/// POST /api/supplier/auth/refresh        — Token refresh (public)
-/// POST /api/supplier/auth/logout         — Revoke refresh token [Supplier]
-/// PUT  /api/supplier/auth/change-password — Change password [Supplier]
-/// </summary>
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/supplier/auth")]
@@ -32,10 +23,7 @@ public class SupplierAuthController : ControllerBase
     private string GetIpAddress() =>
         HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
 
-    /// <summary>
-    /// Authenticates a supplier contact with email + password.
-    /// Returns a supplier-scoped JWT access token and refresh token.
-    /// </summary>
+ 
     [EnableRateLimiting("mutations")]
     [HttpPost("login")]
     [AllowAnonymous]
@@ -45,10 +33,6 @@ public class SupplierAuthController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Exchanges a valid supplier refresh token for a new token pair.
-    /// The provided token is revoked immediately (rotation).
-    /// </summary>
     [EnableRateLimiting("mutations")]
     [HttpPost("refresh")]
     [AllowAnonymous]
@@ -58,9 +42,6 @@ public class SupplierAuthController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Revokes the supplier's refresh token — logout.
-    /// </summary>
     [EnableRateLimiting("mutations")]
     [HttpPost("logout")]
     [Authorize(Policy = "RequireSupplier")]
@@ -70,10 +51,7 @@ public class SupplierAuthController : ControllerBase
         return NoContent();
     }
 
-    /// <summary>
-    /// Changes the authenticated supplier contact's password.
-    /// All existing refresh tokens are revoked — forces re-login on all devices.
-    /// </summary>
+  
     [EnableRateLimiting("mutations")]
     [HttpPut("change-password")]
     [Authorize(Policy = "RequireSupplier")]
@@ -84,9 +62,7 @@ public class SupplierAuthController : ControllerBase
         return NoContent();
     }
 
-    /// <summary>
-    /// Handles supplier self-registration, creating a record in Registered state and generating an email verification OTP.
-    /// </summary>
+
     [EnableRateLimiting("mutations")]
     [HttpPost("register")]
     [AllowAnonymous]
@@ -100,9 +76,7 @@ public class SupplierAuthController : ControllerBase
         });
     }
 
-    /// <summary>
-    /// Verifies the supplier contact's email using the OTP token, moving the supplier to PendingReview.
-    /// </summary>
+
     [EnableRateLimiting("mutations")]
     [HttpPost("verify-email")]
     [AllowAnonymous]
@@ -112,10 +86,7 @@ public class SupplierAuthController : ControllerBase
         return Ok(new { message = "Email verified successfully. Your application is now pending review." });
     }
 
-    /// <summary>
-    /// Resends the email verification OTP for a self-registered supplier.
-    /// Subject to rate-limiting (1-minute cooldown) and resend count limits.
-    /// </summary>
+
     [EnableRateLimiting("mutations")]
     [HttpPost("resend-otp")]
     [AllowAnonymous]
@@ -125,9 +96,7 @@ public class SupplierAuthController : ControllerBase
         return Ok(new { message = "A new OTP has been sent to your registered email address." });
     }
 
-    /// <summary>
-    /// Completes registration details and sets the password for an admin-invited supplier.
-    /// </summary>
+  
     [EnableRateLimiting("mutations")]
     [HttpPost("complete-registration")]
     [AllowAnonymous]
@@ -137,9 +106,7 @@ public class SupplierAuthController : ControllerBase
         return Ok(new { message = "Registration completed successfully. Your profile is now pending review." });
     }
 
-    /// <summary>
-    /// Requests a password reset email with a token link for supplier contacts.
-    /// </summary>
+
     [EnableRateLimiting("mutations")]
     [HttpPost("forgot-password")]
     [AllowAnonymous]
@@ -149,9 +116,7 @@ public class SupplierAuthController : ControllerBase
         return Ok(new { message = "If the email exists, a password reset link has been sent." });
     }
 
-    /// <summary>
-    /// Resets password using a valid reset token.
-    /// </summary>
+
     [EnableRateLimiting("mutations")]
     [HttpPost("reset-password")]
     [AllowAnonymous]

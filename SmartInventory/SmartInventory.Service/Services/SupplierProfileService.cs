@@ -7,10 +7,6 @@ using SmartInventory.Core.Enums;
 
 namespace SmartInventory.Service.Services;
 
-/// <summary>
-/// Manages supplier profile and portal contact details.
-/// SECURITY: All operations validate that the supplierId and contactId match the JWT claims.
-/// </summary>
 public class SupplierProfileService : ISupplierProfileService
 {
     private readonly IUnitOfWork _uow;
@@ -22,9 +18,9 @@ public class SupplierProfileService : ISupplierProfileService
         _fileStorage = fileStorage;
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // GET PROFILE
-    // ─────────────────────────────────────────────────────────────────────────
+
+
+
 
     public async Task<SupplierProfileDto> GetProfileAsync(Guid supplierId, Guid contactId)
     {
@@ -52,9 +48,9 @@ public class SupplierProfileService : ISupplierProfileService
         );
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // UPDATE PROFILE
-    // ─────────────────────────────────────────────────────────────────────────
+
+
+
 
     public async Task UpdateProfileAsync(Guid supplierId, Guid contactId, SupplierUpdateProfileRequest request)
     {
@@ -72,20 +68,20 @@ public class SupplierProfileService : ISupplierProfileService
         await _uow.CommitAsync();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // UPLOAD LOGO
-    // ─────────────────────────────────────────────────────────────────────────
+
+
+
 
     public async Task<string> UploadLogoAsync(Guid supplierId, SupplierUploadLogoRequest request)
     {
-        // Validate the supplier exists
+    
         var supplier = await _uow.Repository<Supplier>().Query()
             .FirstOrDefaultAsync(s => s.Id == supplierId && s.IsActive);
 
         if (supplier == null)
             throw new NotFoundException("Supplier", supplierId);
 
-        // Upload logo to storage
+    
         var logoPath = await _fileStorage.SaveFileAsync(
             request.FileStream,
             request.FileName,
@@ -96,9 +92,9 @@ public class SupplierProfileService : ISupplierProfileService
         return logoPath;
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // GET ONBOARDING STATUS
-    // ─────────────────────────────────────────────────────────────────────────
+
+
+
     public async Task<SupplierOnboardingStatusResponse> GetOnboardingStatusAsync(Guid supplierId)
     {
         var supplier = await _uow.Repository<Supplier>().Query()
@@ -120,9 +116,9 @@ public class SupplierProfileService : ISupplierProfileService
         );
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // SUBMIT ONBOARDING INFO
-    // ─────────────────────────────────────────────────────────────────────────
+
+
+
     public async Task SubmitOnboardingInfoAsync(Guid supplierId, SupplierSubmitInfoRequest request)
     {
         var supplier = await _uow.Repository<Supplier>().Query()
@@ -141,9 +137,9 @@ public class SupplierProfileService : ISupplierProfileService
         await _uow.CommitAsync();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // GET AGREEMENT
-    // ─────────────────────────────────────────────────────────────────────────
+
+
+
     public async Task<string> GetAgreementAsync(Guid supplierId)
     {
         var supplier = await _uow.Repository<Supplier>().Query()
@@ -161,9 +157,9 @@ public class SupplierProfileService : ISupplierProfileService
                "This agreement is legally binding and governs all purchase orders and invoices handled through this portal.";
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // ACCEPT AGREEMENT
-    // ─────────────────────────────────────────────────────────────────────────
+
+
+
     public async Task AcceptAgreementAsync(Guid supplierId, string ipAddress)
     {
         var supplier = await _uow.Repository<Supplier>().Query()

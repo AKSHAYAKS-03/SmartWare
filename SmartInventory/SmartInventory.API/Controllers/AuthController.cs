@@ -7,7 +7,6 @@ using SmartInventory.Core.Interfaces;
 
 namespace SmartInventory.API.Controllers;
 
-/// Handles all authentication and user-session operations.
 
 [ApiController]
 [ApiVersion("1.0")]
@@ -24,9 +23,7 @@ public class AuthController : ControllerBase
     }
 
     
-    /// Authenticates an internal user (Admin/Manager/Staff/Viewer) and returns a
     /// JWT access token + refresh token pair. Rate-limited to prevent brute-force attacks.
-    /// New employee accounts must be created by an Admin via POST /api/v1/Users.
     
     [HttpPost("signin")]
     [EnableRateLimiting("auth")]
@@ -55,7 +52,7 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Revoke([FromBody] RefreshTokenDto dto)
     {
         await _authService.RevokeTokenAsync(dto.Token);
-        return NoContent();
+        return NoContent(); //204
     }
 
     
@@ -74,7 +71,6 @@ public class AuthController : ControllerBase
     /// Activates a newly provisioned employee account by setting their own password.
     /// Uses a one-time invite token sent to their email — no authentication required.
     /// The token is invalidated after use (cannot be replayed).
-    /// Account Status transitions to Active on success.
     
     [HttpPost("set-password")]
     [AllowAnonymous]

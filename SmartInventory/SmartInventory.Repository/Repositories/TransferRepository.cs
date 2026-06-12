@@ -8,10 +8,7 @@ using SmartInventory.Core.Interfaces;
 
 namespace SmartInventory.Repository.Repositories;
 
-/// <summary>
-/// Specialized WarehouseTransfer repository implementing dual-warehouse scoping constraints.
-/// Handles cases where a warehouse manager must see both inbound and outbound shipments.
-/// </summary>
+
 public class TransferRepository : GenericRepository<WarehouseTransfer>, ITransferRepository
 {
     public TransferRepository(AppDbContext context) : base(context)
@@ -25,7 +22,7 @@ public class TransferRepository : GenericRepository<WarehouseTransfer>, ITransfe
             .Include(t => t.ToWarehouse)
             .AsQueryable();
 
-        // 1. Search filter: search matching TransferNumber or Notes
+        // search matching TransferNumber or Notes
         if (!string.IsNullOrWhiteSpace(queryParams.Search))
         {
             var searchPattern = queryParams.Search.Trim().ToLower();
@@ -33,9 +30,7 @@ public class TransferRepository : GenericRepository<WarehouseTransfer>, ITransfe
                                   || (t.Notes != null && t.Notes.ToLower().Contains(searchPattern)));
         }
 
-        // 2. Dual-Warehouse Scoping:
         // If a WarehouseId is supplied, it scopes the query such that transfers originating from OR destined for that location are shown.
-        // This is a vital logistics security rule.
         if (queryParams.WarehouseId.HasValue && queryParams.WarehouseId.Value != Guid.Empty)
         {
             var whId = queryParams.WarehouseId.Value;
@@ -55,19 +50,14 @@ public class TransferRepository : GenericRepository<WarehouseTransfer>, ITransfe
             }
         }
 
-        // 3. Status filter
         if (queryParams.Status.HasValue)
         {
             query = query.Where(t => t.Status == queryParams.Status.Value);
         }
-
-        // Count
         int totalCount = await query.CountAsync();
 
-        // Sort
         query = ApplySorting(query, queryParams.SortBy, queryParams.SortDir);
 
-        // Page window
         int skip = (queryParams.Page - 1) * queryParams.PageSize;
         var data = await query.Skip(skip).Take(queryParams.PageSize).ToListAsync();
 

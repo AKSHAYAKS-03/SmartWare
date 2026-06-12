@@ -9,15 +9,7 @@ using Mapster;
 
 namespace SmartInventory.Service.Services;
 
-/// <summary>
-/// Supplier directory and relationship management.
-///
-/// Business rules:
-///   — Supplier Code must be unique.
-///   — Supplier rating is auto-calculated from SupplierPerformanceLogs (fill rate + on-time %).
-///   — Preferred flag per supplier-product ensures only one preferred supplier per product.
-///   — Soft-delete blocked if the supplier has open Purchase Orders.
-/// </summary>
+
 public class SupplierService : ISupplierService
 {
     private readonly IUnitOfWork _uow;
@@ -29,7 +21,6 @@ public class SupplierService : ISupplierService
         _emailService = emailService;
     }
 
-    // ─── Supplier CRUD ────────────────────────────────────────────────────────
 
     public async Task<SupplierResponseDto> UpdateSupplierAsync(Guid supplierId, SupplierUpdateDto dto)
     {
@@ -111,7 +102,6 @@ public class SupplierService : ISupplierService
         };
     }
 
-    // ─── Supplier-Product Mappings ────────────────────────────────────────────
 
     public async Task<SupplierProductResponseDto> AddSupplierProductAsync(SupplierProductCreateDto dto)
     {
@@ -208,7 +198,6 @@ public class SupplierService : ISupplierService
         return items.Adapt<IEnumerable<SupplierProductResponseDto>>();
     }
 
-    // ─── Performance ──────────────────────────────────────────────────────────
 
     public async Task<IEnumerable<SupplierPerformanceLogResponseDto>> GetSupplierPerformanceAsync(Guid supplierId)
     {
@@ -235,12 +224,6 @@ public class SupplierService : ISupplierService
         });
     }
 
-    /// <summary>
-    /// Recalculates and persists the supplier's performance rating based on historical logs.
-    /// Formula: Rating = (Average Fill Rate * 0.6) + (On-Time Delivery % * 0.4)
-    /// Scale: 0.0 – 5.0
-    /// Called automatically after each PO is closed/received.
-    /// </summary>
     public async Task RecalculateSupplierRatingAsync(Guid supplierId)
     {
         var supplier = await _uow.Repository<Supplier>().GetByIdAsync(supplierId);
@@ -267,9 +250,8 @@ public class SupplierService : ISupplierService
 
 
 
-    // ─────────────────────────────────────────────────────────────────────────
     // INVITE SUPPLIER (Admin invite)
-    // ─────────────────────────────────────────────────────────────────────────
+
     public async Task<SupplierResponseDto> InviteSupplierAsync(SupplierInviteRequest request)
     {
         // Validate duplicate GSTIN
@@ -348,9 +330,7 @@ public class SupplierService : ISupplierService
         return supplier.Adapt<SupplierResponseDto>();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // REVIEW SUPPLIER (Admin action)
-    // ─────────────────────────────────────────────────────────────────────────
+
     public async Task<SupplierResponseDto> ReviewSupplierAsync(Guid supplierId, SupplierReviewRequest request)
     {
         var supplier = await _uow.Repository<Supplier>().Query()
@@ -427,9 +407,6 @@ public class SupplierService : ISupplierService
         return supplier.Adapt<SupplierResponseDto>();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // SUSPEND SUPPLIER
-    // ─────────────────────────────────────────────────────────────────────────
     public async Task SuspendSupplierAsync(Guid supplierId, string reason)
     {
         var supplier = await _uow.Repository<Supplier>().GetByIdAsync(supplierId);
@@ -452,9 +429,7 @@ public class SupplierService : ISupplierService
         await _emailService.SendEmailAsync(supplier.Email, "SmartInventory - Portal Access Suspended", htmlBody);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // ACTIVATE SUPPLIER
-    // ─────────────────────────────────────────────────────────────────────────
+
     public async Task ActivateSupplierAsync(Guid supplierId)
     {
         var supplier = await _uow.Repository<Supplier>().GetByIdAsync(supplierId);
@@ -477,9 +452,6 @@ public class SupplierService : ISupplierService
         await _emailService.SendEmailAsync(supplier.Email, "SmartInventory - Portal Access Restored", htmlBody);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // GET PENDING REVIEWS
-    // ─────────────────────────────────────────────────────────────────────────
     public async Task<IEnumerable<SupplierResponseDto>> GetPendingReviewsAsync()
     {
         var pending = await _uow.Repository<Supplier>().Query()

@@ -265,7 +265,6 @@ public class PurchaseOrderService : IPurchaseOrderService
 
     public async Task<PurchaseOrderResponseDto> ApprovePurchaseOrderAsync(Guid poId, PurchaseOrderApprovalDto dto)
     {
-        // SECURED: Extract approver from token, preventing IDOR spoofing
         var secureApproverId = _currentUserService.UserId;
         return await ApprovePurchaseOrderAsync(poId, secureApproverId, dto.Approve);
     }
@@ -289,7 +288,7 @@ public class PurchaseOrderService : IPurchaseOrderService
         _uow.Repository<PurchaseOrder>().Update(po);
         await _uow.CommitAsync();
 
-        // DECOUPLED: Alert the creator via MediatR background event
+        // alert the creator via MediatR background event
         if (approve)
         {
             await _publisher.Publish(new SmartInventory.Core.Events.PurchaseOrderApprovedEvent(po.Id, po.PoNumber, po.CreatedBy, approver.FullName));
@@ -359,7 +358,7 @@ public class PurchaseOrderService : IPurchaseOrderService
                 throw new NotFoundException("PurchaseOrderShipment", dto.PurchaseOrderShipmentId.Value);
         }
 
-        // Enforcement Gate B: Mandatory Delivery Challan Evidence
+        // Mandatory Delivery Challan Evidence
         if (dto.AttachmentIds == null || !dto.AttachmentIds.Any())
             throw new BusinessRuleException("A Delivery Challan must be uploaded and attached to receive goods.");
 
@@ -441,7 +440,7 @@ public class PurchaseOrderService : IPurchaseOrderService
 
             if (acceptedQty > 0)
             {
-                // ── Enterprise Capacity Engine Checks ────────────────────────────────────
+                // --------------- Capacity Engine Checks --------------------- 
                 {
                     var targetBin = await _uow.Repository<BinLocation>()
                         .Query()
@@ -528,10 +527,8 @@ public class PurchaseOrderService : IPurchaseOrderService
                         }
                     }
                 }
-                // ─────────────────────────────────────────────────────────────────────────
 
                 // -- Weighted Average Costing (WAC) --
-                // DECOUPLED: Valuation logic extracted to dedicated domain service
                 await _valuationService.RecalculateWacAsync(product.Id, acceptedQty, poItem.UnitPrice);
                 // ------------------------------------
 
@@ -577,7 +574,7 @@ public class PurchaseOrderService : IPurchaseOrderService
                     BinLocationId = itemDto.BinLocationId,
                     MovementType = MovementType.Purchase,
                     Quantity = acceptedQty,
-                    ReferenceType = ReferenceType.PurchaseOrder, // Correct reference enum value
+                    ReferenceType = ReferenceType.PurchaseOrder, // enum value
                     ReferenceId = grnId,
                     PerformedBy = _currentUserService.UserId,
                     CreatedAt = DateTime.UtcNow
@@ -652,7 +649,7 @@ public class PurchaseOrderService : IPurchaseOrderService
             "Goods Receipt Created", $"Goods receipt {grn.GrnNumber} has been recorded for Purchase Order {po.PoNumber}.", 
             "GoodsReceipt", grn.Id);
 
-        // ── SUPPLIER NOTIFICATION: Inform supplier of accepted/rejected qty and invoiceable amount
+        // Inform supplier of accepted/rejected qty and invoiceable amount
         var supplier = po.Supplier;
         if (supplier != null)
         {
@@ -694,6 +691,7 @@ public class PurchaseOrderService : IPurchaseOrderService
             // Fire-and-forget outbox notification
             if (totalRejectedQty > 0)
             {
+                //dont wait for the notification to complete
                 _ = _notificationService.SendGoodsReceiptVarianceAlertAsync(
                     po.Id,
                     grnId,
@@ -1072,7 +1070,8 @@ public class PurchaseOrderService : IPurchaseOrderService
                     };
                     await _uow.Repository<StockMovement>().AddAsync(movement);
 
-                    // ── Reverse Bin Spatial Capacity ────────────────────────────────────────
+
+                    // ────────── Reverse Bin Spatial Capacity ─────────
                     // GRN cancellation must release the volume/weight that was consumed on receipt.
                     if (item.BinLocationId.HasValue)
                     {
@@ -1095,7 +1094,7 @@ public class PurchaseOrderService : IPurchaseOrderService
                             }
                         }
                     }
-                    // ─────────────────────────────────────────────────────────────────────────
+                   
                 }
             }
         }

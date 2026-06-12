@@ -10,17 +10,7 @@ using System.Text;
 
 namespace SmartInventory.Service.Services;
 
-/// <summary>
-/// User lifecycle management — Admin-controlled.
-///
-/// Business rules:
-///   — All new users start in PendingVerification status.
-///   — Passwords are NOT set by Admin. Employee sets their own via the invite email link.
-///   — CreateUserAsync generates a secure InviteToken and sends a welcome email.
-///   — SetPasswordAsync (in AuthService) validates the token and activates the account.
-///   — Email must be unique across the system.
-///   — Deactivation (soft delete) is used — users are never physically deleted.
-/// </summary>
+
 public class UserService : IUserService
 {
     private readonly IUnitOfWork _uow;
@@ -55,7 +45,7 @@ public class UserService : IUserService
             Id = Guid.NewGuid(),
             FullName = dto.FullName,
             Email = dto.Email,
-            PasswordHash = string.Empty,   // Not set yet — employee will set via invite link
+            PasswordHash = string.Empty,   
             PhoneNumber = dto.PhoneNumber,
             EmployeeId = dto.EmployeeId,
             RoleId = dto.RoleId,
@@ -81,7 +71,6 @@ public class UserService : IUserService
 
         user.Role = role;
 
-        // Send welcome email with invite link (fire-and-forget style — non-blocking via Outbox)
         await _notificationService.SendWelcomeInviteAsync(user.Id, user.Email, user.FullName, plainInviteToken);
 
         return user.Adapt<UserResponseDto>();
@@ -173,10 +162,7 @@ public class UserService : IUserService
         };
     }
 
-    /// <summary>
-    /// Approves a pending user — transitions status from PendingVerification to Active.
-    /// Records the approving Admin's ID and timestamp.
-    /// </summary>
+
     public async Task<UserResponseDto> ApproveUserAsync(Guid userId, Guid approvedBy)
     {
         var user = await _uow.Repository<User>()
@@ -210,10 +196,6 @@ public class UserService : IUserService
         await _uow.CommitAsync();
     }
 
-    /// <summary>
-    /// Regenerates the invite token and resends the welcome email.
-    /// Only valid if the employee has NOT yet set their password.
-    /// </summary>
     public async Task ResendInviteAsync(Guid userId)
     {
         var user = await _uow.Repository<User>().GetByIdAsync(userId);

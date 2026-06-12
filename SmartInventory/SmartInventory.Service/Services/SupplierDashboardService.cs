@@ -6,11 +6,7 @@ using SmartInventory.Core.Interfaces;
 
 namespace SmartInventory.Service.Services;
 
-/// <summary>
-/// Computes the supplier's own performance metrics.
-/// SECURITY: Only the authenticated supplier's data is returned.
-/// No cross-supplier comparisons or rankings are exposed.
-/// </summary>
+
 public class SupplierDashboardService : ISupplierDashboardService
 {
     private readonly IUnitOfWork _uow;
@@ -22,7 +18,7 @@ public class SupplierDashboardService : ISupplierDashboardService
 
     public async Task<SupplierDashboardSummaryDto> GetDashboardAsync(Guid supplierId)
     {
-        // 1. Load all POs for this supplier
+        // Load all POs for this supplier
         var orders = await _uow.Repository<PurchaseOrder>().Query()
             .Where(po => po.SupplierId == supplierId)
             .ToListAsync();
@@ -35,12 +31,12 @@ public class SupplierDashboardService : ISupplierDashboardService
         var completedOrders = orders.Count(po => po.Status == PurchaseOrderStatus.Received || po.Status == PurchaseOrderStatus.Closed);
         var totalVolume = orders.Sum(po => po.TotalAmount);
 
-        // 2. Load supplier rating
+        // Load supplier rating
         var supplier = await _uow.Repository<Supplier>().Query()
             .FirstOrDefaultAsync(s => s.Id == supplierId);
         var overallRating = supplier?.Rating ?? 0m;
 
-        // 3. Load performance logs for on-time delivery and fill rate
+        // Load performance logs for on-time delivery and fill rate
         var logs = await _uow.Repository<SupplierPerformanceLog>().Query()
             .Include(l => l.PurchaseOrder)
             .Where(l => l.SupplierId == supplierId)

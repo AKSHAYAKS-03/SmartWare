@@ -3,9 +3,7 @@ using SmartInventory.Core.Exceptions;
 
 namespace SmartInventory.API.Middleware;
 
-/// <summary>
-/// Catches all exceptions globally and formats them as standard JSON responses.
-/// </summary>
+
 public class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;

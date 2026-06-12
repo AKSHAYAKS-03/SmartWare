@@ -8,15 +8,7 @@ using System.Security.Claims;
 
 namespace SmartInventory.API.Controllers;
 
-/// <summary>
-/// Supplier portal invoice endpoints.
-/// Route prefix: /api/supplier/invoices
-///
-/// POST   /api/supplier/invoices           — Upload invoice PDF [Supplier]
-/// GET    /api/supplier/invoices           — List my invoices [Supplier]
-/// GET    /api/supplier/invoices/{id}      — Invoice detail [Supplier]
-/// GET    /api/supplier/invoices/{id}/download — Download PDF [Supplier]
-/// </summary>
+
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/supplier/invoices")]
@@ -33,10 +25,7 @@ public class SupplierInvoicesController : ControllerBase
     private Guid GetSupplierId() => Guid.Parse(User.FindFirstValue("supplierId")!);
     private Guid GetContactId() => Guid.Parse(User.FindFirstValue("contactId")!);
 
-    /// <summary>
-    /// Uploads an invoice PDF against a purchase order.
-    /// Accepts multipart/form-data. Max file size: 10 MB, PDF only.
-    /// </summary>
+
     [EnableRateLimiting("mutations")]
     [HttpPost]
     [Consumes("multipart/form-data")]
@@ -65,10 +54,7 @@ public class SupplierInvoicesController : ControllerBase
         return CreatedAtAction(nameof(GetDetail), new { id = result.Id }, result);
     }
 
-    /// <summary>
-    /// Returns a list of all invoices submitted by this supplier.
-    /// Ordered by most recent first. Internal finance notes are NOT included.
-    /// </summary>
+
     [HttpGet]
     public async Task<IActionResult> GetMyInvoices()
     {
@@ -76,9 +62,7 @@ public class SupplierInvoicesController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Returns full detail of a single invoice.
-    /// </summary>
+
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetDetail(Guid id)
     {
@@ -86,10 +70,7 @@ public class SupplierInvoicesController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Returns the invoice PDF file as a downloadable stream.
-    /// Content-Disposition: attachment.
-    /// </summary>
+
     [HttpGet("{id:guid}/download")]
     public async Task<IActionResult> Download(Guid id)
     {

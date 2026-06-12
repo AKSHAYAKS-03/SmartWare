@@ -6,14 +6,11 @@ using SmartInventory.Core.Interfaces;
 
 namespace SmartInventory.Repository.Repositories;
 
-/// <summary>
-/// Unit of Work implementation orchestrating transactional queries and specialized repositories.
-/// Uses constructor injection to bind specialized query interfaces and guarantees atomic PostgreSQL writes.
-/// </summary>
+
 public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _context;
-    private readonly ConcurrentDictionary<string, object> _dynamicRepositories;
+    private readonly ConcurrentDictionary<string, object> _dynamicRepositories; //stores generic repositories
 
     public IProductRepository Products { get; }
     public ISupplierRepository Suppliers { get; }
@@ -45,6 +42,7 @@ public class UnitOfWork : IUnitOfWork
         StockLevels = stockLevels ?? throw new ArgumentNullException(nameof(stockLevels));
     }
 
+    // Get generic repository for any entity
     public IGenericRepository<T> Repository<T>() where T : BaseEntity
     {
         var typeName = typeof(T).Name;
@@ -60,6 +58,6 @@ public class UnitOfWork : IUnitOfWork
     public void Dispose()
     {
         _context.Dispose();
-        GC.SuppressFinalize(this);
+        GC.SuppressFinalize(this); //garbage collector
     }
 }

@@ -41,7 +41,7 @@ public class StockLevelService : IStockLevelService
                 {
                     ProductId = g.Key,
                     ProductName = first.Product.Name,
-                    ProductSKU = first.Product.SKU, // Correct uppercase SKU
+                    ProductSKU = first.Product.SKU, 
                     QuantityOnHand = totalQty,
                     UnitPrice = unitPrice,
                     TotalValue = totalVal
@@ -91,7 +91,7 @@ public class StockLevelService : IStockLevelService
         var product = await _uow.Repository<Product>().GetByIdAsync(productId);
         if (product == null) return 0;
 
-        // 1. Calculate Annual Demand (D) from historical outbound stock movements (Sale, TransferOut, WriteOff)
+        // Calculate Annual Demand (D) from historical outbound stock movements(Sale, TransferOut, WriteOff)
         var cutoff = DateTime.UtcNow.AddDays(-90);
         var movementsQuery = _uow.Repository<StockMovement>().Query();
         
@@ -113,7 +113,7 @@ public class StockLevelService : IStockLevelService
             annualDemand = 100.0; // Default fallback to avoid 0 recommendation
         }
 
-        // 2. Setup Cost (S) - pull from SupplierProduct preferred flag or default to 50.0
+        // Setup Cost (S) - pull from SupplierProduct preferred flag or default to 50.0
         double setupCost = 50.0;
         var supplierProductsQuery = _uow.Repository<SupplierProduct>().Query();
         var preferredSupplier = await supplierProductsQuery
@@ -133,7 +133,7 @@ public class StockLevelService : IStockLevelService
             setupCost = 50.0 + (preferredSupplier.LeadTimeDays * 2.0);
         }
 
-        // 3. Holding Cost (H) - 15% of product's cost price
+        // Holding Cost (H) - 15% of product's cost price
         double holdingCost = (double)product.CostPrice * 0.15;
         if (holdingCost == 0)
         {
@@ -191,7 +191,7 @@ public class StockLevelService : IStockLevelService
         }
         else // FIFO
         {
-            // ending inventory consists of the *most recently received* batches
+            // ending inventory consists of the most recently received batches
             var sortedReceipts = grItems
                 .OrderByDescending(gri => gri.GoodsReceipt.ReceivedDate)
                 .ToList();

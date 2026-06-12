@@ -8,15 +8,7 @@ using System.Security.Claims;
 
 namespace SmartInventory.API.Controllers;
 
-/// <summary>
-/// Supplier portal catalogue management endpoints.
-/// Route prefix: /api/supplier/catalogue
-///
-/// GET    /api/supplier/catalogue            — List my catalogue [Supplier]
-/// POST   /api/supplier/catalogue            — Add a product [Supplier]
-/// PUT    /api/supplier/catalogue/{id}       — Update price/lead time [Supplier]
-/// DELETE /api/supplier/catalogue/{id}       — Deactivate product [Supplier]
-/// </summary>
+
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/supplier/catalogue")]
@@ -32,10 +24,7 @@ public class SupplierCatalogueController : ControllerBase
 
     private Guid GetSupplierId() => Guid.Parse(User.FindFirstValue("supplierId")!);
 
-    /// <summary>
-    /// Returns all products in this supplier's catalogue.
-    /// Other suppliers' catalogue entries are not visible.
-    /// </summary>
+
     [HttpGet]
     public async Task<IActionResult> GetMyCatalogue()
     {
@@ -43,10 +32,6 @@ public class SupplierCatalogueController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// Adds a new product to the supplier's catalogue.
-    /// The product must already exist in the master catalogue.
-    /// </summary>
     [EnableRateLimiting("mutations")]
     [HttpPost]
     public async Task<IActionResult> AddItem([FromBody] SupplierAddCatalogueItemRequest request)
@@ -55,10 +40,6 @@ public class SupplierCatalogueController : ControllerBase
         return CreatedAtAction(nameof(GetMyCatalogue), result);
     }
 
-    /// <summary>
-    /// Updates the unit price, lead time, and MOQ for an existing catalogue item.
-    /// Supplier cannot edit core product details (name, SKU, etc.).
-    /// </summary>
     [EnableRateLimiting("mutations")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateItem(Guid id, [FromBody] SupplierUpdateCatalogueItemRequest request)
@@ -67,10 +48,7 @@ public class SupplierCatalogueController : ControllerBase
         return Ok(new { message = "Catalogue item updated successfully." });
     }
 
-    /// <summary>
-    /// Deactivates a product from the supplier's catalogue (soft delete).
-    /// The product remains in the master catalogue.
-    /// </summary>
+
     [EnableRateLimiting("mutations")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeactivateItem(Guid id)

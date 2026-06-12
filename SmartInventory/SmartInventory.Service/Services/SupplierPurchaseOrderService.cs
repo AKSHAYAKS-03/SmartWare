@@ -6,12 +6,6 @@ using SmartInventory.Core.Exceptions;
 using SmartInventory.Core.Interfaces;
 
 namespace SmartInventory.Service.Services;
-
-/// <summary>
-/// Supplier portal purchase order service.
-/// SECURITY: Every method validates that the PO belongs to the authenticated supplier
-/// by filtering on SupplierId extracted from JWT claims.
-/// </summary>
 public class SupplierPurchaseOrderService : ISupplierPurchaseOrderService
 {
     private readonly IUnitOfWork _uow;
@@ -23,9 +17,6 @@ public class SupplierPurchaseOrderService : ISupplierPurchaseOrderService
         _notificationService = notificationService;
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // GET MY POs
-    // ─────────────────────────────────────────────────────────────────────────
 
     public async Task<List<SupplierPOListItemDto>> GetMyPurchaseOrdersAsync(Guid supplierId)
     {
@@ -49,9 +40,6 @@ public class SupplierPurchaseOrderService : ISupplierPurchaseOrderService
         )).ToList();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // GET PO DETAIL
-    // ─────────────────────────────────────────────────────────────────────────
 
     public async Task<SupplierPODetailDto> GetPurchaseOrderDetailAsync(Guid supplierId, Guid poId)
     {
@@ -66,9 +54,9 @@ public class SupplierPurchaseOrderService : ISupplierPurchaseOrderService
         if (po == null)
             throw new NotFoundException("PurchaseOrder", poId);
 
-        // ── Formula: Aggregate Accepted GRN Value ─────────────────────────────
-        // SUM((QuantityReceived - QuantityRejected) × UnitPrice)
-        // across all Accepted / PartiallyAccepted GRNs
+
+
+
         decimal aggregateAcceptedGrnValue = 0;
         var acceptedGrns = po.GoodsReceipts
             .Where(g => g.Status == GoodsReceiptStatus.Accepted || g.Status == GoodsReceiptStatus.PartiallyAccepted)
@@ -87,18 +75,18 @@ public class SupplierPurchaseOrderService : ISupplierPurchaseOrderService
             }
         }
 
-        // ── Formula: Aggregate Matched Invoice Value ──────────────────────────
-        // SUM(ApprovedAmount) WHERE Status IN (Matched, Paid)
+
+
         decimal aggregateMatchedInvoiceValue = po.SupplierInvoices
             .Where(i => i.Status == SupplierInvoiceStatus.Matched || i.Status == SupplierInvoiceStatus.Paid)
             .Sum(i => i.ApprovedAmount ?? 0);
 
-        // ── Formula: Remaining Invoiceable Amount ─────────────────────────────
-        // AggregateAcceptedGrnValue - AggregateMatchedInvoiceValue
+
+
         decimal remainingInvoiceableAmount = aggregateAcceptedGrnValue - aggregateMatchedInvoiceValue;
 
-        // ── Formula: Remaining Unbilled Amount ───────────────────────────────
-        // PO.TotalAmount - SUM(invoice.Amount) WHERE Status IN (Pending, UnderReview, Matched, Paid)
+
+
         decimal totalInFlightInvoiceAmount = po.SupplierInvoices
             .Where(i => i.Status == SupplierInvoiceStatus.Pending
                      || i.Status == SupplierInvoiceStatus.UnderReview
@@ -107,8 +95,8 @@ public class SupplierPurchaseOrderService : ISupplierPurchaseOrderService
             .Sum(i => i.Amount);
         decimal remainingUnbilledAmount = po.TotalAmount - totalInFlightInvoiceAmount;
 
-        // ── Per-Line Item GRN Breakdown ───────────────────────────────────────
-        // Aggregate accepted/rejected quantities and rejection reasons across all GRNs per PO item
+
+
         var lineItems = po.Items.Select(i =>
         {
             var grnItemsForThisLine = acceptedGrns
@@ -161,15 +149,12 @@ public class SupplierPurchaseOrderService : ISupplierPurchaseOrderService
         );
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // RESPOND TO PO (ACCEPT / DECLINE)
-    // ─────────────────────────────────────────────────────────────────────────
 
     public async Task RespondToPurchaseOrderAsync(Guid supplierId, Guid poId, SupplierRespondToPORequest request)
     {
         var po = await GetSupplierPOOrThrowAsync(supplierId, poId);
 
-        // Only POs that are Submitted or Approved can be responded to
+
         if (po.Status != PurchaseOrderStatus.Submitted && po.Status != PurchaseOrderStatus.Approved)
             throw new BusinessRuleException($"Cannot respond to a PO in '{po.Status}' status. Only Submitted or Approved POs can be accepted or declined.");
 
@@ -188,9 +173,6 @@ public class SupplierPurchaseOrderService : ISupplierPurchaseOrderService
         await _notificationService.SendSupplierPurchaseOrderResponseAlertAsync(po.Id, request.Accept, request.DeclineReason);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // UPDATE EXPECTED DELIVERY DATE
-    // ─────────────────────────────────────────────────────────────────────────
 
     public async Task UpdateExpectedDeliveryAsync(Guid supplierId, Guid poId, SupplierUpdateDeliveryDateRequest request)
     {
@@ -210,9 +192,6 @@ public class SupplierPurchaseOrderService : ISupplierPurchaseOrderService
         await _uow.CommitAsync();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // MARK AS DISPATCHED
-    // ─────────────────────────────────────────────────────────────────────────
 
     public async Task MarkAsDispatchedAsync(Guid supplierId, Guid poId, SupplierMarkDispatchedRequest request)
     {
@@ -311,9 +290,6 @@ public class SupplierPurchaseOrderService : ISupplierPurchaseOrderService
             .ToList();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // PRIVATE HELPERS
-    // ─────────────────────────────────────────────────────────────────────────
 
     private static void ValidatePOShippable(PurchaseOrder po)
     {

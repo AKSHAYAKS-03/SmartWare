@@ -8,9 +8,6 @@ using SmartInventory.Core.Interfaces;
 
 namespace SmartInventory.Repository.Repositories;
 
-/// <summary>
-/// Specialized StockLevel repository supporting exact slot lookups and warehouse security scopes.
-/// </summary>
 public class StockLevelRepository : GenericRepository<StockLevel>, IStockLevelRepository
 {
     public StockLevelRepository(AppDbContext context) : base(context)
@@ -36,7 +33,7 @@ public class StockLevelRepository : GenericRepository<StockLevel>, IStockLevelRe
             .Include(sl => sl.BinLocation)
             .AsQueryable();
 
-        // 1. Search filter: Product Name, SKU, or Bin barcode
+        //  Search filter: Product Name, SKU, or Bin barcode
         if (!string.IsNullOrWhiteSpace(queryParams.Search))
         {
             var searchPattern = queryParams.Search.Trim().ToLower();
@@ -45,31 +42,31 @@ public class StockLevelRepository : GenericRepository<StockLevel>, IStockLevelRe
                                    || (sl.BinLocation != null && sl.BinLocation.Barcode != null && sl.BinLocation.Barcode.ToLower().Contains(searchPattern)));
         }
 
-        // 2. Specific Product constraint
+        //  Specific Product constraint
         if (queryParams.ProductId.HasValue && queryParams.ProductId.Value != Guid.Empty)
         {
             query = query.Where(sl => sl.ProductId == queryParams.ProductId.Value);
         }
 
-        // 3. Warehouse scoping: crucial for scoping Manager/Staff views to their home base
+        //  Warehouse scoping: crucial for scoping Manager/Staff views to their home base
         if (queryParams.WarehouseId.HasValue && queryParams.WarehouseId.Value != Guid.Empty)
         {
             query = query.Where(sl => sl.WarehouseId == queryParams.WarehouseId.Value);
         }
 
-        // 4. Specific Bin slot constraint
+        //  Specific Bin slot constraint
         if (queryParams.BinLocationId.HasValue && queryParams.BinLocationId.Value != Guid.Empty)
         {
             query = query.Where(sl => sl.BinLocationId == queryParams.BinLocationId.Value);
         }
 
-        // Count
+      
         int totalCount = await query.CountAsync();
 
-        // Sort
+        
         query = ApplySorting(query, queryParams.SortBy, queryParams.SortDir);
 
-        // Page
+    
         int skip = (queryParams.Page - 1) * queryParams.PageSize;
         var data = await query.Skip(skip).Take(queryParams.PageSize).ToListAsync();
 
